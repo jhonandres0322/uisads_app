@@ -27,7 +27,7 @@ class HttpHandler {
     final resp =
         await http.get(Uri.parse('$BASE_URL$endpoint'), headers: getHeaders);
     int statusCode = resp.statusCode;
-    if (statusCode < 200 || statusCode > 399) {
+    if ( statusCode < 200 || statusCode > 399 ) {
       throw Exception(statusCode);
     }
     return json.decode(resp.body);
