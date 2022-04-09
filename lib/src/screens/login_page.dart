@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
@@ -16,7 +15,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: size.height * 0.07),
-              createLogoApp(size),
+              _createLogoApp(size),
               SizedBox(height: size.height * 0.02),
               _LoginForm()
             ],
@@ -26,7 +25,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  createLogoApp(Size size) {
+  _createLogoApp(Size size) {
     return Image(
       image: const AssetImage('assets/images/logo_app.png'),
       height: size.height * 0.5,
@@ -41,45 +40,45 @@ class _LoginForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
-          createInputEmail(),
+          _createInputEmail(),
           SizedBox(height: size.height * 0.02),
-          createInputPassword(),
+          _createInputPassword(),
           SizedBox(height: size.height * 0.02),
-          createButtonLogin(size, context),
+          _createButtonLogin(size, context),
           SizedBox(height: size.height * 0.02),
-          createTextForgetPassowrd(context),
+          _createTextForgetPassowrd(context),
           SizedBox(height: size.height * 0.04),
         ],
       ),
     );
   }
 
-  Widget createInputEmail() {
+  Widget _createInputEmail() {
     return InputCustom(
       labelText: 'Email',
       hintText: 'Ingrese el correo',
       obscureText: false,
       keyboardType: TextInputType.emailAddress,
-      onChanged: onChangedExample ,
+      onChanged: _onChangedExample ,
     );
   }
   
-  void onChangedExample( String text ) {
+  void _onChangedExample( String text ) {
     // ignore: avoid_print
     print('text $text');
   }
 
-  Widget createInputPassword() {
+  Widget _createInputPassword() {
     return InputCustom(
       labelText: 'Contraseña',
       hintText: 'Ingrese la contraseña',
       obscureText: true,
       keyboardType: TextInputType.text,
-      onChanged: onChangedExample,
+      onChanged: _onChangedExample,
     );
   }
 
-  Widget createButtonLogin(Size size, BuildContext context) {
+  Widget _createButtonLogin(Size size, BuildContext context) {
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.75,
@@ -95,7 +94,7 @@ class _LoginForm extends StatelessWidget {
     );
   }
 
-  Widget createTextForgetPassowrd(BuildContext context) {
+  Widget _createTextForgetPassowrd(BuildContext context) {
     return TextButton(
       onPressed: () {
         Navigator.pushNamed(context, 'recovery-password');

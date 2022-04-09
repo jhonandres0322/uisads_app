@@ -19,7 +19,7 @@ class App extends StatelessWidget {
         return ScreenUtilInit(
           designSize: const Size(360, 780),
           builder: () {
-            return GetMaterialApp(
+            return MaterialApp(
               debugShowCheckedModeBanner: false,
               routes: appRoutes,
               initialRoute: 'home',
@@ -32,9 +32,10 @@ class App extends StatelessWidget {
               navigatorKey: Get.key,
               supportedLocales: const [Locale('es', 'ES'), Locale('en', 'EN')],
               builder: (context, widget) {
-                ErrorWidget.builder = (FlutterErrorDetails errorDetails){
-                  Widget error = Text("... Renderizando error....: ${errorDetails.summary}" );
-                  if (widget is Scaffold || widget is Navigator){
+                ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+                  Widget error = Text(
+                      "... Renderizando error....: ${errorDetails.summary}");
+                  if (widget is Scaffold || widget is Navigator) {
                     error = Scaffold(body: Center(child: error));
                   }
                   return error;
