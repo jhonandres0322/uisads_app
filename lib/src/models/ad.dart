@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:uisads_app/src/models/category.dart';
 
 Ad adFromJson(String str) => Ad.fromJson(json.decode(str));
 

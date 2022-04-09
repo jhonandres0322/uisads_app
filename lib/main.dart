@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/routes.dart';
+import 'package:uisads_app/src/constants/themes.dart';
 import 'package:uisads_app/src/utils/screen_size.dart';
 
 void main() => runApp(const App());
@@ -24,20 +23,7 @@ class App extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               routes: appRoutes,
               initialRoute: 'home',
-              theme: ThemeData(
-                scaffoldBackgroundColor: AppColors.mainThirdContrast,
-                textTheme: GoogleFonts.robotoTextTheme(),
-                // ignore: prefer_const_constructors
-                appBarTheme: AppBarTheme(
-                  color: AppColors.primary,
-                  elevation: 1,
-                  // ignore: prefer_const_constructors
-                  iconTheme: IconThemeData(
-                    color: AppColors.logoSchoolOpaque,
-                    
-                  )
-                )
-              ),
+              theme: AppTheme.themePrimary,
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
