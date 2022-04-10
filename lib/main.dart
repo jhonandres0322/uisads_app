@@ -29,7 +29,6 @@ class App extends StatelessWidget {
                 GlobalCupertinoLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate
               ],
-              navigatorKey: Get.key,
               supportedLocales: const [Locale('es', 'ES'), Locale('en', 'EN')],
               builder: (context, widget) {
                 ErrorWidget.builder = (FlutterErrorDetails errorDetails) {

@@ -48,7 +48,7 @@ class _RegisterForm extends StatelessWidget {
         _createInputCellphone(),
         SizedBox(height: size.height * spacingInputs),
         _createInputPassword(),
-        SizedBox(height: size.height * 0.05),
+        SizedBox(height: size.height * 0.08),
         _createButtonRegister(size, context)
       ],
     );
