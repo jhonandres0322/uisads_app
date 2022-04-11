@@ -8,21 +8,23 @@ class HomePage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       // ignore: avoid_unnecessary_containers
-      body: Container(
-        margin: EdgeInsets.only(top: size.height * 0.05),
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            createLogo(size),
-            SizedBox(
-              height: size.height * 0.07,
-            ),
-            createButtonLogin(size, context),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            createButtonRegister(size, context)
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(top: size.height * 0.05),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              createLogo(size),
+              SizedBox(
+                height: size.height * 0.07,
+              ),
+              createButtonLogin(size, context),
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              createButtonRegister(size, context)
+            ],
+          ),
         ),
       ),
     );

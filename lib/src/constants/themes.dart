@@ -12,6 +12,7 @@ class AppTheme {
       iconTheme: IconThemeData(
         color: AppColors.logoSchoolOpaque,
       )
-    )
+    ),
+    primaryColor: AppColors.primary
   );
 }

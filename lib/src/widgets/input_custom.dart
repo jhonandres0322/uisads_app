@@ -7,13 +7,17 @@ class InputCustom extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final void Function(String) onChanged;
+  final IconData icon;
+
   const InputCustom(
       {Key? key,
       required this.hintText,
-      required this.labelText,
+      this.labelText = '',
       required this.obscureText,
       required this.keyboardType,
-      required this.onChanged})
+      required this.onChanged,
+      required this.icon
+      })
       : super(key: key);
 
   final double widthBorderInput = 1.5;
@@ -38,25 +42,25 @@ class InputCustom extends StatelessWidget {
           SizedBox(
             height: size.height * 0.01,
           ),
-          Container(
-            height: size.height * 0.06,
-            child: TextFormField(
-              obscureText: obscureText,
-              keyboardType: keyboardType,
-              onChanged: onChanged,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadiusInput),
-                      borderSide: BorderSide(
-                          color: AppColors.primary, width: widthBorderInput)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadiusInput),
-                      borderSide: BorderSide(
-                          color: AppColors.primary, width: widthBorderInput)),
-                  hintText: hintText,
-                  hintStyle: const TextStyle(
-                      fontSize: 14.0, color: AppColors.subtitles)),
-            ),
+          // ignore: sized_box_for_whitespace
+          TextFormField(
+            obscureText: obscureText,
+            keyboardType: keyboardType,
+            onChanged: onChanged,
+            decoration: InputDecoration(
+                prefixIcon : Icon( icon, color: AppColors.primary),
+                prefixIconColor: AppColors.primary,
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadiusInput),
+                    borderSide: BorderSide(
+                        color: AppColors.primary, width: widthBorderInput)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadiusInput),
+                    borderSide: BorderSide(
+                        color: AppColors.primary, width: widthBorderInput)),
+                hintText: hintText,
+                hintStyle: const TextStyle(
+                    fontSize: 14.0, color: AppColors.subtitles)),
           ),
         ],
       ),

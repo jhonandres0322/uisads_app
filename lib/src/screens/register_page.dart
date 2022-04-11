@@ -60,7 +60,9 @@ class _RegisterForm extends StatelessWidget {
         labelText: 'Email',
         obscureText: false,
         keyboardType: TextInputType.emailAddress,
-        onChanged: _onChangedExample);
+        onChanged: _onChangedExample,
+        icon: Icons.email 
+      );
   }
 
   Widget _createInputUser() {
@@ -69,7 +71,10 @@ class _RegisterForm extends StatelessWidget {
         labelText: 'Usuario',
         obscureText: false,
         keyboardType: TextInputType.name,
-        onChanged: _onChangedExample);
+        onChanged: _onChangedExample,
+        icon: Icons.person 
+      
+      );
   }
 
   Widget _createInputPassword() {
@@ -78,7 +83,9 @@ class _RegisterForm extends StatelessWidget {
         labelText: 'Contraseña',
         obscureText: true,
         keyboardType: TextInputType.name,
-        onChanged: _onChangedExample);
+        onChanged: _onChangedExample,
+        icon: Icons.lock 
+        );
   }
 
   Widget _createInputCellphone() {
@@ -87,7 +94,9 @@ class _RegisterForm extends StatelessWidget {
         labelText: 'Celular',
         obscureText: false,
         keyboardType: TextInputType.phone,
-        onChanged: _onChangedExample);
+        onChanged: _onChangedExample,
+        icon: Icons.phone_iphone
+    );
   }
 
   Widget _createButtonRegister(Size size, BuildContext context) {

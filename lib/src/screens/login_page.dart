@@ -60,6 +60,7 @@ class _LoginForm extends StatelessWidget {
       obscureText: false,
       keyboardType: TextInputType.emailAddress,
       onChanged: _onChangedExample ,
+      icon: Icons.email ,
     );
   }
   
@@ -75,6 +76,7 @@ class _LoginForm extends StatelessWidget {
       obscureText: true,
       keyboardType: TextInputType.text,
       onChanged: _onChangedExample,
+      icon: Icons.lock 
     );
   }
 

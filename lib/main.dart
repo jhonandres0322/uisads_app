@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/route_manager.dart';
 import 'package:uisads_app/src/constants/routes.dart';
 import 'package:uisads_app/src/constants/themes.dart';
 import 'package:uisads_app/src/utils/screen_size.dart';
