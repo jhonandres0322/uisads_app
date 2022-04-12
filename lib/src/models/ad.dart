@@ -15,7 +15,6 @@ class Ad {
     required this.description,
     required this.publisher,
     required this.images,
-    required this.postDate,
     required this.category,
     required this.state,
     required this.rating,
@@ -27,7 +26,6 @@ class Ad {
   String description;
   dynamic publisher;
   List<dynamic> images;
-  DateTime postDate;
   dynamic category;
   bool state;
   dynamic rating;
@@ -39,7 +37,6 @@ class Ad {
         description: json["description"],
         publisher: json["publisher"],
         images: List<String>.from(json["images"].map((x) => x)),
-        postDate: DateTime.parse(json["post_date"]),
         category: json["category"],
         state: json["state"],
         rating: json["rating"],
@@ -52,7 +49,6 @@ class Ad {
         "description": description,
         "publisher": publisher,
         "images": List<dynamic>.from(images.map((x) => x)),
-        "post_date": postDate.toIso8601String(),
         "category": category,
         "state": state,
         "rating": rating,
