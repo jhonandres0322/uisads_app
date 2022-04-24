@@ -48,7 +48,7 @@ class InputCustom extends StatelessWidget {
             keyboardType: keyboardType,
             onChanged: onChanged,
             decoration: InputDecoration(
-                prefixIcon : Icon( icon, color: AppColors.primary),
+                prefixIcon : Icon( icon, color: AppColors.subtitles),
                 prefixIconColor: AppColors.primary,
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadiusInput),

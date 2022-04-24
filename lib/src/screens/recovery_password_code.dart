@@ -5,29 +5,30 @@ import 'package:uisads_app/src/widgets/background_top_recovery.dart';
 import 'package:uisads_app/src/widgets/button_arrow_back.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
+
 // ignore: must_be_immutable
-class RecoveryPasswordPage extends StatelessWidget {
-  RecoveryPasswordPage({Key? key}) : super(key: key);
+class RecoveryPasswordCode extends StatelessWidget {
+  RecoveryPasswordCode({ Key? key }) : super(key: key);
   late Size _size;
   @override
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Stack(
-              children: [
-                const BackgroundTopRecovery(),
-                _createInfo(),
-                const ButtonArrowBack()
-              ],
-            ),
-        ));
-  }
-
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            const BackgroundTopRecovery(),
+            _createInfo(),
+            const ButtonArrowBack()
+          ],
+        ),
+      )
+    );
+  } 
 
   Widget _createInfo() {
-    String title = 'Recupere su contraseña';
-    String description = 'Por favor ingrese su dirección de correo electrónico para recibir el código de confirmación';
+    String title = 'Ingrese el código de verificación';
+    String description = 'Por favor ingrese el código verificación que fue enviado a su correo';
     return Center(
       child: Column(
         children: [
@@ -42,7 +43,6 @@ class RecoveryPasswordPage extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _containerInputEmail() {
     return Padding(
@@ -72,8 +72,8 @@ class RecoveryPasswordPage extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class _FormLogin extends StatelessWidget {
+
   late Size _size;
   @override
   Widget build(BuildContext context) {
@@ -82,23 +82,23 @@ class _FormLogin extends StatelessWidget {
       width: _size.width * 0.4,
       child: Column(
         children: [
-          _createInputEmail(),
+          _createInputCode(),
           SizedBox(
             height: _size.height * 0.03,
           ),
-          createButton(context, _size, 'recovery-password-code','Recuperar Contraseña',false)
+          createButton(context, _size, 'change-password','Código verificación',true)
         ],
       ),
     );
-  }
+  }    
 
-  Widget _createInputEmail() {
+  Widget _createInputCode() {
     return InputCustom(
-        hintText: 'Ingresa tu correo electronico',
+        hintText: 'Digite el codigo de verificación',
         obscureText: false,
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.text,
         onChanged: changedExample,
-        icon: Icons.email);
+        icon: Icons.numbers);
   }
 
   void changedExample(String text) {
