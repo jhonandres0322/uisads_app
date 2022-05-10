@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/services/auth_service.dart';
+import 'package:uisads_app/src/widgets/alert_error.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
 class LoginPage extends StatelessWidget {
@@ -65,8 +67,7 @@ class _LoginForm extends StatelessWidget {
   }
   
   void _onChangedExample( String text ) {
-    // ignore: avoid_print
-    print('text $text');
+    debugPrint('text $text');
   }
 
   Widget _createInputPassword() {
@@ -86,7 +87,9 @@ class _LoginForm extends StatelessWidget {
       width: size.width * 0.75,
       child: ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, 'main');
+            debugPrint("Button create"); 
+            onPressedExample( context );
+            // Navigator.pushNamed(context, 'main');
           },
           child: const Text('Iniciar Sesión'),
           style: ElevatedButton.styleFrom(
@@ -94,6 +97,13 @@ class _LoginForm extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0)))),
     );
+  }
+
+  void onPressedExample( BuildContext context) async {
+    debugPrint('este es el onpressed del boton');
+    dynamic resp = await AuthService().loginUser();
+    debugPrint(" resp $resp ");
+    showErrorDialog(context);
   }
 
   Widget _createTextForgetPassowrd(BuildContext context) {

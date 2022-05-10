@@ -1,13 +1,12 @@
 class Env {
-  String type = 'development';
-  String endpointDev = 'http://localhost:5000/api';
-  String endpointPrd = '';
+  final String _endpointDev = 'http://192.168.1.6:5000/api';
+  final String _endpointPrd = '';
 
-  String getEndpoint() {
-    if (type.contains('development')) {
-      return endpointDev;
+  String getEndpoint( String type ) {
+    if (type.contains('dev')) {
+      return _endpointDev;
     } else {
-      return endpointPrd;
+      return _endpointPrd;
     }
   }
 }
