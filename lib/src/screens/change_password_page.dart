@@ -28,7 +28,8 @@ class ChangePasswordPage extends StatelessWidget {
 
   _createInfo() {
     String title = 'Cambiar contraseña';
-    String description = 'Crea una nueva contraseña y por favor no la compartas con nadie por su seguridad';
+    String description =
+        'Crea una nueva contraseña y por favor no la compartas con nadie por su seguridad';
     return Center(
       child: Column(
         children: [
@@ -36,23 +37,21 @@ class ChangePasswordPage extends StatelessWidget {
             height: _size.height * 0.08,
           ),
           createLogo(),
-          createTitleInfo( _size, title ),
-          createTextInfo( _size, description ),
+          createTitleInfo(_size, title),
+          createTextInfo(_size, description),
           _containerInputEmail()
         ],
       ),
     );
   }
 
-    Widget _containerInputEmail() {
+  Widget _containerInputEmail() {
     return Padding(
       padding: EdgeInsets.only(
-        bottom: _size.height * 0.18,
-        top: _size.height * 0.03
-      ),
+          bottom: _size.height * 0.18, top: _size.height * 0.03),
       child: Center(
         child: Container(
-          child: _FormLogin(),
+          child: _FormChangePassword(),
           width: _size.width * 0.95,
           height: _size.height * 0.4,
           decoration: BoxDecoration(
@@ -72,8 +71,10 @@ class ChangePasswordPage extends StatelessWidget {
   }
 }
 
-class _FormLogin extends StatelessWidget {
-
+// ignore: must_be_immutable
+class _FormChangePassword extends StatelessWidget {
+  // ignore: unused_field
+  final TextEditingController _inputController = TextEditingController();
   late Size _size;
   @override
   Widget build(BuildContext context) {
@@ -82,25 +83,27 @@ class _FormLogin extends StatelessWidget {
       width: _size.width * 0.4,
       child: Column(
         children: [
-          _createInputNewPassword('Nueva Contraseña'),
-          _createInputNewPassword('Confirme nueva contraseña'),
+          // _createInputNewPassword('Nueva Contraseña'),
+          // _createInputNewPassword('Confirme nueva contraseña'),
           SizedBox(
             height: _size.height * 0.02,
           ),
-          createButton(context, _size, 'login','Actualizar contraseña',true)
+          createButton(context, _size, 'login', 'Actualizar contraseña', true)
         ],
       ),
     );
-  }    
-
-  Widget _createInputNewPassword(String hintText) {
-    return InputCustom(
-        hintText: hintText,
-        obscureText: false,
-        keyboardType: TextInputType.text,
-        onChanged: changedExample,
-        icon: Icons.shield);
   }
+
+  // Widget _createInputNewPassword(String hintText) {
+  //   return InputCustom(
+  //       controller: _inputController,
+  //       hintText: hintText,
+  //       obscureText: false,
+  //       keyboardType: TextInputType.text,
+  //       onChanged: changedExample,
+  //       icon: Icons.shield
+  //   );
+  // }
 
   void changedExample(String text) {
     // ignore: avoid_print

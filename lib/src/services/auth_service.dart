@@ -1,19 +1,20 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
+import 'package:uisads_app/src/models/user_request.dart';
 import 'package:uisads_app/src/utils/http_handler.dart';
 
+class AuthService extends ChangeNotifier with HttpHandler {
 
-
-class AuthService with HttpHandler {
-
-  Future<dynamic> loginUser() async {
-    debugPrint("entrando a login service");
-    Map<String, dynamic> request = {
-      "email": "jhonandres0322gmail.com",
-      "password": "123456"
-    };
-    final resp = await getPost('/auth/login', request);
-    debugPrint(" resp --> $resp");
+  
+  Future<dynamic> loginUser(Map<String, dynamic> user) async {
+    log("entrando a login service");
+    UserRequest userRequest = UserRequest.fromJson(user);
+    log(" userRequest --> ${userRequest.toString()} ");
+    final resp = await getPost('/auth/login', userRequest.toJson());
+    log(" resp --> $resp");
     return resp;
   }
 
+  Future<dynamic> registerUser() async {}
 }

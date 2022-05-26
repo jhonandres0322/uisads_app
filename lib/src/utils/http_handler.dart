@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uisads_app/src/constants/env.dart';
 import 'package:uisads_app/src/widgets/alert_error.dart';
@@ -34,7 +36,7 @@ class HttpHandler {
     final resp =
         await http.get(Uri.parse('$_baseUrl$endpoint'), headers: getHeaders);
     int statusCode = resp.statusCode;
-    if ( statusCode < 200 || statusCode > 399 ) {
+    if (statusCode < 200 || statusCode > 399) {
       throw Exception(statusCode);
     }
     return json.decode(resp.body);
@@ -42,12 +44,11 @@ class HttpHandler {
 
   Future<dynamic> getPost(String endpoint, Map<String, dynamic> request) async {
     Map<String, String> postHeaders = _addTokenHeader(token, headers);
-    final resp = await http.post(
-      Uri.parse('$_baseUrl$endpoint'),
-      headers: postHeaders, 
-      body: request
-    );
-    return json.decode( resp.body );
+    final resp = await http.post(Uri.parse('$_baseUrl$endpoint'),
+        headers: postHeaders, body: request);
+    final decoded = json.decode( resp.body );
+    log('decoded --> $decoded');
+    return decoded;
   }
 
   Future<dynamic> getPut(String endpoint, Map<String, dynamic> request) async {

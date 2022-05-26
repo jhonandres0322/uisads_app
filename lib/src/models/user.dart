@@ -25,9 +25,9 @@ class User {
 
   String email;
   String password;
-  bool state;
-  int retry;
-  bool blocked;
+  bool state = true;
+  int retry = 0;
+  bool blocked = false;
   DateTime firstEntry;
   DateTime lastEntry;
   bool available;

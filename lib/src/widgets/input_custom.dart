@@ -1,23 +1,26 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 
+// ignore: must_be_immutable
 class InputCustom extends StatelessWidget {
   final String hintText;
   final String labelText;
   final bool obscureText;
   final TextInputType keyboardType;
-  final void Function(String) onChanged;
   final IconData icon;
 
-  const InputCustom(
+  String value = '';
+
+  InputCustom(
       {Key? key,
       required this.hintText,
       this.labelText = '',
-      required this.obscureText,
+      this.obscureText = false,
       required this.keyboardType,
-      required this.onChanged,
-      required this.icon
-      })
+      required this.icon,
+      required this.value})
       : super(key: key);
 
   final double widthBorderInput = 1.5;
@@ -44,11 +47,21 @@ class InputCustom extends StatelessWidget {
           ),
           // ignore: sized_box_for_whitespace
           TextFormField(
+            autofocus: false,
             obscureText: obscureText,
             keyboardType: keyboardType,
-            onChanged: onChanged,
+            initialValue: '',
+            onChanged: (value) {
+              this.value = value;
+              log("onchange value --> $value");
+            },
+            validator: (value) {
+              if (value == null) return "Este campo es requerido";
+              return value.length < 3 ? 'Minimo de 3 letras' : null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
-                prefixIcon : Icon( icon, color: AppColors.subtitles),
+                prefixIcon: Icon(icon, color: AppColors.subtitles),
                 prefixIconColor: AppColors.primary,
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadiusInput),

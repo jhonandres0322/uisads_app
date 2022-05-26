@@ -7,22 +7,21 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      // ignore: avoid_unnecessary_containers
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(top: size.height * 0.05),
           alignment: Alignment.center,
           child: Column(
             children: [
-              createLogo(size),
+              _createLogo(size),
               SizedBox(
                 height: size.height * 0.07,
               ),
-              createButtonLogin(size, context),
+              _createButtonLogin(size, context),
               SizedBox(
                 height: size.height * 0.05,
               ),
-              createButtonRegister(size, context)
+              _createButtonRegister(size, context)
             ],
           ),
         ),
@@ -30,14 +29,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget createLogo(Size size) {
+  Widget _createLogo(Size size) {
     return Image(
       image: const AssetImage('assets/images/logo_app.png'),
       height: size.height * 0.5,
     );
   }
 
-  Widget createButtonLogin(Size size, BuildContext context) {
+  Widget _createButtonLogin(Size size, BuildContext context) {
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.75,
@@ -53,14 +52,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget createButtonRegister(Size size, BuildContext context) {
+  Widget _createButtonRegister(Size size, BuildContext context) {
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.75,
       child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, 'register');
-          },
+          onPressed: () => Navigator.pushNamed(context, 'register'),
           child: const Text(
             'Registrarse',
             style: TextStyle(color: AppColors.primary),

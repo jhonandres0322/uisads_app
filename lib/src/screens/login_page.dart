@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:uisads_app/src/providers/login_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
-import 'package:uisads_app/src/widgets/alert_error.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
+
+import '../constants/colors.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -18,7 +20,6 @@ class LoginPage extends StatelessWidget {
             children: [
               SizedBox(height: size.height * 0.07),
               _createLogoApp(size),
-              SizedBox(height: size.height * 0.02),
               _LoginForm()
             ],
           ),
@@ -27,71 +28,84 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _createLogoApp(Size size) {
+  Widget _createLogoApp(Size size) {
     return Image(
       image: const AssetImage('assets/images/logo_app.png'),
       height: size.height * 0.5,
     );
   }
+
+  void loginUser() async {}
 }
 
 class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Form(
-      child: Column(
-        children: [
-          _createInputEmail(),
-          SizedBox(height: size.height * 0.02),
-          _createInputPassword(),
-          SizedBox(height: size.height * 0.02),
-          _createButtonLogin(size, context),
-          SizedBox(height: size.height * 0.02),
-          _createTextForgetPassowrd(context),
-          SizedBox(height: size.height * 0.04),
-        ],
+    final loginForm = Provider.of<LoginFormProvider>(context);
+    final Size size = MediaQuery.of(context).size;
+    // ignore: avoid_unnecessary_containers
+    return Container(
+      child: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        key: loginForm.formKey,
+        child: Column(
+          children: [
+            _createInputEmail(loginForm),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            _createInputPassword(loginForm),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            _createButtonLogin(size, context, loginForm),
+            _createTextForgotPassword(context)
+          ],
+        ),
       ),
     );
   }
 
-  Widget _createInputEmail() {
+  Widget _createInputEmail(LoginFormProvider loginForm) {
     return InputCustom(
-      labelText: 'Email',
-      hintText: 'Ingrese el correo',
-      obscureText: false,
-      keyboardType: TextInputType.emailAddress,
-      onChanged: _onChangedExample ,
-      icon: Icons.email ,
-    );
-  }
-  
-  void _onChangedExample( String text ) {
-    debugPrint('text $text');
+        hintText: "example@example.com",
+        keyboardType: TextInputType.emailAddress,
+        labelText: 'Correo Electronico',
+        value: loginForm.email,
+        icon: Icons.email);
   }
 
-  Widget _createInputPassword() {
+  Widget _createInputPassword(LoginFormProvider loginForm) {
     return InputCustom(
-      labelText: 'Contraseña',
-      hintText: 'Ingrese la contraseña',
-      obscureText: true,
-      keyboardType: TextInputType.text,
-      onChanged: _onChangedExample,
-      icon: Icons.lock 
-    );
+        hintText: "********",
+        keyboardType: TextInputType.text,
+        labelText: 'Contraseña',
+        obscureText: true,
+        value: loginForm.password,
+        icon: Icons.lock);
   }
 
-  Widget _createButtonLogin(Size size, BuildContext context) {
+  Widget _createButtonLogin(
+      Size size, BuildContext context, LoginFormProvider loginForm) {
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.75,
       child: ElevatedButton(
           onPressed: () {
-            debugPrint("Button create"); 
-            onPressedExample( context );
             // Navigator.pushNamed(context, 'main');
+            loginForm.isLoading
+                ? null
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    final authService =
+                        Provider.of<AuthService>(context, listen: false);
+                    if (!loginForm.isValidForm()) return;
+                    loginForm.isLoading = true;
+
+                    
+                  };
           },
-          child: const Text('Iniciar Sesión'),
+          child: const Text('Crear Cuenta'),
           style: ElevatedButton.styleFrom(
               primary: AppColors.primary,
               shape: RoundedRectangleBorder(
@@ -99,18 +113,9 @@ class _LoginForm extends StatelessWidget {
     );
   }
 
-  void onPressedExample( BuildContext context) async {
-    debugPrint('este es el onpressed del boton');
-    dynamic resp = await AuthService().loginUser();
-    debugPrint(" resp $resp ");
-    showErrorDialog(context);
-  }
-
-  Widget _createTextForgetPassowrd(BuildContext context) {
+  Widget _createTextForgotPassword(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        Navigator.pushNamed(context, 'recovery-password');
-      },
+      onPressed: () => Navigator.pushNamed(context, 'recovery-password'),
       child: const Text('¿Olvidaste tu contraseña?'),
       style: TextButton.styleFrom(primary: AppColors.subtitles),
     );

@@ -5,30 +5,29 @@ import 'package:uisads_app/src/widgets/background_top_recovery.dart';
 import 'package:uisads_app/src/widgets/button_arrow_back.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
-
 // ignore: must_be_immutable
 class RecoveryPasswordCode extends StatelessWidget {
-  RecoveryPasswordCode({ Key? key }) : super(key: key);
+  RecoveryPasswordCode({Key? key}) : super(key: key);
   late Size _size;
   @override
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            const BackgroundTopRecovery(),
-            _createInfo(),
-            const ButtonArrowBack()
-          ],
-        ),
-      )
-    );
-  } 
+        body: SingleChildScrollView(
+      child: Stack(
+        children: [
+          const BackgroundTopRecovery(),
+          _createInfo(),
+          const ButtonArrowBack()
+        ],
+      ),
+    ));
+  }
 
   Widget _createInfo() {
     String title = 'Ingrese el código de verificación';
-    String description = 'Por favor ingrese el código verificación que fue enviado a su correo';
+    String description =
+        'Por favor ingrese el código verificación que fue enviado a su correo';
     return Center(
       child: Column(
         children: [
@@ -36,8 +35,8 @@ class RecoveryPasswordCode extends StatelessWidget {
             height: _size.height * 0.08,
           ),
           createLogo(),
-          createTitleInfo( _size, title ),
-          createTextInfo( _size, description ),
+          createTitleInfo(_size, title),
+          createTextInfo(_size, description),
           _containerInputEmail()
         ],
       ),
@@ -47,12 +46,10 @@ class RecoveryPasswordCode extends StatelessWidget {
   Widget _containerInputEmail() {
     return Padding(
       padding: EdgeInsets.only(
-        bottom: _size.height * 0.18,
-        top: _size.height * 0.03
-      ),
+          bottom: _size.height * 0.18, top: _size.height * 0.03),
       child: Center(
         child: Container(
-          child: _FormLogin(),
+          child: _FormRecoveryPassword(),
           width: _size.width * 0.95,
           height: _size.height * 0.23,
           decoration: BoxDecoration(
@@ -72,8 +69,10 @@ class RecoveryPasswordCode extends StatelessWidget {
   }
 }
 
-class _FormLogin extends StatelessWidget {
-
+// ignore: must_be_immutable
+class _FormRecoveryPassword extends StatelessWidget {
+  // ignore: unused_field
+  final TextEditingController _inputController = TextEditingController();
   late Size _size;
   @override
   Widget build(BuildContext context) {
@@ -82,24 +81,26 @@ class _FormLogin extends StatelessWidget {
       width: _size.width * 0.4,
       child: Column(
         children: [
-          _createInputCode(),
+          // _createInputCode(),
           SizedBox(
             height: _size.height * 0.03,
           ),
-          createButton(context, _size, 'change-password','Código verificación',true)
+          createButton(
+              context, _size, 'change-password', 'Código verificación', true)
         ],
       ),
     );
-  }    
-
-  Widget _createInputCode() {
-    return InputCustom(
-        hintText: 'Digite el codigo de verificación',
-        obscureText: false,
-        keyboardType: TextInputType.text,
-        onChanged: changedExample,
-        icon: Icons.numbers);
   }
+
+  // Widget _createInputCode() {
+  //   return InputCustom(
+  //       controller: _inputController,
+  //       hintText: 'Digite el codigo de verificación',
+  //       obscureText: false,
+  //       keyboardType: TextInputType.text,
+  //       onChanged: changedExample,
+  //       icon: Icons.numbers);
+  // }
 
   void changedExample(String text) {
     // ignore: avoid_print
