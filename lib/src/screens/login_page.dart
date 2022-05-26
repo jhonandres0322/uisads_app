@@ -12,16 +12,19 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              SizedBox(height: size.height * 0.07),
-              _createLogoApp(size),
-              _LoginForm()
-            ],
+    return ChangeNotifierProvider(
+      create: (_) => LoginFormProvider(),
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                SizedBox(height: size.height * 0.07),
+                _createLogoApp(size),
+                _LoginForm()
+              ],
+            ),
           ),
         ),
       ),
