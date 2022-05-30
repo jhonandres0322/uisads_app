@@ -33,12 +33,17 @@ class InputCustom extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: size.width * 0.03),
+            padding: EdgeInsets.only(left: size.width * 0.01),
             child: Align(
               alignment: Alignment.topLeft,
               child: Text(
                 labelText,
-                style: const TextStyle(color: AppColors.subtitles),
+                style: const TextStyle(
+                  color: AppColors.subtitles,
+                  fontSize: 14, 
+                  fontWeight: FontWeight.w400, 
+                  fontFamily: 'Roboto'
+                ),
               ),
             ),
           ),
@@ -61,6 +66,8 @@ class InputCustom extends StatelessWidget {
             },
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(borderRadiusInput)),
                 prefixIcon: Icon(icon, color: AppColors.subtitles),
                 prefixIconColor: AppColors.primary,
                 enabledBorder: OutlineInputBorder(
@@ -73,7 +80,10 @@ class InputCustom extends StatelessWidget {
                         color: AppColors.primary, width: widthBorderInput)),
                 hintText: hintText,
                 hintStyle: const TextStyle(
-                    fontSize: 14.0, color: AppColors.subtitles)),
+                    fontSize: 12.0, 
+                    color: AppColors.subtitles
+                )
+            ),
           ),
         ],
       ),

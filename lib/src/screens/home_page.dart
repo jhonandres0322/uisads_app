@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/widgets/logo_app.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,15 +14,15 @@ class HomePage extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             children: [
-              _createLogo(size),
+              LogoApp(size: size,),
               SizedBox(
                 height: size.height * 0.07,
               ),
-              _createButtonLogin(size, context),
+              _ButtonLoginHome(size:size),
               SizedBox(
                 height: size.height * 0.05,
               ),
-              _createButtonRegister(size, context)
+              _ButtonRegisterHome(size: size ,)
             ],
           ),
         ),
@@ -29,30 +30,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _createLogo(Size size) {
-    return Image(
-      image: const AssetImage('assets/images/logo_app.png'),
-      height: size.height * 0.5,
-    );
-  }
+}
 
-  Widget _createButtonLogin(Size size, BuildContext context) {
-    return SizedBox(
-      height: size.height * 0.065,
-      width: size.width * 0.75,
-      child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, 'login');
-          },
-          child: const Text('Iniciar Sesión'),
-          style: ElevatedButton.styleFrom(
-              primary: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0)))),
-    );
-  }
-
-  Widget _createButtonRegister(Size size, BuildContext context) {
+/// Widget con boton secundario a la pagina de registrro
+class _ButtonRegisterHome extends StatelessWidget {
+  const _ButtonRegisterHome({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+  final Size size;
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.75,
@@ -60,13 +48,52 @@ class HomePage extends StatelessWidget {
           onPressed: () => Navigator.pushNamed(context, 'register'),
           child: const Text(
             'Registrarse',
-            style: TextStyle(color: AppColors.primary),
+            style: TextStyle(
+              color: AppColors.primary,
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Roboto',
+            ),
           ),
           style: ElevatedButton.styleFrom(
               primary: AppColors.mainThirdContrast,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0)),
               side: const BorderSide(width: 1.0, color: AppColors.titles))),
+    );
+  }
+}
+
+/// Widget que contiene el boton de login en el home
+class _ButtonLoginHome extends StatelessWidget {
+  const _ButtonLoginHome({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+  
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: size.height * 0.065,
+      width: size.width * 0.75,
+      child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, 'login');
+          },
+          child: const Text('Iniciar Sesión',
+              style: TextStyle(
+                color: Colors.white, 
+                fontSize: 15, 
+                fontWeight: FontWeight.w600, 
+                fontFamily: 'Roboto'
+              )
+          ),
+          style: ElevatedButton.styleFrom(
+              primary: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0)))),
     );
   }
 }
