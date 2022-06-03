@@ -15,18 +15,43 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return ChangeNotifierProvider(
       create: (_) => LoginFormProvider(),
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            const Spacer(),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'register');
+              },
+              child: const Text(
+                'Registrarse',
+                style: TextStyle(
+                  color: AppColors.third,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Roboto',
+                  fontSize: 16.0
+                ),
+              ),
+            ),
+            const SizedBox(width: 20,),
+          ],
+          leading: Container(),
+          backgroundColor: AppColors.mainThirdContrast,
+          elevation: 0,
+          
+        ),
         body: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Container(
             alignment: Alignment.center,
             child: Column(
               children: [
-                SizedBox(height: size.height * 0.07),
+                // SizedBox(height: size.height * 0.07),
                 LogoApp(size: size),
                 _LoginForm(),
+                const SizedBox(height: 10.0),
               ],
             ),
           ),

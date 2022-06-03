@@ -12,7 +12,7 @@ class LogoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image(
       image: const AssetImage('assets/images/logo_app.png'),
-      height: size.height * 0.5,
+      height: size.height * 0.45,
     );
   }
 }
