@@ -1,59 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: const CircleAvatar(),
-        title: const Text('Main Page'),
-        actions: [
-          const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(85.0),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          // leading:  CirclePerfilAvatar(size: size,),
+          title: const Text('Main Page', style: TextStyle(color: Colors.black),),
+          actions: [
+            // const Spacer(),
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
-      body: const Center(
-        child: CirclePerfilAvatar()
+      body: Center(
+        child: PerfilCirculoUsuario(size: size)
       )
     );
   }
 }
 
-/// Widget con el perfil y circulo avatar
+/// Widget con el perfil y circulo avatar para el perfil de la pagina
 class CirclePerfilAvatar extends StatelessWidget {
 
-  const CirclePerfilAvatar({Key? key}) : super(key: key);
+  const CirclePerfilAvatar({
+    Key? key, 
+    required this.size
+  }) : super(key: key);
 
+  final Size size;
   @override
   Widget build(BuildContext context) {
+    print('Size: ${size.width} y ${size.height}');
+    // Obtenemos los valores de la pantalla
     return Container(
-      width: 400,
-      height: 200,
+      // color: Colors.redAccent,
+      width: size.width * 0.55,
+      height: size.width * 0.3,
       child: Stack(
-        children: const [
+        children: [
           // Entre mas abajo del stack mas arriba en pantalla estará
-          _BarraPerfilNombre(),
-          _CirculoFondoAvatar(),
-          _CirculoFrenteAvatar(),
+          _BarraPerfilNombre(size: size,),
+          // Stack con el circulo de perfil
+          PerfilCirculoUsuario(size: size)
           
         ],
       ),
     );
   }
 }
-
+///Widget ded barra complemento del perfil
 class _BarraPerfilNombre extends StatelessWidget {
   const _BarraPerfilNombre({
     Key? key,
+    required this.size
   }) : super(key: key);
-
+  final Size size;
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -82,57 +95,3 @@ class _BarraPerfilNombre extends StatelessWidget {
     );
   }
 }
-
-class _CirculoFondoAvatar extends StatelessWidget {
-  const _CirculoFondoAvatar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return  Positioned(
-      top: 20,
-      left: 20,
-      child: CircleAvatar(
-        child: Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            // borderRadius: BorderRadius.circular(50),
-            color: AppColors.mainThirdContrast,
-            boxShadow: [
-              BoxShadow(
-                color:Color.fromRGBO(0, 0, 0, 0.25),
-                blurRadius: 4,
-                offset: Offset(-3, 5),
-              ),
-            ],
-          ),
-        ),
-        radius: 45
-      )
-    );
-  }
-}
-class _CirculoFrenteAvatar extends StatelessWidget {
-  const _CirculoFrenteAvatar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Positioned(
-      top: 23,
-      left: 23,
-      child: CircleAvatar(
-        child: Image(
-          image: AssetImage('assets/images/avatar.png'), 
-          fit: BoxFit.cover,
-        ),
-        backgroundColor: Colors.blue, 
-        radius: 42
-      )
-    );
-  }
-}
-
-
