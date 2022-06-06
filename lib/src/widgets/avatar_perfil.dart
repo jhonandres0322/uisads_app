@@ -3,6 +3,7 @@ import 'package:uisads_app/src/constants/colors.dart';
 
 
 /// Widget con el circulo del usuario centrado en el stack
+/// El size pasado al Perfil circulo usuario permite distribuir el tamaño entre ellos
 class PerfilCirculoUsuario extends StatelessWidget {
   const PerfilCirculoUsuario({
     Key? key,
@@ -13,12 +14,13 @@ class PerfilCirculoUsuario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Width y height del circulo como el tamaño maximo que se puede permitir, en base al size pasado, que sera del mismo tamaño que el stack
     return Container(
-      width: 200,
-      height: 200,
+      width: size.width * 0.55,
+      height: size.width * 0.55,
       decoration: BoxDecoration(
         color: Colors.red,
-        shape: BoxShape.circle,
+        // shape: BoxShape.circle,
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -58,11 +60,15 @@ class _CirculoFondoAvatar extends StatelessWidget {
           ],
         ),
       ),
-      radius: size.width * 0.14,
-      // maxRadius: size.width * 0.18,
+      radius: size.width * 0.40,
+      // maxRadius: size.width * 0.55,
     );
   }
 }
+
+/// Widget frente del usuario Perfil
+/// Debe contener un tamaño menor o igual que el de su fondo 
+/// para el efecto del shadow y una visualizacion con marco 
 class _CirculoFrenteAvatar extends StatelessWidget {
   const _CirculoFrenteAvatar({
     Key? key, 
@@ -78,8 +84,8 @@ class _CirculoFrenteAvatar extends StatelessWidget {
         fit: BoxFit.cover,
       ),
       backgroundColor: Colors.blue, 
-      radius: size.width * 0.12,
-      // maxRadius: size.width * 0.13,
+      radius: size.width * 0.40,
+      // maxRadius: size.width * 0.55,
     );
   }
 }
