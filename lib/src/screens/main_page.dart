@@ -24,8 +24,8 @@ class MainPage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: PerfilCirculoUsuario(size: size)
+      body: const Center(
+        child: PerfilCirculoUsuario(radio: 100, radioInterno: 3, ),
       )
     );
   }
@@ -53,7 +53,7 @@ class CirclePerfilAvatar extends StatelessWidget {
           // Entre mas abajo del stack mas arriba en pantalla estará
           _BarraPerfilNombre(size: size,),
           // Stack con el circulo de perfil
-          PerfilCirculoUsuario(size: size)
+          // PerfilCirculoUsuario(size: size)
           
         ],
       ),
