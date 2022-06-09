@@ -7,53 +7,62 @@ import 'package:uisads_app/src/widgets/input_custom.dart';
 
 // ignore: must_be_immutable
 class ChangePasswordPage extends StatelessWidget {
-  ChangePasswordPage({Key? key}) : super(key: key);
-  late Size _size;
+  const ChangePasswordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    _size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
-          children: [
-            const BackgroundTopRecovery(),
-            _createInfo(),
-            const ButtonArrowBack()
+          children: const [
+            BackgroundTopRecovery(),
+            LogoApp(),
+            ButtonArrowBack(),
+            _ContainerInfo(),
+            _ContainerForm()
           ],
         ),
       ),
     );
   }
+}
 
-  _createInfo() {
-    String title = 'Cambiar contraseña';
+class _ContainerInfo extends StatelessWidget {
+  const _ContainerInfo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String title = 'Cambiar Contraseña';
     String description =
         'Crea una nueva contraseña y por favor no la compartas con nadie por su seguridad';
+    final Size size = MediaQuery.of(context).size;
     return Center(
       child: Column(
         children: [
           SizedBox(
-            height: _size.height * 0.08,
+            height: size.height * 0.17,
           ),
-          createLogo(),
-          createTitleInfo(_size, title),
-          createTextInfo(_size, description),
-          _containerInputEmail()
+          TitleInfo(title: title),
+          DescriptionInfo(description: description)
         ],
       ),
     );
   }
+}
 
-  Widget _containerInputEmail() {
+class _ContainerForm extends StatelessWidget {
+  const _ContainerForm({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.only(
-          bottom: _size.height * 0.18, top: _size.height * 0.03),
+      padding:
+          EdgeInsets.only(bottom: size.height * 0.18, top: size.height * 0.35),
       child: Center(
         child: Container(
-          child: _FormChangePassword(),
-          width: _size.width * 0.95,
-          height: _size.height * 0.4,
+          child: _FormRecoveryChangePassword(),
+          width: size.width * 0.9,
+          height: size.height * 0.3,
           decoration: BoxDecoration(
             color: AppColors.mainThirdContrast,
             borderRadius: BorderRadius.circular(20),
@@ -71,42 +80,46 @@ class ChangePasswordPage extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
-class _FormChangePassword extends StatelessWidget {
-  // ignore: unused_field
-  final TextEditingController _inputController = TextEditingController();
-  late Size _size;
+class _FormRecoveryChangePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return SizedBox(
-      width: _size.width * 0.4,
+      width: size.width * 0.4,
       child: Column(
         children: [
-          // _createInputNewPassword('Nueva Contraseña'),
-          // _createInputNewPassword('Confirme nueva contraseña'),
-          SizedBox(
-            height: _size.height * 0.02,
+          _InputNewPassword(
+            hintText: 'Nueva Contraseña',
           ),
-          createButton(context, _size, 'login', 'Actualizar contraseña', true)
+          _InputNewPassword(hintText: 'Confirme Nueva Contraseña'),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          ButtonRecovery(
+              routeName: 'login',
+              text: 'Actualizar Contraseña',
+              navigator: 'until'
+          )
         ],
       ),
     );
   }
+}
 
-  // Widget _createInputNewPassword(String hintText) {
-  //   return InputCustom(
-  //       controller: _inputController,
-  //       hintText: hintText,
-  //       obscureText: false,
-  //       keyboardType: TextInputType.text,
-  //       onChanged: changedExample,
-  //       icon: Icons.shield
-  //   );
-  // }
-
-  void changedExample(String text) {
-    // ignore: avoid_print
-    print('text --> $text');
+// ignore: must_be_immutable
+class _InputNewPassword extends StatelessWidget {
+  String hintText;
+  _InputNewPassword({
+    Key? key,
+    required this.hintText
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return InputCustom(
+        hintText: hintText,
+        obscureText: false,
+        keyboardType: TextInputType.text,
+        value: '',
+        icon: Icons.shield);
   }
 }

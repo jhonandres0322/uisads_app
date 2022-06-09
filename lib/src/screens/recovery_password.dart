@@ -5,53 +5,71 @@ import 'package:uisads_app/src/widgets/background_top_recovery.dart';
 import 'package:uisads_app/src/widgets/button_arrow_back.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
-// ignore: must_be_immutable
 class RecoveryPasswordPage extends StatelessWidget {
-  RecoveryPasswordPage({Key? key}) : super(key: key);
-  late Size _size;
+  const RecoveryPasswordPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    _size = MediaQuery.of(context).size;
     return Scaffold(
         body: SingleChildScrollView(
-      child: Stack(
+            child: Container(
+      alignment: Alignment.center,
+      child: Column(
         children: [
-          const BackgroundTopRecovery(),
-          _createInfo(),
-          const ButtonArrowBack()
+          Stack(
+            children: const [
+              BackgroundTopRecovery(), 
+              LogoApp(),
+              ButtonArrowBack(), 
+              _ContainerInfo(),
+              _ContainerForm()
+            ],
+          ),
+          
         ],
       ),
-    ));
+    )));
   }
+}
 
-  Widget _createInfo() {
+
+
+class _ContainerInfo extends StatelessWidget {
+  const _ContainerInfo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     String title = 'Recupere su contraseña';
     String description =
         'Por favor ingrese su dirección de correo electrónico para recibir el código de confirmación';
+    final Size size = MediaQuery.of(context).size;
     return Center(
       child: Column(
         children: [
           SizedBox(
-            height: _size.height * 0.08,
+            height: size.height * 0.17,
           ),
-          createLogo(),
-          createTitleInfo(_size, title),
-          createTextInfo(_size, description),
-          _containerInputEmail()
+          TitleInfo(title: title),
+          DescriptionInfo(description: description)
         ],
       ),
     );
   }
+}
 
-  Widget _containerInputEmail() {
+
+class _ContainerForm extends StatelessWidget {
+  const _ContainerForm({ Key? key }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.only(
-          bottom: _size.height * 0.18, top: _size.height * 0.03),
+          bottom: size.height * 0.18, top: size.height * 0.35),
       child: Center(
         child: Container(
           child: _FormRecoveryPassword(),
-          width: _size.width * 0.95,
-          height: _size.height * 0.23,
+          width: size.width * 0.9,
+          height: size.height * 0.23,
           decoration: BoxDecoration(
             color: AppColors.mainThirdContrast,
             borderRadius: BorderRadius.circular(20),
@@ -71,38 +89,39 @@ class RecoveryPasswordPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _FormRecoveryPassword extends StatelessWidget {
-  final TextEditingController _inputController = TextEditingController();
-  late Size _size;
   @override
   Widget build(BuildContext context) {
-    _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return SizedBox(
-      width: _size.width * 0.4,
+      width: size.width * 0.4,
       child: Column(
         children: [
-          // _createInputEmail(),
+          const _InputEmail(),
           SizedBox(
-            height: _size.height * 0.03,
+            height: size.height * 0.03,
           ),
-          createButton(context, _size, 'recovery-password-code',
-              'Recuperar Contraseña', false)
+          ButtonRecovery(
+            routeName: 'recovery-password-code', 
+            text: 'Recuperar Contraseña', 
+            navigator: 'push'
+          )
         ],
       ),
     );
   }
+}
 
-  // Widget _createInputEmail() {
-  //   return InputCustom(
-  //       controller: _inputController,
-  //       hintText: 'Ingresa tu correo electronico',
-  //       obscureText: false,
-  //       keyboardType: TextInputType.emailAddress,
-  //       onChanged: changedExample,
-  //       icon: Icons.email);
-  // }
+class _InputEmail extends StatelessWidget {
+  const _InputEmail({ Key? key }) : super(key: key);
 
-  void changedExample(String text) {
-    // ignore: avoid_print
-    print('text --> $text');
+  @override
+  Widget build(BuildContext context) {
+    return InputCustom(
+        hintText: 'Ingresa tu correo electronico',
+        obscureText: false,
+        keyboardType: TextInputType.emailAddress,
+        value: '',
+        icon: Icons.email
+    );
   }
 }

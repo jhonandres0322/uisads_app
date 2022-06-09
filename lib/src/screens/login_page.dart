@@ -157,18 +157,23 @@ class _ButtonLogin extends StatelessWidget {
       width: size.width * 0.70,
       child: ElevatedButton(
           onPressed: () {
-            // Navigator.pushNamed(context, 'main');
-            loginForm.isLoading
-                ? null
-                : () async {
-                    FocusScope.of(context).unfocus();
-                    final authService =
-                        Provider.of<AuthService>(context, listen: false);
-                    if (!loginForm.isValidForm()) return;
-                    loginForm.isLoading = true;
+            // Navigator.popAndPushNamed(context, 'main');
+            Navigator.pushNamedAndRemoveUntil(
+              context, 
+              'main', 
+              (route) => false
+            );
+            // loginForm.isLoading
+            //     ? null
+            //     : () async {
+            //         FocusScope.of(context).unfocus();
+            //         final authService =
+            //             Provider.of<AuthService>(context, listen: false);
+            //         if (!loginForm.isValidForm()) return;
+            //         loginForm.isLoading = true;
 
                     
-                  };
+            //       };
           },
           child: const Text('Iniciar sesión',
               style: TextStyle(

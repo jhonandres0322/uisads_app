@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 class BackgroundTopRecovery extends StatelessWidget {
   const BackgroundTopRecovery({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Container(
-        height: size.height * 0.35,
+        height: size.height * 0.4,
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20.0),

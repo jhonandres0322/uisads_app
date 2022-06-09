@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
-import 'package:uisads_app/src/widgets/button_arrow_back.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
 /// Pagina de registro de la aplicacion
@@ -11,7 +10,6 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return ChangeNotifierProvider(
       create: (_) => RegisterFormProvider(),
       child: Scaffold(

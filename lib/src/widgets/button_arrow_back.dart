@@ -7,8 +7,7 @@ class ButtonArrowBack extends StatelessWidget {
   const ButtonArrowBack({ 
     Key? key,
     this.color =AppColors.mainThirdContrast,
-   }) : super(key: key);
-  
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;

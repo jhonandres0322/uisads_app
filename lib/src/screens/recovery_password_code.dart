@@ -7,51 +7,67 @@ import 'package:uisads_app/src/widgets/input_custom.dart';
 
 // ignore: must_be_immutable
 class RecoveryPasswordCode extends StatelessWidget {
-  RecoveryPasswordCode({Key? key}) : super(key: key);
-  late Size _size;
+  const RecoveryPasswordCode({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    _size = MediaQuery.of(context).size;
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Stack(
-        children: [
-          const BackgroundTopRecovery(),
-          _createInfo(),
-          const ButtonArrowBack()
-        ],
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Stack(
+                children: const [
+                  BackgroundTopRecovery(),
+                  LogoApp(),
+                  ButtonArrowBack(),
+                  _ContainerInfo(),
+                  _ContainerForm()
+                ],
+              )
+            ],
+          ),
+        ),
       ),
-    ));
+    );
   }
+}
 
-  Widget _createInfo() {
+class _ContainerInfo extends StatelessWidget {
+  const _ContainerInfo({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
     String title = 'Ingrese el código de verificación';
     String description =
-        'Por favor ingrese el código verificación que fue enviado a su correo';
+        'Por favor ingrese el código de verificación que fue enviado a su correo';
+    final Size size = MediaQuery.of(context).size;
     return Center(
       child: Column(
         children: [
           SizedBox(
-            height: _size.height * 0.08,
+            height: size.height * 0.17,
           ),
-          createLogo(),
-          createTitleInfo(_size, title),
-          createTextInfo(_size, description),
-          _containerInputEmail()
+          TitleInfo(title: title),
+          DescriptionInfo(description: description)
         ],
       ),
     );
   }
+}
 
-  Widget _containerInputEmail() {
+class _ContainerForm extends StatelessWidget {
+  const _ContainerForm({ Key? key }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.only(
-          bottom: _size.height * 0.18, top: _size.height * 0.03),
+          bottom: size.height * 0.18, top: size.height * 0.35),
       child: Center(
         child: Container(
-          child: _FormRecoveryPassword(),
-          width: _size.width * 0.95,
-          height: _size.height * 0.23,
+          child: _FormRecoveryPasswordCode(),
+          width: size.width * 0.9,
+          height: size.height * 0.23,
           decoration: BoxDecoration(
             color: AppColors.mainThirdContrast,
             borderRadius: BorderRadius.circular(20),
@@ -70,40 +86,39 @@ class RecoveryPasswordCode extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class _FormRecoveryPassword extends StatelessWidget {
-  // ignore: unused_field
-  final TextEditingController _inputController = TextEditingController();
-  late Size _size;
+class _FormRecoveryPasswordCode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return SizedBox(
-      width: _size.width * 0.4,
+      width: size.width * 0.4,
       child: Column(
         children: [
-          // _createInputCode(),
+          const _InputCode(),
           SizedBox(
-            height: _size.height * 0.03,
+            height: size.height * 0.03,
           ),
-          createButton(
-              context, _size, 'change-password', 'Código verificación', true)
+          ButtonRecovery(
+            routeName: 'change-password', 
+            text: 'Código Verificación', 
+            navigator: 'pop'
+          )
         ],
       ),
     );
   }
+}
 
-  // Widget _createInputCode() {
-  //   return InputCustom(
-  //       controller: _inputController,
-  //       hintText: 'Digite el codigo de verificación',
-  //       obscureText: false,
-  //       keyboardType: TextInputType.text,
-  //       onChanged: changedExample,
-  //       icon: Icons.numbers);
-  // }
-
-  void changedExample(String text) {
-    // ignore: avoid_print
-    print('text --> $text');
+class _InputCode extends StatelessWidget {
+  const _InputCode({ Key? key }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return InputCustom(
+      hintText: 'Digite el código de verificación',
+      obscureText: false,
+      keyboardType: TextInputType.emailAddress,
+      value: '',
+      icon: Icons.email
+    );
   }
 }

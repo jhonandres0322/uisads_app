@@ -1,60 +1,106 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 
+class LogoApp extends StatelessWidget {
+  const LogoApp({Key? key}) : super(key: key);
 
-Widget createLogo() {
-  return const Image(
-    image: AssetImage('assets/images/logo_app_alt.png')
-  );
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.only(top: size.height * 0.07),
+      alignment: Alignment.center,
+      child: const Image(image: AssetImage('assets/images/logo_app_alt.png')),
+    );
+  }
 }
 
+// ignore: must_be_immutable
+class TitleInfo extends StatelessWidget {
+  String title;
+  TitleInfo({Key? key, required this.title}) : super(key: key);
 
-Widget createTitleInfo( Size size, String title) {
-  return Padding(
-    padding: EdgeInsets.only(
-      top: size.height * 0.01
-    ),
-    child: Text(
-      title,
-      textAlign: TextAlign.left,
-      style: const TextStyle(
-          color: AppColors.mainThirdContrast,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold),
-    ),
-  );
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.only(top: size.height * 0.03),
+      child: Text(
+        title,
+        style: const TextStyle(
+            color: AppColors.mainThirdContrast,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold),
+      ),
+    );
+  }
 }
 
-Widget createTextInfo( Size size, String description) {
-  return Padding(
-    padding: EdgeInsets.only(
-        top: size.height * 0.01,
-        left: size.width * 0.085,
-        right: size.height * 0.02),
-    child: Text(
-      description ,
-      style: const TextStyle(
-          color: AppColors.mainThirdContrast,
-          fontSize: 14.0,
-          fontWeight: FontWeight.normal),
-    ),
-  );
+// ignore: must_be_immutable
+class DescriptionInfo extends StatelessWidget {
+  String description;
+  DescriptionInfo({Key? key, required this.description}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.only(
+          top: size.height * 0.01,
+          left: size.width * 0.085,
+          right: size.width * 0.01),
+      child: Text(
+        description,
+        style: const TextStyle(
+            color: AppColors.mainThirdContrast,
+            fontSize: 14.0,
+            fontWeight: FontWeight.normal),
+      ),
+    );
+  }
 }
 
-Widget createButton( BuildContext context, Size size, String route, String text, bool isPop) { 
-  return SizedBox(
+// ignore: must_be_immutable
+class ButtonRecovery extends StatelessWidget {
+  String routeName;
+  String text;
+  String navigator;
+  ButtonRecovery(
+      {Key? key,
+      required this.routeName,
+      required this.text,
+      required this.navigator})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.75,
       child: ElevatedButton(
           onPressed: () {
-            isPop 
-            ? Navigator.popAndPushNamed(context, route) 
-            : Navigator.pushNamed(context, route);
+            switch (navigator) {
+              case 'pop':
+                Navigator.popAndPushNamed(context, routeName);
+                break;
+              case 'push':
+                Navigator.pushNamed(context, routeName);
+                break;
+              case 'until':
+                Navigator.pushNamedAndRemoveUntil(
+                    context, routeName, (Route<dynamic> route) => false);
+                break;
+            }
+            // isPop
+            //     ? Navigator.popAndPushNamed(context, route)
+            //     : Navigator.pushNamed(context, route);
           },
-          child: Text( text ),
+          child: Text(text),
           style: ElevatedButton.styleFrom(
               primary: AppColors.primary,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0)))),
     );
+  }
 }
