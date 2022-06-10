@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/providers/login_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
+import 'package:uisads_app/src/widgets/alert_custom.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 import 'package:uisads_app/src/widgets/logo_app.dart';
 
@@ -28,19 +29,19 @@ class LoginPage extends StatelessWidget {
               child: const Text(
                 'Registrarse',
                 style: TextStyle(
-                  color: AppColors.third,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Roboto',
-                  fontSize: 16.0
-                ),
+                    color: AppColors.third,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Roboto',
+                    fontSize: 16.0),
               ),
             ),
-            const SizedBox(width: 20,),
+            const SizedBox(
+              width: 20,
+            ),
           ],
           leading: Container(),
           backgroundColor: AppColors.mainThirdContrast,
           elevation: 0,
-          
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -59,8 +60,6 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
-  
 
   void loginUser() async {}
 }
@@ -96,9 +95,6 @@ class _LoginForm extends StatelessWidget {
   }
 }
 
-
-
-
 /// Widget que contiene el input de email para el formulario de login
 class _InputEmailLogin extends StatelessWidget {
   const _InputEmailLogin({
@@ -114,8 +110,7 @@ class _InputEmailLogin extends StatelessWidget {
         keyboardType: TextInputType.emailAddress,
         labelText: 'Correo Electronico',
         value: loginForm.email,
-        icon: Icons.email
-    );
+        icon: Icons.email);
   }
 }
 
@@ -134,8 +129,7 @@ class _InputPasswordLogin extends StatelessWidget {
         labelText: 'Contraseña',
         obscureText: true,
         value: loginForm.password,
-        icon: Icons.lock
-    );
+        icon: Icons.lock);
   }
 }
 
@@ -158,11 +152,10 @@ class _ButtonLogin extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {
             // Navigator.popAndPushNamed(context, 'main');
+            ScaffoldMessenger.of(context)
+                .showSnackBar(showAlertCustom('No pudo ingresar', true));
             Navigator.pushNamedAndRemoveUntil(
-              context, 
-              'main', 
-              (route) => false
-            );
+                context, 'main', (route) => false);
             // loginForm.isLoading
             //     ? null
             //     : () async {
@@ -172,24 +165,18 @@ class _ButtonLogin extends StatelessWidget {
             //         if (!loginForm.isValidForm()) return;
             //         loginForm.isLoading = true;
 
-                    
             //       };
           },
           child: const Text('Iniciar sesión',
               style: TextStyle(
-                color: Colors.white, 
-                fontSize: 17, 
-                fontWeight: FontWeight.w600, 
-                fontFamily: 'Roboto'
-              )
-          ),
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Roboto')),
           style: ElevatedButton.styleFrom(
               primary: AppColors.primary,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)
-              )
-          )
-      ),
+                  borderRadius: BorderRadius.circular(10.0)))),
     );
   }
 }
@@ -210,8 +197,7 @@ class _TextForgotPasswordLogin extends StatelessWidget {
             fontSize: 12,
             fontWeight: FontWeight.w400,
             fontFamily: 'Roboto',
-          )
-      ),
+          )),
       style: TextButton.styleFrom(primary: AppColors.subtitles),
     );
   }
