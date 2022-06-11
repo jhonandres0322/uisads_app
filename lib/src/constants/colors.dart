@@ -23,4 +23,6 @@ class AppColors {
   static const Color foodBg = Color(0xFFFDD2B2);
   static const Color sportsBg = Color(0xFFD6D5D5);
   static const Color logoSchoolOpaque = Color(0xFF171738);
+  static const Color accept = Color(0xFF4EC910);
+  static const Color reject = Color(0xFFDD3A35);
 }
