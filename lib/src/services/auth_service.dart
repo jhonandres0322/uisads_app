@@ -12,7 +12,6 @@ class AuthService extends ChangeNotifier with HttpHandler {
     UserRequest userRequest = UserRequest.fromJson(user);
     log(" userRequest --> ${userRequest.toString()} ");
     final resp = await getPost('/auth/login', userRequest.toJson());
-    log(" resp --> $resp");
     return resp;
   }
 

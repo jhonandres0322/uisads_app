@@ -153,9 +153,15 @@ class _ButtonLogin extends StatelessWidget {
           onPressed: () {
             // Navigator.popAndPushNamed(context, 'main');
             ScaffoldMessenger.of(context)
-                .showSnackBar(showAlertCustom('No pudo ingresar', true));
-            Navigator.pushNamedAndRemoveUntil(
-                context, 'main', (route) => false);
+                .showSnackBar(showAlertCustom('Inicio de Sesión con Exito', false));
+            // Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+            final authService =
+                Provider.of<AuthService>(context, listen: false);
+            Map<String, dynamic> user = {
+              "email": "jhonandres0322@gmail.com",
+              "password": "andres03221"
+            };
+            authService.loginUser(user);
             // loginForm.isLoading
             //     ? null
             //     : () async {
