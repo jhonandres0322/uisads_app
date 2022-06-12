@@ -37,7 +37,6 @@ class CustomUisIcons {
   static const IconData eye_strong = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData filter = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData food = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData frameicons = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData geometry_icon = IconData(0xe812, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData global_local = IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData home = IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -61,6 +60,7 @@ class CustomUisIcons {
   static const IconData search_left = IconData(0xe826, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData search_right = IconData(0xe827, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shield = IconData(0xe828, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData sports = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData uis_ads_icon = IconData(0xe829, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData user = IconData(0xe82a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData whatsapp = IconData(0xe82b, fontFamily: _kFontFam, fontPackage: _kFontPkg);

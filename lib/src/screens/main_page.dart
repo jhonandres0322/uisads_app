@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
+import 'package:uisads_app/src/utils/categoria_model.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
+import 'package:uisads_app/src/widgets/card_table.dart';
+import 'package:uisads_app/src/widgets/categoria_widget.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -20,10 +23,14 @@ class MainPage extends StatelessWidget {
           backgroundColor: Colors.white,
           // leading:  const CirclePerfilAvatar(width: 91, height: 44,),
           actions: [
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
-            CirclePerfilAvatar(width: 91, height: 44,),
+            const CirclePerfilAvatar(
+              width: 91,
+              height: 44,
+              userName: 'Usuario',
+            ),
             // PerfilCirculoUsuario(radio: 22, radioInterno: 2),
             const Spacer(),
             IconButton(
@@ -36,11 +43,31 @@ class MainPage extends StatelessWidget {
           //   // centerTitle: true,
           // ),
         ),
-        body: const Center(
-          child: CirclePerfilAvatar(
-            width: 91,
-            height: 44,
-          ),
+        body: Column(
+          children: [
+            // Widget Horizontal con la lista de categorias
+            Container(
+              width: double.infinity,
+              // color: Colors.yellow,
+              height: 90,
+              child: _ListaCategorias()
+            ),
+            // CardTable para los anuncios mostrados
+            Flexible(
+              // flex: 1,
+              child: ListView.builder(
+                itemCount: 2,
+                itemBuilder: (BuildContext context, int index) {  
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    color: Colors.blue,
+                    child: CardTable(),
+                  );
+                },
+                
+              )
+            ),
+          ],
         ),
         bottomNavigationBar: const BottomNavigatonBarUisAds(),
         floatingActionButton: FloatingActionButton(
@@ -50,7 +77,138 @@ class MainPage extends StatelessWidget {
             CustomUisIcons.megaphone,
             color: AppColors.logoSchoolPrimary,
           ),
-        )
+        ));
+  }
+}
+
+/// Widget placeholder para el CardTable
+class CardTablePlaceholder extends StatelessWidget {
+  const CardTablePlaceholder({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Container(
+                color: Colors.red,
+                height: 100,
+                width: 100,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                color: Colors.red,
+                height: 190,
+                width: 190,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Container(
+                color: Colors.red,
+                height: 190,
+                width: 190,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                color: Colors.red,
+                height: 190,
+                width: 190,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Container(
+                color: Colors.red,
+                height: 190,
+                width: 190,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                color: Colors.red,
+                height: 190,
+                width: 190,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Container(
+                color: Colors.red,
+                height: 190,
+                width: 190,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                color: Colors.red,
+                height: 190,
+                width: 190,
+              ),
+            ],
+          ),
+        ])
+      );
+  }
+}
+
+/// Widget Horizontal con la lista de categorias
+// TODO: Implementar el Widget Horizontal con la lista de categorias y mover de la main page a un archivo separado
+class _ListaCategorias extends StatelessWidget {
+  const _ListaCategorias({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Categoria> categorias = [
+      Categoria(icono: CustomUisIcons.geometry_icon, nombre: 'Variados'),
+      Categoria(icono: CustomUisIcons.food, nombre: 'Alimentos'),
+      Categoria(icono: CustomUisIcons.key_hand, nombre: 'Alquiler'),
+      Categoria(icono: CustomUisIcons.art, nombre: 'Arte'),
+      Categoria(icono: CustomUisIcons.sports, nombre: 'Deportes'),
+      Categoria(icono: CustomUisIcons.facilitador, nombre: 'Educación'),
+      Categoria(icono: CustomUisIcons.sports, nombre: 'Empleo'),
+      Categoria(icono: CustomUisIcons.work_tool, nombre: 'Servicios'),
+      Categoria(icono: CustomUisIcons.cloathing, nombre: 'Textil'),
+      Categoria(icono: Icons.laptop, nombre: 'Tecnología'),
+    ];
+    // TODO: Agregar la lista de categorias
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      itemCount: categorias.length,
+      itemBuilder: (BuildContext context, int index) {
+        return CategoriaButton(
+          icono: categorias[index].icono,
+          nombre: categorias[index].nombre,
+        );
+      },
     );
   }
 }
@@ -61,10 +219,12 @@ class CirclePerfilAvatar extends StatelessWidget {
     Key? key,
     required this.width,
     required this.height,
+    required this.userName,
   }) : super(key: key);
 
   final double width;
   final double height;
+  final String userName;
   @override
   Widget build(BuildContext context) {
     // Obtenemos los valores de la pantalla
@@ -73,34 +233,35 @@ class CirclePerfilAvatar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
-          // Stack con el circulo de perfil
-          PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
           // Entre mas abajo del stack mas arriba en pantalla estará
           _BarraPerfilNombre(
-            width: width ,
+            // width: width ,
             height: height,
+            nombreUser: 'Hola, $userName',
           ),
+          // Stack con el circulo de perfil
+          PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
         ],
       ),
     );
   }
 }
 
-///Widget ded barra complemento del perfil
+///Widget de la barra complemento del perfil
 class _BarraPerfilNombre extends StatelessWidget {
   const _BarraPerfilNombre({
     Key? key,
-    required this.width,
+    // required this.width,
     required this.height,
+    required this.nombreUser,
   }) : super(key: key);
-  final double width;
+  // final double width;
   final double height;
+  final String nombreUser;
 
   @override
   Widget build(BuildContext context) {
-    const String userName = 'Hola, Juaasdasdaasdasasdasd';
-    double anchoNombre = userName.length.toDouble();
-    print(anchoNombre);
+    double anchoNombre = nombreUser.length.toDouble();
     return Container(
       padding: const EdgeInsets.only(right: 5),
       alignment: Alignment.centerRight,
@@ -109,19 +270,17 @@ class _BarraPerfilNombre extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: height+5,
+            width: height + 5,
           ),
           // Texto de nombre del usuario conectado
-          const Text(userName,
+          Text(nombreUser,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.right,
-              style: TextStyle(
-                color: AppColors.titles,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
-                fontSize: 10
-              )
-          ),
+              style: const TextStyle(
+                  color: AppColors.titles,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 10)),
           const SizedBox(
             width: 5,
           ),
