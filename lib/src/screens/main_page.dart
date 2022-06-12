@@ -56,11 +56,10 @@ class MainPage extends StatelessWidget {
             Flexible(
               // flex: 1,
               child: ListView.builder(
-                itemCount: 2,
+                itemCount: 10,
                 itemBuilder: (BuildContext context, int index) {  
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    color: Colors.blue,
                     child: CardTable(),
                   );
                 },
