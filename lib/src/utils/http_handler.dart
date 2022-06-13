@@ -20,10 +20,8 @@ class HttpHandler {
     if (token.isNotEmpty) {
       Map<String, String> accessToken = {'access-token': token};
       _headers.addAll(accessToken);
-      log("headers with token --> $_headers");
       return _headers;
     }
-    log("headers without token --> $_headers");
     return _headers;
   }
 
@@ -32,35 +30,31 @@ class HttpHandler {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
     final resp = await http.get(Uri.parse(url), headers: getHeaders);
-    log("response --> $resp");
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
-    if (statusCode > 399) {
-      List errors = jsonDecode['errors'];
-      String msgError = errorHandler(errors);
-      log("mensaje de Errores --> $msgError");
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
   }
 
   // ignore: unused_element
   Future<Map<String, dynamic>> getPost(
       String endpoint, Map<String, dynamic> request) async {
-    log("Entrando al metodo post");
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
     final resp =
         await http.post(Uri.parse(url), headers: getHeaders, body: request);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
-    log("response --> $jsonDecode");
-    log("statusCode --> ${resp.statusCode}");
     int statusCode = resp.statusCode;
-    if (statusCode > 399) {
-      List errors = jsonDecode['errors'];
-      String msgError = errorHandler(errors);
-      log("mensaje de Errores --> $msgError");
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
   }
 
   // ignore: unused_element
@@ -70,15 +64,14 @@ class HttpHandler {
     String url = _getEndpoint(endpoint);
     final resp =
         await http.put(Uri.parse(url), headers: getHeaders, body: request);
-    log("response --> $resp");
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
-    if (statusCode > 399) {
-      List errors = jsonDecode['errors'];
-      String msgError = errorHandler(errors);
-      log("mensaje de Errores --> $msgError");
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
   }
 
   // ignore: unused_element
@@ -86,22 +79,28 @@ class HttpHandler {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
     final resp = await http.delete(Uri.parse(url), headers: getHeaders);
-    log("response --> $resp");
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
-    if (statusCode > 399) {
-      List errors = jsonDecode['errors'];
-      String msgError = errorHandler(errors);
-      log("mensaje de Errores --> $msgError");
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
   }
 
-  String errorHandler(List errors) {
-    String msg = '';
-    for (var i = 0; i < errors.length; i++) {
-      msg += errors[i]['msg'] + "\n";
+  Map<String, dynamic> errorHandler(
+      Map<String, dynamic> response, int statusCode) {
+    if (statusCode > 399) {
+      List errors = response['errors'];
+      Map<String, dynamic> msgMap = {};
+      String msg = '';
+      for (var i = 0; i < errors.length; i++) {
+        msg += errors[i]['msg'] + "\n";
+      }
+      msgMap.addAll({"msg": msg, "error": true});
+      return msgMap;
     }
-    return msg;
+    return {};
   }
 }

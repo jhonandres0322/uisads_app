@@ -60,8 +60,6 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
-  void loginUser() async {}
 }
 
 class _LoginForm extends StatelessWidget {
@@ -152,16 +150,12 @@ class _ButtonLogin extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {
             // Navigator.popAndPushNamed(context, 'main');
-            ScaffoldMessenger.of(context)
-                .showSnackBar(showAlertCustom('Inicio de Sesión con Exito', false));
             // Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
-            final authService =
-                Provider.of<AuthService>(context, listen: false);
             Map<String, dynamic> user = {
               "email": "jhonandres0322@gmail.com",
-              "password": "andres03221"
+              "password": "andres0322"
             };
-            authService.loginUser(user);
+            _loginUser(context, user);
             // loginForm.isLoading
             //     ? null
             //     : () async {
@@ -184,6 +178,24 @@ class _ButtonLogin extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0)))),
     );
+  }
+
+  void _loginUser(BuildContext context, Map<String, dynamic> user) async {
+    bool typeColorSnackbar = false;
+    String textSnackbar = '';
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final resp = await authService.loginUser(user);
+    if (resp.containsKey('error')) {
+      log("error resp -->");
+      typeColorSnackbar = resp['error'];
+    }
+    if (resp.containsKey('msg')) {
+      textSnackbar = resp['msg'];
+    }
+    log('typeColorSnackbar --> $typeColorSnackbar');
+    ScaffoldMessenger.of(context)
+        .showSnackBar(showAlertCustom(textSnackbar, typeColorSnackbar));
+    log("returning login page --> $resp");
   }
 }
 

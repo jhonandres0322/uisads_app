@@ -1,18 +1,24 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 
-SnackBar showAlertCustom( String text, bool isError ) {
+SnackBar showAlertCustom(String text, bool isError) {
   return SnackBar(
-    content: Text( text ),
+    content: Text(
+      text,
+      style: const TextStyle(fontSize: 11.0),
+    ),
     action: SnackBarAction(
       label: 'Cerrar',
-      onPressed: () {},
+      onPressed: () {
+        log("entering button close snackbar");
+      },
       textColor: AppColors.mainThirdContrast,
     ),
-    backgroundColor: isError ? AppColors.textile : AppColors.primary,
+    elevation: 1.0,
+    backgroundColor: isError ? AppColors.reject : AppColors.accept,
     behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(24)
-    ),
+    duration: const Duration( seconds: 3),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
   );
 }

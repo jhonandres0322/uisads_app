@@ -14,11 +14,11 @@ import 'package:uisads_app/src/screens/register_page.dart';
 Map<String, WidgetBuilder> appRoutes = {
   'home': ( BuildContext context ) => const HomePage(),
   'ad': ( BuildContext context ) => const AdPage(),
-  'change-password': (BuildContext context ) => ChangePasswordPage(),
+  'change-password': (BuildContext context ) => const ChangePasswordPage(),
   'login': (BuildContext context ) => const LoginPage(),
   'main': ( BuildContext context ) => const MainPage(),
   'profile': ( BuildContext context ) => const ProfilePage(),
-  'recovery-password': ( BuildContext context ) => RecoveryPasswordPage(),
+  'recovery-password': ( BuildContext context ) => const RecoveryPasswordPage(),
   'register': ( BuildContext context ) => const RegisterPage(),
-  'recovery-password-code' : ( BuildContext context ) => RecoveryPasswordCode()
+  'recovery-password-code' : ( BuildContext context ) => const RecoveryPasswordCode()
 };
