@@ -24,12 +24,15 @@ class TitleInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.only(top: size.height * 0.03),
+      padding: EdgeInsets.only(
+        top: size.height * 0.03,
+        left: size.width * 0.03
+      ),
       child: Text(
         title,
         style: const TextStyle(
             color: AppColors.mainThirdContrast,
-            fontSize: 20.0,
+            fontSize: 18.0,
             fontWeight: FontWeight.bold),
       ),
     );
@@ -47,13 +50,13 @@ class DescriptionInfo extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
           top: size.height * 0.01,
-          left: size.width * 0.085,
-          right: size.width * 0.01),
+          left: size.width * 0.09,
+          right: size.width * 0.02),
       child: Text(
         description,
         style: const TextStyle(
             color: AppColors.mainThirdContrast,
-            fontSize: 14.0,
+            fontSize: 12.0,
             fontWeight: FontWeight.normal),
       ),
     );
