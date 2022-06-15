@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/utils/utils_recovery_page.dart';
 import 'package:uisads_app/src/widgets/background_top_recovery.dart';
 import 'package:uisads_app/src/widgets/button_arrow_back.dart';
@@ -62,7 +63,7 @@ class _ContainerForm extends StatelessWidget {
         child: Container(
           child: _FormRecoveryChangePassword(),
           width: size.width * 0.9,
-          height: size.height * 0.3,
+          height: size.height * 0.4,
           decoration: BoxDecoration(
             color: AppColors.mainThirdContrast,
             borderRadius: BorderRadius.circular(20),
@@ -88,10 +89,8 @@ class _FormRecoveryChangePassword extends StatelessWidget {
       width: size.width * 0.4,
       child: Column(
         children: [
-          _InputNewPassword(
-            hintText: 'Nueva Contraseña',
-          ),
-          _InputNewPassword(hintText: 'Confirme Nueva Contraseña'),
+          const _InputNewPassword(),
+          const _InputNewConfirmPassword(),
           SizedBox(
             height: size.height * 0.03,
           ),
@@ -106,20 +105,38 @@ class _FormRecoveryChangePassword extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class _InputNewPassword extends StatelessWidget {
-  String hintText;
-  _InputNewPassword({
-    Key? key,
-    required this.hintText
-  }) : super(key: key);
+  const _InputNewPassword({ Key? key }) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
-    return InputCustom(
-        hintText: hintText,
-        obscureText: false,
-        keyboardType: TextInputType.text,
-        value: '',
-        icon: Icons.shield);
+    final Widget inputCode = TextFormField(
+      autofocus: false,
+      obscureText: false,
+      keyboardType: TextInputType.text,
+      //onChanged: (value) => loginForm.password = value,
+      //validator: loginForm.validatePassword,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.lock, 'Ingrese la nueva contraseña'),
+    );
+    return InputCustom(labelText: 'Nueva contraseña', input: inputCode);
+  }
+}
+
+class _InputNewConfirmPassword extends StatelessWidget {
+  const _InputNewConfirmPassword({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget inputCode = TextFormField(
+      autofocus: false,
+      obscureText: false,
+      keyboardType: TextInputType.text,
+      //onChanged: (value) => loginForm.password = value,
+      //validator: loginForm.validatePassword,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.lock, 'Confirme la contraseña'),
+    );
+    return InputCustom(labelText: 'Confirma la nueva contraseña',input: inputCode);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/providers/login_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/widgets/alert_custom.dart';
@@ -68,26 +69,24 @@ class _LoginForm extends StatelessWidget {
     final loginForm = Provider.of<LoginFormProvider>(context);
     final Size size = MediaQuery.of(context).size;
     // ignore: avoid_unnecessary_containers
-    return Container(
-      child: Form(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        key: loginForm.formKey,
-        child: Column(
-          children: [
-            const _InputEmailLogin(),
-            // _createInputEmail(loginForm),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            const _InputPasswordLogin(),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            _ButtonLogin(size: size),
-            const _TextForgotPasswordLogin(),
-            SizedBox(height: size.height * 0.05),
-          ],
-        ),
+    log('formKey --> ${loginForm.formKey}');
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      key: loginForm.formKey,
+      child: Column(
+        children: [
+          const _InputEmailLogin(),
+          SizedBox(
+            height: size.height * 0.005,
+          ),
+          const _InputPasswordLogin(),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          _ButtonLogin(size: size),
+          const _TextForgotPasswordLogin(),
+          SizedBox(height: size.height * 0.05),
+        ],
       ),
     );
   }
@@ -103,16 +102,20 @@ class _InputEmailLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     // Llamada al provider
     final loginForm = Provider.of<LoginFormProvider>(context);
-    return InputCustom(
-        hintText: "example@example.com",
-        keyboardType: TextInputType.emailAddress,
-        labelText: 'Correo Electronico',
-        value: loginForm.email,
-        icon: Icons.email);
+    final Widget inputEmail = TextFormField(
+      autofocus: false,
+      obscureText: false,
+      keyboardType: TextInputType.emailAddress,
+      onChanged: (value) => loginForm.email = value,
+      validator: loginForm.validateEmail,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.email, 'example@example.com'),
+    );
+    return InputCustom( labelText: 'Correo Electronico', input: inputEmail );
   }
 }
 
-/// Widget que contiene el input de contraseña del correo para el login
+// Widget que contiene el input de contraseña del correo para el login
 class _InputPasswordLogin extends StatelessWidget {
   const _InputPasswordLogin({
     Key? key,
@@ -121,13 +124,16 @@ class _InputPasswordLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
-    return InputCustom(
-        hintText: "********",
-        keyboardType: TextInputType.text,
-        labelText: 'Contraseña',
-        obscureText: true,
-        value: loginForm.password,
-        icon: Icons.lock);
+    final Widget inputPassword = TextFormField(
+      autofocus: false,
+      obscureText: true,
+      keyboardType: TextInputType.text,
+      onChanged: (value) => loginForm.password = value,
+      validator: loginForm.validatePassword,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.lock, '*******'),
+    );
+    return InputCustom(labelText: 'Contraseña', input: inputPassword);
   }
 }
 
@@ -149,13 +155,15 @@ class _ButtonLogin extends StatelessWidget {
       width: size.width * 0.70,
       child: ElevatedButton(
           onPressed: () {
+            // if( loginForm.formKey.)
+            log('value email button --> ${loginForm.email}');
             // Navigator.popAndPushNamed(context, 'main');
             // Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
             Map<String, dynamic> user = {
-              "email": "jhonandres0322@gmail.com",
-              "password": "andres0322"
+              "email": loginForm.email,
+              "password": loginForm.password
             };
-            _loginUser(context, user);
+            // _loginUser(context, user);
             // loginForm.isLoading
             //     ? null
             //     : () async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/utils/utils_recovery_page.dart';
 import 'package:uisads_app/src/widgets/background_top_recovery.dart';
 import 'package:uisads_app/src/widgets/button_arrow_back.dart';
@@ -116,12 +117,15 @@ class _InputEmail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InputCustom(
-        hintText: 'Ingresa tu correo electronico',
-        obscureText: false,
-        keyboardType: TextInputType.emailAddress,
-        value: '',
-        icon: Icons.email
+    final Widget inputEmail = TextFormField(
+      autofocus: false,
+      obscureText: true,
+      keyboardType: TextInputType.text,
+      //onChanged: (value) => loginForm.password = value,
+      //validator: loginForm.validatePassword,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.email, 'example@example.com'),
     );
+    return InputCustom(labelText: 'Correo Electronico',input: inputEmail);
   }
 }

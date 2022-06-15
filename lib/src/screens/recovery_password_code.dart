@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/utils/utils_recovery_page.dart';
 import 'package:uisads_app/src/widgets/background_top_recovery.dart';
 import 'package:uisads_app/src/widgets/button_arrow_back.dart';
@@ -113,12 +114,15 @@ class _InputCode extends StatelessWidget {
   const _InputCode({ Key? key }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return InputCustom(
-      hintText: 'Digite el código de verificación',
+    final Widget inputCode = TextFormField(
+      autofocus: false,
       obscureText: false,
-      keyboardType: TextInputType.emailAddress,
-      value: '',
-      icon: Icons.email
+      keyboardType: TextInputType.text,
+      //onChanged: (value) => loginForm.password = value,
+      //validator: loginForm.validatePassword,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.lock, 'Ingrese el codigo'),
     );
+    return InputCustom(labelText: 'Codigo',input: inputCode);
   }
 }

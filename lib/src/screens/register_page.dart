@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
+import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
 /// Pagina de registro de la aplicacion
@@ -68,11 +69,6 @@ class RegisterPage extends StatelessWidget {
 
 class _RegisterForm extends StatelessWidget {
 
-  // final TextEditingController _controllerEmail = TextEditingController();
-  // final TextEditingController _controllerName = TextEditingController();
-  // final TextEditingController _controllerPassword = TextEditingController();
-  // final TextEditingController _controllerCellphone = TextEditingController();
-
   final double spacingInputs = 0.03;
   @override
   Widget build(BuildContext context) {
@@ -82,13 +78,9 @@ class _RegisterForm extends StatelessWidget {
       children: [
         SizedBox(height: size.height * 0.05),
         const _InputEmailRegister(),
-        SizedBox(height: size.height * 0.025),
         const _InputUsuarioRegister(),
-        SizedBox(height: size.height * 0.025),
         const _InputCelularRegister(),
-        SizedBox(height: size.height * 0.025),
         const _InputCiudadRegister(),
-        SizedBox(height: size.height * 0.025),
         const _InputPasswordLogin(),
         // SizedBox(height: size.height * spacingInputs),
         // _createInputUser(),
@@ -147,7 +139,7 @@ class _ButtonRegister extends StatelessWidget {
   }
 }
 
-/// Widget que contiene el input de email para el registro
+// Widget que contiene el input de email para el registro
 class _InputEmailRegister extends StatelessWidget {
   const _InputEmailRegister({
     Key? key,
@@ -156,13 +148,16 @@ class _InputEmailRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    return InputCustom(
-      hintText: "example@example.com",
+    final Widget inputEmail = TextFormField(
+      autofocus: false,
+      obscureText: false,
       keyboardType: TextInputType.emailAddress,
-      labelText: 'Correo Electronico',
-      value: registerForm.email,
-      icon: Icons.email
+      onChanged: (value) => registerForm.email = value,
+      // validator: registerForm.email,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.email, 'example@example.com'),
     );
+    return InputCustom(labelText: 'Correo Electronico', input: inputEmail);
   }
 }
 
@@ -175,13 +170,16 @@ class _InputUsuarioRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    return InputCustom(
-      hintText: "Ingrese tu nombre",
+    final Widget inputName = TextFormField(
+      autofocus: false,
+      obscureText: false,
       keyboardType: TextInputType.name,
-      labelText: 'Usuario',
-      value: registerForm.usuario,
-      icon: Icons.person
+      onChanged: (value) => registerForm.usuario = value,
+      // validator: registerForm.email,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.person, 'Ingrese su nombre'),
     );
+    return InputCustom(labelText: 'Nombre', input: inputName);
   }
 }
 
@@ -194,13 +192,16 @@ class _InputCelularRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    return InputCustom(
-      hintText: 'Ingresa tu celular',
-      labelText: 'Celular',
+    final Widget inputPhone = TextFormField(
+      autofocus: false,
+      obscureText: false,
       keyboardType: TextInputType.phone,
-      value: registerForm.celular,
-      icon: Icons.mobile_friendly
+      onChanged: (value) => registerForm.celular = value,
+      // validator: registerForm.email,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.mobile_friendly, 'Ingrese su celular'),
     );
+    return InputCustom(labelText: 'Celular', input: inputPhone);
   }
 }
 
@@ -213,13 +214,16 @@ class _InputCiudadRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    return InputCustom(
-      hintText: 'Bucaramanga',
-      labelText: 'Ciudad',
+    final Widget inputCity = TextFormField(
+      autofocus: false,
+      obscureText: false,
       keyboardType: TextInputType.text,
-      value: registerForm.ciudad,
-      icon: Icons.location_city_rounded
+      onChanged: (value) => registerForm.ciudad = value,
+      // validator: registerForm.email,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.location_city_rounded, 'Ingrese la ciudad'),
     );
+    return InputCustom(labelText: 'Ciudad', input: inputCity);
   }
 }
 
@@ -233,13 +237,15 @@ class _InputPasswordLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    return InputCustom(
-        hintText: "********",
-        keyboardType: TextInputType.text,
-        labelText: 'Contraseña',
-        obscureText: true,
-        value: registerForm.password,
-        icon: Icons.lock
+    final Widget inputPassword = TextFormField(
+      autofocus: false,
+      obscureText: true,
+      keyboardType: TextInputType.text,
+      onChanged: (value) => registerForm.password = value,
+      // validator: registerForm.email,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: decorationInputCustom(Icons.lock, 'Ingrese su contraseña'),
     );
+    return InputCustom(labelText: 'Contraseña', input: inputPassword);
   }
 }
