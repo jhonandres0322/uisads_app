@@ -6,6 +6,7 @@ import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
 import 'package:uisads_app/src/widgets/categoria_widget.dart';
+import 'package:uisads_app/src/widgets/drawer_custom.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class MainPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 60,
           backgroundColor: Colors.white,
           // leading:  const CirclePerfilAvatar(width: 91, height: 44,),
@@ -43,29 +45,27 @@ class MainPage extends StatelessWidget {
           //   // centerTitle: true,
           // ),
         ),
+        drawer: const DrawerCustom(),
         body: Column(
           children: [
             // Widget Horizontal con la lista de categorias
             Container(
-              width: double.infinity,
-              // color: Colors.yellow,
-              height: 90,
-              child: _ListaCategorias()
-            ),
+                width: double.infinity,
+                // color: Colors.yellow,
+                height: 90,
+                child: _ListaCategorias()),
             // CardTable para los anuncios mostrados
             Flexible(
-              // flex: 1,
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {  
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: CardTable(),
-                  );
-                },
-                
-              )
-            ),
+                // flex: 1,
+                child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CardTable(),
+                );
+              },
+            )),
           ],
         ),
         bottomNavigationBar: const BottomNavigatonBarUisAds(),
@@ -171,8 +171,7 @@ class CardTablePlaceholder extends StatelessWidget {
               ),
             ],
           ),
-        ])
-      );
+        ]));
   }
 }
 
@@ -227,20 +226,25 @@ class CirclePerfilAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Obtenemos los valores de la pantalla
-    return Container(
-      height: height,
-      child: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          // Entre mas abajo del stack mas arriba en pantalla estará
-          _BarraPerfilNombre(
-            // width: width ,
-            height: height,
-            nombreUser: 'Hola, $userName',
-          ),
-          // Stack con el circulo de perfil
-          PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
-        ],
+    return InkWell(
+      onTap: () {
+        Scaffold.of(context).openDrawer();
+      },
+      child: Container(
+        height: height,
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            // Entre mas abajo del stack mas arriba en pantalla estará
+            _BarraPerfilNombre(
+              // width: width ,
+              height: height,
+              nombreUser: 'Hola, $userName',
+            ),
+            // Stack con el circulo de perfil
+            PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
+          ],
+        ),
       ),
     );
   }
