@@ -158,7 +158,7 @@ class _ButtonLogin extends StatelessWidget {
             // if( loginForm.formKey.)
             log('value email button --> ${loginForm.email}');
             // Navigator.popAndPushNamed(context, 'main');
-            // Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
             Map<String, dynamic> user = {
               "email": loginForm.email,
               "password": loginForm.password

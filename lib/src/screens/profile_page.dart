@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
+import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
@@ -12,29 +14,28 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            iconTheme: const IconThemeData(color: AppColors.mainThirdContrast),
-            title: const Text(
-              'Perfil de Usuario',
-              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-            ),
-            centerTitle: true,
-            actions: [
-              const Icon(Icons.search, color: AppColors.mainThirdContrast),
-              SizedBox(
-                width: size.width * 0.03,
-              )
-            ]),
-        body: Column(
-          children: const [
-            _InfoProfile(), 
-            _BarTabProfile(),
-          ],
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          iconTheme: const IconThemeData(color: AppColors.mainThirdContrast),
+          title: const Text(
+            'Perfil de Usuario',
+            style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          actions: [
+            const Icon(Icons.search, color: AppColors.mainThirdContrast),
+            SizedBox(
+              width: size.width * 0.03,
+            )
+          ]),
+      body: SingleChildScrollView(
+        child: Column(
+          children: const [_InfoProfile(), _BarTabProfile(), _ListAdsProfile()],
         ),
-        bottomNavigationBar: const BottomNavigatonBarUisAds(),
+      ),
+      bottomNavigationBar: const BottomNavigatonBarUisAds(),
     );
   }
 }
@@ -82,7 +83,9 @@ class _PhotoProfile extends StatelessWidget {
         const PerfilCirculoUsuario(radio: 50.0),
         FloatingActionButton.small(
           child: const Icon(CustomUisIcons.pencil_square),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, 'edit-profile');
+          },
           backgroundColor: AppColors.primary,
         )
       ],
@@ -193,61 +196,114 @@ class _BarTabProfile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _BartItemProfile(
-              backgroundColor: AppColors.logoSchoolPrimary,
-              iconData: CustomUisIcons.advertising,
-              label: 'Publicaciones',
-              iconColor: AppColors.mainThirdContrast,
-              ),
+            iconData: CustomUisIcons.advertising,
+            label: 'Publicaciones',
+            index: 0,
+          ),
           _BartItemProfile(
-              backgroundColor: AppColors.mainThirdContrast,
-              iconData: CustomUisIcons.library_photo,
-              label: 'Mas Valoradas',
-              iconColor: AppColors.logoSchoolPrimary,
-              ),
+            iconData: CustomUisIcons.library_photo,
+            label: 'Mas Valoradas',
+            index: 1,
+          ),
         ],
       ),
     );
   }
 }
 
+// ignore: must_be_immutable
 class _BartItemProfile extends StatelessWidget {
-  Color backgroundColor;
-  Color iconColor;
+  Color colorActive = AppColors.logoSchoolPrimary;
+  Color colorInactive = AppColors.mainThirdContrast;
+
   IconData iconData;
   String label;
+  int index;
   _BartItemProfile(
       {Key? key,
-      required this.backgroundColor,
       required this.iconData,
       required this.label,
-      required this.iconColor,
-      })
+      required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return Expanded(
-      child: Container(
-        color: backgroundColor,
-        height: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              iconData,
-              color: iconColor,
-            ),
-            SizedBox(
-              width: size.width * 0.03,
-            ),
-            Text(
-              label,
-              style: TextStyle(color: iconColor, fontSize: 10.0),
-            )
-          ],
+      child: InkWell(
+        onTap: () {
+          profileProvider.currentPage = index;
+        },
+        child: Container(
+          color: (profileProvider.currentPage == index)
+              ? colorActive
+              : colorInactive,
+          height: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                iconData,
+                color: (profileProvider.currentPage == index)
+                    ? colorInactive
+                    : colorActive,
+              ),
+              SizedBox(
+                width: size.width * 0.03,
+              ),
+              Text(
+                label,
+                style: TextStyle(
+                    color: (profileProvider.currentPage == index)
+                        ? colorInactive
+                        : colorActive,
+                    fontSize: 10.0),
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _ListAdsProfile extends StatelessWidget {
+  const _ListAdsProfile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return _getListAds(context);
+  }
+
+  Widget _getListAds(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    if (profileProvider.currentPage == 0) {
+      return const _MyAdsProfile();
+    } else {
+      return const _AdsMostValuedProfile();
+    }
+  }
+}
+
+class _MyAdsProfile extends StatelessWidget {
+  const _MyAdsProfile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [CardTable(), CardTable()],
+    );
+  }
+}
+
+class _AdsMostValuedProfile extends StatelessWidget {
+  const _AdsMostValuedProfile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [CardTable(), CardTable()],
     );
   }
 }
