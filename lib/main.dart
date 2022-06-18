@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/routes.dart';
 import 'package:uisads_app/src/constants/themes.dart';
 import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
+import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/utils/screen_size.dart';
 
@@ -22,6 +23,7 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => BottomNavigationBarProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: const App(),
     );
