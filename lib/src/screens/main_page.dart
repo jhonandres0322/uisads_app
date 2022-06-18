@@ -71,7 +71,9 @@ class MainPage extends StatelessWidget {
         bottomNavigationBar: const BottomNavigatonBarUisAds(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.primary,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, 'create-ad');
+          },
           child: const Icon(
             CustomUisIcons.megaphone,
             color: AppColors.logoSchoolPrimary,
