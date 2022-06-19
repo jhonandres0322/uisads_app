@@ -46,6 +46,10 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
       selectedItemColor: AppColors.titles,
       onTap: (int index) {
         navegacionProvider.currentPage = index;
+        //TODO: Codigo para ejecutar el drawer se necesita revisar la mejor ubicacion de este
+        if (index == 3) {
+          Scaffold.of(context).openDrawer();  
+        }
       },
     );
   }

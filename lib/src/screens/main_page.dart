@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uisads_app/src/constants/categories.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/utils/categoria_model.dart';
@@ -186,18 +187,7 @@ class _ListaCategorias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Categoria> categorias = [
-      Categoria(icono: CustomUisIcons.geometry_icon, nombre: 'Variados'),
-      Categoria(icono: CustomUisIcons.food, nombre: 'Alimentos'),
-      Categoria(icono: CustomUisIcons.key_hand, nombre: 'Alquiler'),
-      Categoria(icono: CustomUisIcons.art, nombre: 'Arte'),
-      Categoria(icono: CustomUisIcons.sports, nombre: 'Deportes'),
-      Categoria(icono: CustomUisIcons.facilitador, nombre: 'Educación'),
-      Categoria(icono: CustomUisIcons.sports, nombre: 'Empleo'),
-      Categoria(icono: CustomUisIcons.work_tool, nombre: 'Servicios'),
-      Categoria(icono: CustomUisIcons.cloathing, nombre: 'Textil'),
-      Categoria(icono: Icons.laptop, nombre: 'Tecnología'),
-    ];
+    final categorias = categoriasData;
     // TODO: Agregar la lista de categorias
     return ListView.builder(
       physics: const BouncingScrollPhysics(),

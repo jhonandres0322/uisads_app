@@ -24,7 +24,10 @@ class DrawerCustom extends StatelessWidget {
                       return ItemDrawer(data: items[index]);
                     }),
               ),
-              ItemDrawer(data: logoutDrawerInfo)
+              ItemDrawer(data: logoutDrawerInfo),
+              SizedBox(
+                height: size.height * 0.05,
+              )
             ],
           ),
         ));
@@ -87,10 +90,9 @@ class CardInfoProfile extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class ItemDrawer extends StatelessWidget {
-  Map<String, dynamic> data;
-  ItemDrawer({Key? key, required this.data}) : super(key: key);
+  final Map<String, dynamic> data;
+  const ItemDrawer({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +122,11 @@ class ItemDrawer extends StatelessWidget {
             Text(
               data['label'],
               style:
-                  TextStyle(color: getColorItem(currentRoute, data['route'])),
+                  TextStyle(
+                    color: getColorItem(currentRoute, data['route']),
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500
+                  ),
             )
           ],
         ),

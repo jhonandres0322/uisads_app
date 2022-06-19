@@ -16,23 +16,42 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          iconTheme: const IconThemeData(color: AppColors.mainThirdContrast),
-          title: const Text(
-            'Perfil de Usuario',
-            style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          actions: [
-            const Icon(Icons.search, color: AppColors.mainThirdContrast),
-            SizedBox(
-              width: size.width * 0.03,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppColors.mainThirdContrast),
+        title: const Text(
+          'Perfil de Usuario',
+          style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: [
+          const Icon(CustomUisIcons.search_right, color: AppColors.mainThirdContrast),
+          SizedBox(
+            width: size.width * 0.03,
+          )
+        ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  Color(0xFF67B93E),
+                  Color(0xFF3EB96B),
+                  Color(0xFFA9B93E)
+                ]
             )
-          ]),
+          ),
+        ),     
+      ),
       body: SingleChildScrollView(
         child: Column(
-          children: const [_InfoProfile(), _BarTabProfile(), _ListAdsProfile()],
+          children: const [
+            _InfoProfile(), 
+            _BarTabProfile(), 
+            _ListAdsProfile()
+          ],
         ),
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
@@ -63,11 +82,14 @@ class _InfoProfile extends StatelessWidget {
       height: size.height * 0.5,
       width: double.infinity,
       decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [
-        Color(0xFF67B93E),
-        Color(0xFF3EB96B),
-        Color(0xFFA9B93E)
-      ])),
+        gradient: LinearGradient(
+          colors: [
+          Color(0xFF67B93E),
+          Color(0xFF3EB96B),
+          Color(0xFFA9B93E)
+          ]
+        )
+      ),
     );
   }
 }
@@ -150,13 +172,16 @@ class _CardInfoProfile extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
-class _ItemCardInfoProfile extends StatelessWidget {
-  String label;
-  String value;
-  _ItemCardInfoProfile({Key? key, required this.label, required this.value})
-      : super(key: key);
 
+class _ItemCardInfoProfile extends StatelessWidget {
+  final String label;
+  final String value;
+  const _ItemCardInfoProfile({Key? key, 
+    required this.label, 
+    required this.value
+    })
+      : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -291,8 +316,16 @@ class _MyAdsProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [CardTable(), CardTable()],
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 7),
+      child: Column(
+        children: const [
+          CardTable(), 
+          CardTable(),
+          CardTable(),
+          CardTable(),
+        ],
+      ),
     );
   }
 }
@@ -302,8 +335,16 @@ class _AdsMostValuedProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [CardTable(), CardTable()],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7),
+      child: Column(
+        children: const [
+          CardTable(), 
+          CardTable(),
+          CardTable(),
+          CardTable(),
+        ],
+      ),
     );
   }
 }

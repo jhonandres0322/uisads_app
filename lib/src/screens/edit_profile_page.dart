@@ -13,6 +13,7 @@ class EditProfilePage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         iconTheme: const IconThemeData(color: AppColors.mainThirdContrast),
@@ -26,6 +27,19 @@ class EditProfilePage extends StatelessWidget {
                 style: TextStyle(color: AppColors.mainThirdContrast),
               ))
         ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  Color(0xFF67B93E),
+                  Color(0xFF3EB96B),
+                  Color(0xFFA9B93E)
+                ]
+            )
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -71,7 +85,8 @@ class _PhotoProfile extends StatelessWidget {
         FloatingActionButton.small(
           child: const Icon(CustomUisIcons.camera),
           onPressed: () {
-            Navigator.pushNamed(context, 'edit-profile');
+            //TODO: Implementar el envio a el cambio de foto del perfil, ya sea a la camara o la galeria
+            // Navigator.pushNamed(context, 'edit-profile');
           },
           backgroundColor: AppColors.logoSchoolPrimary,
         )
@@ -95,7 +110,8 @@ class _FormEditProfile extends StatelessWidget {
         const _InputCity(),
         const _InputDescription(),
         SizedBox(height: size.height * 0.02),
-        const _ButtonChangePassword()
+        const _ButtonChangePassword(),
+        SizedBox(height: size.height * 0.02),
       ],
     );
   }
@@ -218,7 +234,7 @@ class _ButtonChangePassword extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: size.height * 0.07,
-      margin: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+      margin: EdgeInsets.symmetric(horizontal: size.width * 0.10),
       child: ElevatedButton(
         onPressed: () {
           Navigator.pushNamed(context, 'new-password');
