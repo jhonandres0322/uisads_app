@@ -1,6 +1,6 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 
 class CategoriaButton extends StatelessWidget {
   const CategoriaButton({
@@ -13,9 +13,10 @@ class CategoriaButton extends StatelessWidget {
   final String nombre;
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        print('Tocaste el boton de la categoria $nombre');
+        log('Tocaste el boton de la categoria $nombre');
       },
       child: FocusableActionDetector(
         child: Padding(
@@ -26,11 +27,11 @@ class CategoriaButton extends StatelessWidget {
               // Circulo del widget
               Container(
                 width: 50,
-                height: 50,
+                height: size.height * 0.05,
                 child: Icon(
                   icono,
                   color: AppColors.subtitles,
-                  size: 30,
+                  size: size.height * 0.03,
                 ),
                 decoration: BoxDecoration(
                   // color: Colors.green,
@@ -41,8 +42,8 @@ class CategoriaButton extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 4,
+              SizedBox(
+                height: size.height * 0.005,
               ),
               Text(
                 nombre,
