@@ -29,6 +29,7 @@ class HttpHandler {
   Future<Map<String, dynamic>> getGet(String endpoint) async {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
+    log("endpoint --> $url");
     final resp = await http.get(Uri.parse(url), headers: getHeaders);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
@@ -45,6 +46,7 @@ class HttpHandler {
       String endpoint, Map<String, dynamic> request) async {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
+    log("url --> $url");
     final resp =
         await http.post(Uri.parse(url), headers: getHeaders, body: request);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);

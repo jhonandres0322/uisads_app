@@ -1,5 +1,6 @@
 class Env {
-  final String _endpointDev = 'http://192.168.0.105:5000/api';
+
+  final _endpointDev = 'http://10.0.2.2:5000/api';  
   final String _endpointPrd = '';
 
   String getEndpoint(String type) {

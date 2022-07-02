@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
+import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
@@ -115,13 +118,18 @@ class _ButtonRegister extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _registerProvider = Provider.of<RegisterFormProvider>(context);
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.70,
       child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
+            final userRegister = _registerProvider.getData();
+            final authService = AuthService();
+            log("userRegister --> $userRegister");
+            final resp = await authService.registerUser(userRegister);
             // Navegacion que elimina todas las rutas atras a mi main page
-            Navigator.pushNamedAndRemoveUntil(context, 'main', (Route<dynamic> route) => false);
+            // Navigator.pushNamedAndRemoveUntil(context, 'main', (Route<dynamic> route) => false);
           },
           child: const Text('Crear Cuenta',
             style: TextStyle(
@@ -174,7 +182,7 @@ class _InputUsuarioRegister extends StatelessWidget {
       autofocus: false,
       obscureText: false,
       keyboardType: TextInputType.name,
-      onChanged: (value) => registerForm.usuario = value,
+      onChanged: (value) => registerForm.name = value,
       // validator: registerForm.email,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.person, 'Ingrese su nombre'),
@@ -196,7 +204,7 @@ class _InputCelularRegister extends StatelessWidget {
       autofocus: false,
       obscureText: false,
       keyboardType: TextInputType.phone,
-      onChanged: (value) => registerForm.celular = value,
+      onChanged: (value) => registerForm.cellphone = value,
       // validator: registerForm.email,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.mobile_friendly, 'Ingrese su celular'),
@@ -214,16 +222,51 @@ class _InputCiudadRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    final Widget inputCity = TextFormField(
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.text,
-      onChanged: (value) => registerForm.ciudad = value,
-      // validator: registerForm.email,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.location_city_rounded, 'Ingrese la ciudad'),
+    return FutureBuilder  (
+      builder: (context, AsyncSnapshot<dynamic> snapshot) {
+        List<String> cities = snapshot.hasData ? snapshot.data : [];
+        log("data --> $cities");
+        final Widget dropdownCity = DropdownButtonFormField<String>(
+          decoration: decorationInputCustom(Icons.location_city_rounded, 'Ingrese la ciudad'),
+          items: cities.map((String value) {
+            log("value --> $value");
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (_) {},
+        );
+        return InputCustom(labelText: 'Ciudad', input: dropdownCity);
+      },
+      future: registerForm.getCities(),
     );
-    return InputCustom(labelText: 'Ciudad', input: inputCity);
+    // final cities = getCities( registerForm );
+    // log("cities screens --> $cities");
+    // final Widget inputCity = TextFormField(
+    //   autofocus: false,
+    //   obscureText: false,
+    //   keyboardType: TextInputType.text,
+    //   onChanged: (value) => registerForm.city = value,
+    //   // validator: registerForm.email,
+    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   decoration: decorationInputCustom(Icons.location_city_rounded, 'Ingrese la ciudad'),
+    // );
+  // final Widget dropdownCity = DropdownButtonFormField<String>(
+  //   decoration: decorationInputCustom(Icons.location_city_rounded, 'Ingrese la ciudad'),
+  //   items: <String>['A', 'B', 'C', 'D'].map((String value) {
+  //     return DropdownMenuItem<String>(
+  //       value: value,
+  //       child: Text(value),
+  //     );
+  //   }).toList(),
+  //   onChanged: (_) {},
+  // );
+  //   return InputCustom(labelText: 'Ciudad', input: dropdownCity);
+  }
+
+  Future<dynamic> getCities( RegisterFormProvider registerFormProvider ) async {
+    return await registerFormProvider.getCities();
   }
 }
 

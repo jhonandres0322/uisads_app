@@ -51,7 +51,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: [
                 // SizedBox(height: size.height * 0.07),
-                LogoApp(size: size),
+                LogoApp(height: size.height * 0.45 ),
                 _LoginForm(),
                 const SizedBox(height: 10.0),
               ],

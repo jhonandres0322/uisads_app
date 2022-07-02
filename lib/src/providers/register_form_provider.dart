@@ -1,12 +1,16 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:uisads_app/src/services/auth_service.dart';
 
 class RegisterFormProvider with ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String _email = '';
-  String _usuario = '';
-  String _celular = '';
-  String _ciudad = '';
+  String _name = '';
+  String _cellphone = '';
+  String _city = '';
   String _password = '';
   bool _isLoading = false;
 
@@ -16,15 +20,15 @@ class RegisterFormProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String get usuario => _usuario;
-  set usuario(String value) {
-    _usuario = value;
+  String get name => _name;
+  set name(String value) {
+    _name = value;
     notifyListeners();
   }
 
-  String get celular => _celular;
-  set celular(String value) {
-    _celular = value;
+  String get cellphone => _cellphone;
+  set cellphone(String value) {
+    _cellphone = value;
     notifyListeners();
   }
 
@@ -34,9 +38,9 @@ class RegisterFormProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String get ciudad => _ciudad;
-  set ciudad(String value) {
-    _ciudad = value;
+  String get city => _city;
+  set city(String value) {
+    _city = value;
     notifyListeners();
   }
 
@@ -46,5 +50,22 @@ class RegisterFormProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Map<String, dynamic> getData() {
+    return {
+      "email": _email,
+      "name": _name,
+      "cellphone": _cellphone,
+      "password": _password,
+      "city": _city
+    };
+  }
+
   bool isValidForm() => formKey.currentState?.validate() ?? false;
+
+  Future<dynamic> getCities() async {
+    final authService = AuthService();
+    final resp = await authService.getCities();
+    log( "cities provider --> ${resp['cities']}");
+    return resp['cities'];
+  }
 }

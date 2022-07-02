@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             children: [
-              LogoApp(size: size,),
+              LogoApp(height: size.height * 0.45,),
               SizedBox(
                 height: size.height * 0.07,
               ),

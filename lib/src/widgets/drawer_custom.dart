@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/items_drawer.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
+import 'package:uisads_app/src/widgets/logo_app.dart';
 
 class DrawerCustom extends StatelessWidget {
   const DrawerCustom({Key? key}) : super(key: key);
@@ -141,7 +144,34 @@ class ItemDrawer extends StatelessWidget {
       currentRoute == route ? AppColors.primary : AppColors.logoSchoolPrimary;
 
   void getNavigationRoute(BuildContext context, String routeName) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, routeName, (Route<dynamic> route) => false);
+    log("routeName --> $routeName ");
+    if( routeName.isEmpty ) {
+      showAboutApp(context);
+    } else {
+      Navigator.pushNamedAndRemoveUntil( context, routeName, (Route<dynamic> route) => false);
+    }
+  }
+
+  void showAboutApp(BuildContext context ) {
+    final Size size = MediaQuery.of(context).size;
+    showDialog(
+      context: context, 
+      builder: ( context ) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: size.height * 1
+          ),
+          content: Column(
+            children: [
+              Row(
+                children: [
+                  LogoApp(height: size.height * 0.01)
+                ],
+              )
+            ],
+          ), 
+        );
+      }
+    );
   }
 }
