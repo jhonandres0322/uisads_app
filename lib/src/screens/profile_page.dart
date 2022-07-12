@@ -236,15 +236,16 @@ class _BarTabProfile extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
-class _BartItemProfile extends StatelessWidget {
-  Color colorActive = AppColors.logoSchoolPrimary;
-  Color colorInactive = AppColors.mainThirdContrast;
 
-  IconData iconData;
-  String label;
-  int index;
-  _BartItemProfile(
+class _BartItemProfile extends StatelessWidget {
+  final Color colorActive = AppColors.logoSchoolPrimary;
+  final Color colorInactive = AppColors.mainThirdContrast;
+
+  final IconData iconData;
+  final String label;
+  final int index;
+
+  const _BartItemProfile(
       {Key? key,
       required this.iconData,
       required this.label,
@@ -253,6 +254,7 @@ class _BartItemProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final Size size = MediaQuery.of(context).size;
     final profileProvider = Provider.of<ProfileProvider>(context);
     return Expanded(
@@ -298,26 +300,25 @@ class _ListAdsProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _getListAds(context);
-  }
-
-  Widget _getListAds(BuildContext context) {
+    // Seleccion de la pagina actual
     final profileProvider = Provider.of<ProfileProvider>(context);
     if (profileProvider.currentPage == 0) {
       return const _MyAdsProfile();
     } else {
-      return const _AdsMostValuedProfile();
+      return _AdsMostValuedProfile();
     }
   }
 }
 
+/// Widget que mostrarla los anuncios del perfil del usuario, implementar como un ListView.builder()
 class _MyAdsProfile extends StatelessWidget {
   const _MyAdsProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 7),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
       child: Column(
         children: const [
           CardTable(), 
@@ -329,14 +330,16 @@ class _MyAdsProfile extends StatelessWidget {
     );
   }
 }
-
+/// Widget que mostrarla los anuncios mas valorados del perfil del usuario, implementar como un ListView.builder()
 class _AdsMostValuedProfile extends StatelessWidget {
   const _AdsMostValuedProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    // print(size.width * 0.02);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
       child: Column(
         children: const [
           CardTable(), 
