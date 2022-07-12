@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:uisads_app/src/constants/env.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class HttpHandler {
   final String _baseUrl = Env().getEndpoint('dev');
-  final String token = '';
+  final Preferences _preferences = Preferences();
+  late String token = _preferences.token.isNotEmpty ? _preferences.token : '' ;
+
 
   final Map<String, String> _headers = {
     'Content-type': 'application/x-www-form-urlencoded',
@@ -29,7 +31,6 @@ class HttpHandler {
   Future<Map<String, dynamic>> getGet(String endpoint) async {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
-    log("endpoint --> $url");
     final resp = await http.get(Uri.parse(url), headers: getHeaders);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
@@ -46,9 +47,7 @@ class HttpHandler {
       String endpoint, Map<String, dynamic> request) async {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
-    log("url --> $url");
-    final resp =
-        await http.post(Uri.parse(url), headers: getHeaders, body: request);
+    final resp = await http.post(Uri.parse(url), headers: getHeaders, body: request);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
     Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);

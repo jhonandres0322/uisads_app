@@ -12,11 +12,9 @@ class AuthService with HttpHandler {
     return resp;
   }
 
-  Future<dynamic> registerUser( Map<String, dynamic> user ) async {
-    log("entrando al servicio de register user ");
+  Future<Map<String,dynamic>> registerUser( Map<String, dynamic> user ) async {
     UserRegister userRegister = UserRegister.fromJson(user);
     final resp = await getPost('/auth/register', userRegister.toJson());
-    log("resp services auth register --> $resp");
     return resp;
   }
 

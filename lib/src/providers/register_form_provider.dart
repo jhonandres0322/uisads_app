@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 
@@ -65,7 +62,6 @@ class RegisterFormProvider with ChangeNotifier {
   Future<dynamic> getCities() async {
     final authService = AuthService();
     final resp = await authService.getCities();
-    log( "cities provider --> ${resp['cities']}");
     return resp['cities'];
   }
 }

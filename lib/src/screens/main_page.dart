@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/categories.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/utils/categoria_model.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
@@ -11,14 +13,13 @@ import 'package:uisads_app/src/widgets/drawer_custom.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     // const String userName = 'Hola, Armandosasas';
     // double anchoNombre = userName.length.toDouble();
     // print(anchoNombre);
-
+    Preferences _preferences = Preferences();
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,

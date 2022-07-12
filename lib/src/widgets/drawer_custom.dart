@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/items_drawer.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/logo_app.dart';
 
@@ -144,10 +145,15 @@ class ItemDrawer extends StatelessWidget {
       currentRoute == route ? AppColors.primary : AppColors.logoSchoolPrimary;
 
   void getNavigationRoute(BuildContext context, String routeName) {
-    log("routeName --> $routeName ");
     if( routeName.isEmpty ) {
       showAboutApp(context);
     } else {
+      if( routeName == 'login' ) {
+        Preferences _preferences = Preferences();
+        _preferences.token = '';
+        _preferences.user = '';
+        _preferences.profile = '';
+      }
       Navigator.pushNamedAndRemoveUntil( context, routeName, (Route<dynamic> route) => false);
     }
   }

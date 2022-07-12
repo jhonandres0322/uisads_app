@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/providers/login_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
@@ -69,7 +71,6 @@ class _LoginForm extends StatelessWidget {
     final loginForm = Provider.of<LoginFormProvider>(context);
     final Size size = MediaQuery.of(context).size;
     // ignore: avoid_unnecessary_containers
-    log('formKey --> ${loginForm.formKey}');
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       key: loginForm.formKey,
@@ -156,24 +157,11 @@ class _ButtonLogin extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {
             // if( loginForm.formKey.)
-            log('value email button --> ${loginForm.email}');
-            // Navigator.popAndPushNamed(context, 'main');
-            Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
             Map<String, dynamic> user = {
               "email": loginForm.email,
               "password": loginForm.password
             };
-            // _loginUser(context, user);
-            // loginForm.isLoading
-            //     ? null
-            //     : () async {
-            //         FocusScope.of(context).unfocus();
-            //         final authService =
-            //             Provider.of<AuthService>(context, listen: false);
-            //         if (!loginForm.isValidForm()) return;
-            //         loginForm.isLoading = true;
-
-            //       };
+            _loginUser(context, user);
           },
           child: const Text('Iniciar sesión',
               style: TextStyle(
@@ -189,21 +177,19 @@ class _ButtonLogin extends StatelessWidget {
   }
 
   void _loginUser(BuildContext context, Map<String, dynamic> user) async {
-    bool typeColorSnackbar = false;
-    String textSnackbar = '';
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final resp = await authService.loginUser(user);
-    if (resp.containsKey('error')) {
-      log("error resp -->");
-      typeColorSnackbar = resp['error'];
+    final _authService = AuthService();
+    final resp = await _authService.loginUser(user);
+    log('resp --> $resp');
+    if( resp['error'] ) {
+      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], true));
+    } else {
+      Preferences _preferences = Preferences();
+      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], false));
+      _preferences.token = resp['token'];
+      _preferences.user = json.encode( resp['user'] );
+      _preferences.profile = json.encode( resp['profile'] );
+      Navigator.pushNamedAndRemoveUntil(context, 'main', (Route<dynamic> route) => false);
     }
-    if (resp.containsKey('msg')) {
-      textSnackbar = resp['msg'];
-    }
-    log('typeColorSnackbar --> $typeColorSnackbar');
-    ScaffoldMessenger.of(context)
-        .showSnackBar(showAlertCustom(textSnackbar, typeColorSnackbar));
-    log("returning login page --> $resp");
   }
 }
 

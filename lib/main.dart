@@ -9,7 +9,6 @@ import 'package:uisads_app/src/constants/themes.dart';
 import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
 import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/utils/screen_size.dart';
 
 void main() => runApp(const AppState());
