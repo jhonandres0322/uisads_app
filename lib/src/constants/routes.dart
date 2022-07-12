@@ -13,6 +13,7 @@ import 'package:uisads_app/src/screens/profile_page.dart';
 import 'package:uisads_app/src/screens/recovery_password.dart';
 import 'package:uisads_app/src/screens/recovery_password_code.dart';
 import 'package:uisads_app/src/screens/register_page.dart';
+import 'package:uisads_app/src/screens/search_page.dart';
 
 Map<String, WidgetBuilder> appRoutes = {
   'home': ( BuildContext context ) => const HomePage(),
@@ -27,4 +28,5 @@ Map<String, WidgetBuilder> appRoutes = {
   'create-ad' : (BuildContext context) => const CreateAdPage(),
   'edit-profile': (BuildContext context ) => const EditProfilePage(),
   'new-password' :(BuildContext context) => const NewPasswordPage(), 
+  'search' : (BuildContext context) => const SearchPage(),
 };
