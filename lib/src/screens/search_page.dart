@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/categories.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
+import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
 import 'package:uisads_app/src/widgets/categoria_card.dart';
 import 'package:uisads_app/src/widgets/categoria_widget.dart';
+import 'package:uisads_app/src/widgets/input_custom.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -31,37 +33,89 @@ class SearchPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigatonBarUisAds(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            // TODO: Lista de categorias
-            Container(
-                width: double.infinity,
-                // color: Colors.yellow,
-                height: 50,
-                child: _ListaCategorias()
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            // TODO: Barra de busqueda y icono filtro
-            Container(),
-            // TODO: Placeholder para los anuncios ojala sea animado
-            Container(),
-            CardTable(),
-            CardTable(),
-            CardTable(),
-            CardTable(),
-            CardTable(),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          // Lista de categorias el height afecta el tamaño de las categorias internas
+          Container(
+              width: double.infinity,
+              // color: Colors.yellow,
+              height: 45,
+              child: _ListaCategorias()),
+          SizedBox(
+            height: 10,
+          ),
+          // TODO: Barra de busqueda y icono filtro
+          _SearchWidget(),
+          // TODO: Placeholder para los anuncios ojala sea animado
+          Flexible(
+              // flex: 1,
+              child: ListView.builder(
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: CardTable(),
+              );
+            },
+          )),
+        ],
       ),
     );
+  }
+}
+
+class _SearchWidget extends StatelessWidget {
+  const _SearchWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    final Widget inputEmail = TextField(
+      onChanged: (value) {},
+      controller: TextEditingController(),
+      autofocus: false,
+      keyboardType: TextInputType.text,
+      decoration: decorationInputCustom( CustomUisIcons.search_right, '¿Qué estas buscando?', AppColors.titles,true),
+    );
+
+    return Container(
+      height: size.height * 0.06,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: size.width * 0.05),
+            width: size.width * 0.70,
+            child: inputEmail
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          IconButton(
+            icon: Icon(CustomUisIcons.filter),
+            color: AppColors.subtitles,
+            onPressed: () {},
+            // iconSize: size.height * 0.06,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+        ],
+      ),
+    );
+    // return Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 10),
+    //   height: 60,
+    //   color: Colors.yellow,
+    // );
   }
 }
 
