@@ -46,7 +46,7 @@ class App extends StatelessWidget {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               routes: appRoutes,
-              initialRoute: 'search', //home por defecto
+              initialRoute: 'home', //home por defecto
               theme: AppTheme.themePrimary,
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
