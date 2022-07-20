@@ -7,25 +7,28 @@ class CardTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Column(children: [
-      // Separacion de la parte superior
-      SizedBox(
-        height: 5,
-      ),
-      // Construccion de las tarjetas de la fila
-      Row(
+      child: Column(
         children: [
-          AnuncioCard( image: images[0]['source'], name: images[0]['name'] ),
+          // Separacion de la parte superior
           SizedBox(
-            width: 10,
+            height: 5,
           ),
-          AnuncioCard( image: images[1]['source'], name: images[1]['name'])
-        ],
-      ),
-      SizedBox(
-        height: 5,
-      ),
-    ]));
+          // Construccion de las tarjetas de la fila
+          Row(
+            children: [
+              // AnuncioCard(),
+              SizedBox(
+                width: 10,
+              ),
+              // AnuncioCard()
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+        ]
+      )
+    );
   }
 }
 
