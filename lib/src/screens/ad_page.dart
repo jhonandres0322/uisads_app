@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
@@ -48,7 +50,7 @@ class AdPage extends StatelessWidget {
                       color: AppColors.foods,
                     ),
                     child: const Text(
-                      'Alimentos',
+                      'Tecnología',
                       // textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -60,7 +62,7 @@ class AdPage extends StatelessWidget {
                   ),
                   const Spacer(),
                   const Text(
-                    '16 de Enero de 2022',
+                    '16 de Abril de 2022',
                     style: TextStyle(
                       color: AppColors.subtitles,
                       fontSize: 10,
@@ -79,7 +81,7 @@ class AdPage extends StatelessWidget {
               margin: const EdgeInsets.only(left: 15, top: 10),
               alignment: Alignment.topLeft,
               child: const Text(
-                'Titulo del anuncio',
+                'Pantalla 21 pulgadas',
                 style: TextStyle(
                   color: AppColors.titles,
                   fontSize: 24,
@@ -89,80 +91,87 @@ class AdPage extends StatelessWidget {
               ),
             ),
             // Widget para la imagen del vendedor, nombre y ubicacion como elemento fijo
-            Container(
-              margin: const EdgeInsets.only(left: 15, top: 10),
-              child: Row(
-                children: [
-                  // Widget de la imagen del vendedor
-                  // TODO:Reemplazar por mi widget personalizado
-                  PerfilCirculoUsuario(radio: 20, radioInterno: 2),
-                  // Container(
-                  //   width: 50,
-                  //   height: 50,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(50),
-                  //     image: DecorationImage(
-                  //       image: AssetImage('assets/images/avatar.png'),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  // ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  // Widget del nombre del vendedor
-                  Container(
-                    width: 130,
-                    // color: Colors.redAccent ,
-                    child: const Text(
-                      'Nombre del vendedor',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: AppColors.subtitles,
-                        fontSize: 12,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w400,
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, 'profile', arguments: {
+                  'type': 'seller'
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 15, top: 10),
+                child: Row(
+                  children: [
+                    // Widget de la imagen del vendedor
+                    // TODO:Reemplazar por mi widget personalizado
+                    const PerfilCirculoUsuario(radio: 20, radioInterno: 2),
+                    // Container(
+                    //   width: 50,
+                    //   height: 50,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(50),
+                    //     image: DecorationImage(
+                    //       image: AssetImage('assets/images/avatar.png'),
+                    //       fit: BoxFit.cover,
+                    //     ),
+                    //   ),
+                    // ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    // Widget del nombre del vendedor
+                    Container(
+                      width: 130,
+                      // color: Colors.redAccent ,
+                      child: const Text(
+                        'Jorge Andres Triana Mojica',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: AppColors.subtitles,
+                          fontSize: 12,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  Spacer(),
-                  // Widget de la ubicacion del vendedor,
-                  // TODO: Agregar el icono de ubicacion y Arreglar el texto
-                  Container(
-                    height: 25,
-                    // width: 100,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: AppColors.logoSchoolPrimary,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Bucaramanga',
-                          style: TextStyle(
-                            color: AppColors.mainThirdContrast,
-                            fontSize: 9,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w500,
+                    Spacer(),
+                    // Widget de la ubicacion del vendedor,
+                    // TODO: Agregar el icono de ubicacion y Arreglar el texto
+                    Container(
+                      height: 25,
+                      // width: 100,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColors.logoSchoolPrimary,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.white,
+                            size: 15,
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Bucaramanga',
+                            style: TextStyle(
+                              color: AppColors.mainThirdContrast,
+                              fontSize: 9,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  )
-                ],
+                    SizedBox(
+                      width: 15,
+                    )
+                  ],
+                ),
               ),
             ),
             // Widget para el contenido del anuncio carrete principal de fotografias
@@ -177,7 +186,7 @@ class AdPage extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: FadeInImage(
-                          image: AssetImage('assets/images/cocacola.jpg'),
+                          image: AssetImage('assets/quemados/pantalla_1.jpeg'),
                           placeholder:
                               AssetImage('assets/images/jar-loading.gif'),
                           fit: BoxFit.cover,
@@ -192,7 +201,7 @@ class AdPage extends StatelessWidget {
                       ),
                     );
                   },
-                  itemCount: 3,
+                  itemCount: 5,
                   pagination: const SwiperPagination(
                     builder: SwiperPagination.dots,
                   ),
@@ -207,11 +216,11 @@ class AdPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-                  _CarreteImageElement(),
-                  _CarreteImageElement(),
-                  _CarreteImageElement(),
-                  _CarreteImageElement(),
-                  _CarreteImageElement(),
+                  _CarreteImageElement( image: 'assets/quemados/pantalla_1.jpeg',),
+                  _CarreteImageElement( image: 'assets/quemados/pantalla_2.jpeg',),
+                  _CarreteImageElement( image: 'assets/quemados/pantalla_3.jpeg',),
+                  _CarreteImageElement( image: 'assets/quemados/pantalla_4.jpeg',),
+                  _CarreteImageElement( image: 'assets/quemados/pantalla_5.jpeg',),
                 ],
               ),
             ),
@@ -235,7 +244,7 @@ class AdPage extends StatelessWidget {
                     child: _IconButtonLike(
                       icon: CustomUisIcons.like,
                       color: AppColors.primary,
-                      valoracion: 15,
+                      valoracion: 5,
                     ),
                   ),
                   const SizedBox(
@@ -325,11 +334,11 @@ class _DescripcionAnuncio extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: const Text(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id ultrices turpis amet. Sem arcu orci, duis morbi velit venenatis a. Tincidunt proin sed viverra dui justo, orci blandit. Molestie nunc sed nisi enim aliquet vel ultrices accumsan. Nisl, sit enim nunc viverra gravida non. Elementum cursus diam curabitur aenean imperdiet augue vitae quis sapien. \n \n Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id ultrices turpis amet. Sem arcu orci, duis morbi velit venenatis a. Tincidunt proin sed viverra dui justo, orci blandit. Molestie nunc sed nisi enim aliquet vel ultrices accumsan. Nisl, sit enim nunc viverra gravida non. Elementum cursus diam curabitur aenean imperdiet augue vitae quis sapien.',
+        'Se vendde pantalla de 21 pulgadas LCD, unico dueño, viene con el cable de poder y el conector HDMI para conectar al equipo.',
         textAlign: TextAlign.justify,
         style: TextStyle(
           color: AppColors.logoSchoolPrimary,
-          fontSize: 10,
+          fontSize: 11,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
         ),
@@ -342,8 +351,9 @@ class _DescripcionAnuncio extends StatelessWidget {
 class _CarreteImageElement extends StatelessWidget {
   const _CarreteImageElement({
     Key? key,
+    required this.image
   }) : super(key: key);
-
+  final String image;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -358,9 +368,9 @@ class _CarreteImageElement extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(9),
-        child: const FadeInImage(
-          image: AssetImage('assets/images/cocacola.jpg'),
-          placeholder: AssetImage('assets/images/jar-loading.gif'),
+        child: FadeInImage(
+          image: AssetImage( image ),
+          placeholder: const AssetImage('assets/images/jar-loading.gif'),
           fit: BoxFit.cover,
         ),
       ),

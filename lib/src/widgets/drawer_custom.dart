@@ -1,8 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/items_drawer.dart';
+import 'package:uisads_app/src/models/profile.dart';
+import 'package:uisads_app/src/models/user.dart';
+import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/logo_app.dart';
@@ -19,7 +23,7 @@ class DrawerCustom extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const CardInfoProfile(),
+              CardInfoProfile(),
               SizedBox(height: size.height * 0.05),
               Expanded(
                 child: ListView.builder(
@@ -39,14 +43,18 @@ class DrawerCustom extends StatelessWidget {
 }
 
 class CardInfoProfile extends StatelessWidget {
-  const CardInfoProfile({Key? key}) : super(key: key);
+  CardInfoProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final _authService = Provider.of<AuthService>(context);
+    final _preferences = Preferences();
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, 'profile');
+        Navigator.pushNamed(context, 'profile', arguments: {
+          'type': 'user'
+        });
       },
       child: Container(
         child: Row(
@@ -54,30 +62,42 @@ class CardInfoProfile extends StatelessWidget {
             SizedBox(width: size.width * 0.05),
             const PerfilCirculoUsuario(radio: 30.0),
             SizedBox(width: size.width * 0.03),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Jorge Andres Gonzalez',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.mainThirdContrast,
+            FutureBuilder(
+              future: _authService.getProfile( _preferences.profile ),
+              builder: (context, snapshot) {
+                if( snapshot.hasData ) {
+                  Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
+                  String email = data['email'];
+                  Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
+                  Widget widget = Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _profile.name,
+                          style: const TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.mainThirdContrast,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          email,
+                          style: const TextStyle(
+                            fontSize: 10.0,
+                            color: AppColors.mainThirdContrast,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    'jorgegonzalez123@gmail.com',
-                    style: TextStyle(
-                      fontSize: 10.0,
-                      color: AppColors.mainThirdContrast,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ],
-              ),
+                  );
+                  return widget;
+                }
+                return const CircularProgressIndicator();
+              },
             )
           ],
         ),
@@ -104,7 +124,7 @@ class ItemDrawer extends StatelessWidget {
     // return Text('${data['label']}');
     final currentRoute = ModalRoute.of(context)?.settings.name;
     return InkWell(
-      onTap: () => getNavigationRoute(context, data['route']),
+      onTap: () => getNavigationRoute(context, data['route'],),
       child: Container(
         padding: EdgeInsets.symmetric(
             horizontal: size.width * 0.05, vertical: size.height * 0.015),
@@ -151,8 +171,6 @@ class ItemDrawer extends StatelessWidget {
       if( routeName == 'login' ) {
         Preferences _preferences = Preferences();
         _preferences.token = '';
-        _preferences.user = '';
-        _preferences.profile = '';
       }
       Navigator.pushNamedAndRemoveUntil( context, routeName, (Route<dynamic> route) => false);
     }

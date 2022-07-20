@@ -1,10 +1,10 @@
 class Env {
 
-  final String _endpointDev = 'http://192.168.1.11:5000/api';  
-  final String _endpointPrd = '';
+  static const String _endpointDev = 'http://192.168.1.11:5000/api';  
+  static const String _endpointPrd = 'https://uisads.herokuapp.com/api';
 
-  String getEndpoint(String type) {
-    if (type == 'dev') {
+  static String getEndpoint(String type) {
+    if (type == 'prd') {
       return _endpointDev;
     } else {
       return _endpointPrd;

@@ -10,52 +10,52 @@ String profileToJson(Profile data) => json.encode(data.toJson());
 
 class Profile {
   Profile({
-    required this.name,
-    required this.cellphone,
-    required this.city,
-    required this.image,
-    required this.state,
-    required this.description,
-    required this.user,
-    required this.rating,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id = '',
+    this.name = '',
+    this.cellphone = '',
+    this.city = '',
+    this.image = '',
+    this.description = '',
+    this.user,
+    this.score,
+    this.createdAt,
+    this.updatedAt,
   });
 
+  String id;
   String name;
   String cellphone;
   String city;
   dynamic image;
-  bool state;
   String description;
   dynamic user;
-  dynamic rating;
-  DateTime createdAt;
-  DateTime updatedAt;
+  dynamic score;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        name: json["name"],
-        cellphone: json["cellphone"],
-        city: json["city"],
-        image: json["image"],
-        state: json["state"],
-        description: json["description"],
-        user: json["user"],
-        rating: json["rating"],
+        id: json["uid"] ?? '',
+        name: json["name"] ?? '',
+        cellphone: json["cellphone"] ?? '',
+        city: json["city"] ?? '',
+        image: json["image"] ?? '',
+        description: json["description"] ?? ''  ,
+        user: json["user"] ?? '',
+        score: json["score"] ?? '',
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "cellphone": cellphone,
         "city": city,
         "image": image,
-        "state": state,
         "description": description,
         "user": user,
-        "rating": rating,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "score": score,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
       };
 }

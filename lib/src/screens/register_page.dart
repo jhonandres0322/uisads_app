@@ -136,8 +136,6 @@ class _ButtonRegister extends StatelessWidget {
               Preferences _preferences = Preferences();
               ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], false));
               _preferences.token = resp['token'];
-              _preferences.user = json.encode( resp['user'] );
-              _preferences.profile = json.encode( resp['profile'] );
               Navigator.pushNamedAndRemoveUntil(context, 'main', (Route<dynamic> route) => false);
             }
           },

@@ -25,6 +25,6 @@ Map<String, WidgetBuilder> appRoutes = {
   'register': ( BuildContext context ) => const RegisterPage(),
   'recovery-password-code' : ( BuildContext context ) => const RecoveryPasswordCode(),
   'create-ad' : (BuildContext context) => const CreateAdPage(),
-  'edit-profile': (BuildContext context ) => const EditProfilePage(),
+  'edit-profile': (BuildContext context ) => EditProfilePage(),
   'new-password' :(BuildContext context) => const NewPasswordPage(), 
 };

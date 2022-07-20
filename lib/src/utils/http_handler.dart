@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:uisads_app/src/constants/env.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class HttpHandler {
-  final String _baseUrl = Env().getEndpoint('dev');
+  final String _baseUrl = Env.getEndpoint('dev');
   final Preferences _preferences = Preferences();
   late String token = _preferences.token.isNotEmpty ? _preferences.token : '' ;
 
@@ -49,6 +50,7 @@ class HttpHandler {
     String url = _getEndpoint(endpoint);
     final resp = await http.post(Uri.parse(url), headers: getHeaders, body: request);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
+    log('jsonDecode $jsonDecode');
     int statusCode = resp.statusCode;
     Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
     if (msgError.isNotEmpty) {
@@ -81,6 +83,7 @@ class HttpHandler {
     String url = _getEndpoint(endpoint);
     final resp = await http.delete(Uri.parse(url), headers: getHeaders);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
+    log('jsonDecode $jsonDecode');
     int statusCode = resp.statusCode;
     Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
     if (msgError.isNotEmpty) {
@@ -91,16 +94,22 @@ class HttpHandler {
   }
 
   Map<String, dynamic> errorHandler(
-      Map<String, dynamic> response, int statusCode) {
+    Map<String, dynamic> response, int statusCode) {
     if (statusCode > 399) {
-      List errors = response['errors'];
       Map<String, dynamic> msgMap = {};
-      String msg = '';
-      for (var i = 0; i < errors.length; i++) {
-        msg += errors[i]['msg'] + "\n";
+      if( response['errors'] is List ) {
+        List errors = response['errors'];
+        String msg = '';
+        for (var i = 0; i < errors.length; i++) {
+          msg += errors[i]['msg'] + "\n";
+        }
+        msgMap.addAll({"msg": msg, "error": true});
+        return msgMap;
+      } else {
+        msgMap.addAll({"msg" : response['msg'], "error": true } );
+        return msgMap;
       }
-      msgMap.addAll({"msg": msg, "error": true});
-      return msgMap;
+
     }
     return {};
   }

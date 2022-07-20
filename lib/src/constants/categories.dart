@@ -15,4 +15,10 @@ final List<Categoria> categoriasData = [
       Categoria(icono: CustomUisIcons.work_tool, nombre: 'Servicios'),
       Categoria(icono: CustomUisIcons.cloathing, nombre: 'Textil'),
       Categoria(icono: Icons.laptop, nombre: 'Tecnología'),
-    ];
+];
+
+IconData getIcon( String name ) {
+  int index = categoriasData.indexWhere((element) => element.nombre == name );
+  IconData icon = categoriasData[index].icono; 
+  return icon;
+}

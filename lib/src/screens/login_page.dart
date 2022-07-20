@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/providers/login_form_provider.dart';
@@ -108,7 +109,7 @@ class _InputEmailLogin extends StatelessWidget {
       obscureText: false,
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) => loginForm.email = value,
-      validator: loginForm.validateEmail,
+      // validator: loginForm.validateEmail,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.email, 'example@example.com'),
     );
@@ -130,7 +131,7 @@ class _InputPasswordLogin extends StatelessWidget {
       obscureText: true,
       keyboardType: TextInputType.text,
       onChanged: (value) => loginForm.password = value,
-      validator: loginForm.validatePassword,
+      // validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.lock, '*******'),
     );
@@ -179,15 +180,14 @@ class _ButtonLogin extends StatelessWidget {
   void _loginUser(BuildContext context, Map<String, dynamic> user) async {
     final _authService = AuthService();
     final resp = await _authService.loginUser(user);
-    log('resp --> $resp');
     if( resp['error'] ) {
       ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], true));
     } else {
       Preferences _preferences = Preferences();
       ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], false));
       _preferences.token = resp['token'];
-      _preferences.user = json.encode( resp['user'] );
-      _preferences.profile = json.encode( resp['profile'] );
+      Profile _profile = Profile.fromJson(resp['profile']);
+      _preferences.profile = _profile.id;
       Navigator.pushNamedAndRemoveUntil(context, 'main', (Route<dynamic> route) => false);
     }
   }

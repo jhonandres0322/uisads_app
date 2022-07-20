@@ -47,8 +47,21 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
       onTap: (int index) {
         navegacionProvider.currentPage = index;
         //TODO: Codigo para ejecutar el drawer se necesita revisar la mejor ubicacion de este
-        if (index == 3) {
-          Scaffold.of(context).openDrawer();  
+        switch (index) {
+          case 0:
+            Navigator.pushNamed(context, 'main');
+            break;
+          case 1:
+          break;  
+          case 2:
+            Navigator.pushNamed(context, 'create-ad');
+            break;
+          case 3:
+            Navigator.pushNamed(context, 'profile', arguments: {
+              'type': 'user'
+            });
+          break;  
+          default:
         }
       },
     );

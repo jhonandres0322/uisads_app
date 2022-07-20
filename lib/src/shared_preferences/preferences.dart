@@ -28,13 +28,4 @@ class Preferences {
     _profile = profile;
     _prefs?.setString('profile', profile);
   }
-
-  String get user {
-    return _prefs?.getString('user') ?? _user;
-  }
-
-  set user( String user ) {
-    _user = user;
-    _prefs?.setString('user', user);
-  }
 }

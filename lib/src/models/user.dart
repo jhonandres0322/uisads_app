@@ -11,20 +11,18 @@ String userToJson(User data) => json.encode(data.toJson());
 class User {
   User({
     required this.email,
-    required this.password,
     required this.state,
     required this.retry,
     required this.blocked,
     required this.firstEntry,
     required this.lastEntry,
     required this.available,
-    required this.otp,
+    this.otp = '',
     required this.createdAt,
     required this.updatedAt,
   });
 
   String email;
-  String password;
   bool state = true;
   int retry = 0;
   bool blocked = false;
@@ -37,21 +35,19 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         email: json["email"],
-        password: json["password"],
         state: json["state"],
         retry: json["retry"],
         blocked: json["blocked"],
         firstEntry: DateTime.parse(json["firstEntry"]),
         lastEntry: DateTime.parse(json["lastEntry"]),
         available: json["available"],
-        otp: json["otp"],
+        otp: json["otp"] ?? '',
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
         "email": email,
-        "password": password,
         "state": state,
         "retry": retry,
         "blocked": blocked,

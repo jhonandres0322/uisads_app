@@ -25,13 +25,11 @@ class RecoveryPasswordPage extends StatelessWidget {
               _ContainerForm()
             ],
           ),
-          
         ],
       ),
     )));
   }
 }
-
 
 
 class _ContainerInfo extends StatelessWidget {

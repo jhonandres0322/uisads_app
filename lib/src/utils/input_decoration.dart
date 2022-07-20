@@ -12,7 +12,7 @@ InputDecoration decorationInputCustom(IconData icon, String hintText) {
     hintText: hintText,
     hintStyle: const TextStyle(
       fontSize: 11.0, 
-      color: AppColors.subtitles
+      color: AppColors.subtitles,      
     ),
     prefixIcon: Icon(icon, color: AppColors.subtitles),
     prefixIconColor: AppColors.primary,

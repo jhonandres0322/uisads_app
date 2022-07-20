@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/categories.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
+import 'package:uisads_app/src/models/profile.dart';
+import 'package:uisads_app/src/services/ad_service.dart';
+import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
@@ -19,7 +24,38 @@ class MainPage extends StatelessWidget {
     // const String userName = 'Hola, Armandosasas';
     // double anchoNombre = userName.length.toDouble();
     // print(anchoNombre);
-    Preferences _preferences = Preferences();
+    final List<Map<String,String>> ads1 = [
+      {
+        "source" : "assets/quemados/book.jpg",
+        "name": "Libro de Calculo"
+      },
+      {
+        "source" : "assets/quemados/pantalla_1.jpeg",
+        "name": "Pantalla 21 pulgadas"
+      }
+    ];
+
+    final List<Map<String,String>> ads2 = [
+      {
+        "source" : "assets/quemados/computador_1.jpeg",
+        "name": "Se vende computador Acer"
+      },
+      {
+        "source" : "assets/quemados/shoes.jpg",
+        "name": "Zapatos Dama"
+      },
+    ];
+
+    final List<Map<String,String>> ads3 = [
+      {
+        "source" : "assets/quemados/toy.jpg",
+        "name": "Juguete Halo"
+      },
+      {
+        "source" : "assets/quemados/book2.jpg",
+        "name": "Libro de Algebra"
+      },
+    ];
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -58,16 +94,28 @@ class MainPage extends StatelessWidget {
                 child: _ListaCategorias()),
             // CardTable para los anuncios mostrados
             Flexible(
-                // flex: 1,
-                child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: CardTable(),
-                );
-              },
-            )),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    CardTable( images: ads1), 
+                    CardTable( images: ads2 ),
+                    CardTable( images: ads3 )
+                  ],
+                ),
+              ),
+            )
+            // Flexible(
+            //     // flex: 1,
+            //   child: ListView.builder(
+            //   itemCount: 4,
+            //   itemBuilder: (BuildContext context, int index) {
+            //     return Container(
+            //       padding: const EdgeInsets.symmetric(horizontal: 10),
+            //       child: CardTable(),
+            //     );
+            //   },
+            // )),
           ],
         ),
         bottomNavigationBar: const BottomNavigatonBarUisAds(),
@@ -188,16 +236,28 @@ class _ListaCategorias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categorias = categoriasData;
-    // TODO: Agregar la lista de categorias
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      itemCount: categorias.length,
-      itemBuilder: (BuildContext context, int index) {
-        return CategoriaButton(
-          icono: categorias[index].icono,
-          nombre: categorias[index].nombre,
+    final _adService = AdService();
+    return FutureBuilder(
+      future: _adService.getCategories(),
+      builder: (context, snapshot) {
+        if( snapshot.hasData ) {
+          final data = snapshot.data as Map<String,dynamic>;
+          List categories = data['categories'];
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return CategoriaButton(
+                id: categories[index]['_id'],
+                icono: getIcon( categories[index]['name'] ),
+                nombre: categories[index]['name'],
+              );
+            },
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
         );
       },
     );
@@ -218,22 +278,34 @@ class CirclePerfilAvatar extends StatelessWidget {
   final String userName;
   @override
   Widget build(BuildContext context) {
+    AuthService _authService = Provider.of<AuthService>(context);
+    Preferences _preferences = Preferences();
     // Obtenemos los valores de la pantalla
     return InkWell(
       onTap: () {
         Scaffold.of(context).openDrawer();
       },
-      child: Container(
+      child: SizedBox(
         height: height,
         child: Stack(
           alignment: Alignment.centerLeft,
           children: [
             // Entre mas abajo del stack mas arriba en pantalla estará
-            _BarraPerfilNombre(
-              // width: width ,
-              height: height,
-              nombreUser: 'Hola, $userName',
-            ),
+            FutureBuilder(
+              future: _authService.getProfile( _preferences.profile ),
+              builder: ((context, snapshot) {
+                if( snapshot.hasData ) {
+                  Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
+                  Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
+                  return _BarraPerfilNombre(
+                    // width: width ,
+                    height: height,
+                    nombreUser: 'Hola, Jorge Andrés Triana Mojica ',
+                  );
+                }
+                return const CircularProgressIndicator();
+
+            })),
             // Stack con el circulo de perfil
             PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
           ],

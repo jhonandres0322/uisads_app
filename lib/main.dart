@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/routes.dart';
 import 'package:uisads_app/src/constants/themes.dart';
 import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
+import 'package:uisads_app/src/providers/create_ad_provider.dart';
+import 'package:uisads_app/src/providers/edit_profile_provider.dart';
 import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
 import 'package:uisads_app/src/utils/screen_size.dart';
@@ -23,7 +25,9 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => BottomNavigationBarProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
-        ChangeNotifierProvider(create: (_) => RegisterFormProvider())
+        ChangeNotifierProvider(create: (_) => RegisterFormProvider()),
+        ChangeNotifierProvider(create: (_) => EditProfileProvider()),
+        ChangeNotifierProvider(create: (_) => CreateAdProvider()),
       ],
       child: const App(),
     );

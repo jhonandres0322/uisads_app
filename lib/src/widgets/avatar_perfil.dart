@@ -86,15 +86,19 @@ class _CirculoFrenteAvatar extends StatelessWidget {
   final double xradius;
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      child: Image(
-        image: AssetImage('assets/images/avatar.png'),
-        width: double.infinity,
-        fit: BoxFit.cover,
+    return ClipOval(
+      child: Container(
+        child: const Image(
+          image: AssetImage('assets/quemados/profile.jpg'),
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue
+        ),
+        // maxRadius: size.width * 0.55,
       ),
-      backgroundColor: Colors.blue,
-      maxRadius: radius - xradius,
-      // maxRadius: size.width * 0.55,
     );
   }
 }
