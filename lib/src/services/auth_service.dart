@@ -5,7 +5,7 @@ import 'package:uisads_app/src/models/user_login.dart';
 import 'package:uisads_app/src/models/user_register.dart';
 import 'package:uisads_app/src/utils/http_handler.dart';
 
-class AuthService with HttpHandler, ChangeNotifier {
+class AuthService with HttpHandler {
   
   Future<Map<String,dynamic>> loginUser(Map<String, dynamic> user) async {
     UserLogin userLogin = UserLogin.fromJson(user);

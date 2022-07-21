@@ -75,7 +75,9 @@ class MainPage extends StatelessWidget {
             const Spacer(),
             IconButton(
               icon: const Icon(CustomUisIcons.search_right),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed( context, 'search');
+              },
             ),
           ],
           // flexibleSpace: const FlexibleSpaceBar(
@@ -278,7 +280,7 @@ class CirclePerfilAvatar extends StatelessWidget {
   final String userName;
   @override
   Widget build(BuildContext context) {
-    AuthService _authService = Provider.of<AuthService>(context);
+    AuthService _authService = AuthService();
     Preferences _preferences = Preferences();
     // Obtenemos los valores de la pantalla
     return InkWell(
@@ -300,7 +302,7 @@ class CirclePerfilAvatar extends StatelessWidget {
                   return _BarraPerfilNombre(
                     // width: width ,
                     height: height,
-                    nombreUser: 'Hola, Jorge Andrés Triana Mojica ',
+                    nombreUser: _profile.name,
                   );
                 }
                 return const CircularProgressIndicator();

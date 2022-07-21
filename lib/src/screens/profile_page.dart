@@ -71,7 +71,7 @@ class _InfoProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<AuthService>(context);
+    final _authService = AuthService();
     final _preferences = Preferences();
     final Size size = MediaQuery.of(context).size;
     return Container(

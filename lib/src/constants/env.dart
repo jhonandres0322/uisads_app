@@ -4,7 +4,7 @@ class Env {
   static const String _endpointPrd = 'https://uisads.herokuapp.com/api';
 
   static String getEndpoint(String type) {
-    if (type == 'prd') {
+    if (type == 'dev') {
       return _endpointDev;
     } else {
       return _endpointPrd;

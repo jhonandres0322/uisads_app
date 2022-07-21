@@ -48,7 +48,7 @@ class CardInfoProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final _authService = Provider.of<AuthService>(context);
+    final _authService = AuthService();
     final _preferences = Preferences();
     return InkWell(
       onTap: () {

@@ -131,7 +131,7 @@ class _FormEditProfile extends StatelessWidget {
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
     final formKey = editProfileProvider.formKey;
     final Size size = MediaQuery.of(context).size;
-    final _authService = Provider.of<AuthService>(context);
+    final _authService = AuthService(); 
     final _preferences = Preferences();
     return Form(
       key:  formKey,
