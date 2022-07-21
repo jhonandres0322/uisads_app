@@ -89,7 +89,7 @@ class _CirculoFrenteAvatar extends StatelessWidget {
     return ClipOval(
       child: Container(
         child: const Image(
-          image: AssetImage('assets/quemados/profile.jpg'),
+          image: AssetImage('assets/images/avatar.png'),
           width: double.infinity,
           fit: BoxFit.cover,
         ),

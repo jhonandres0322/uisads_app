@@ -24,38 +24,6 @@ class MainPage extends StatelessWidget {
     // const String userName = 'Hola, Armandosasas';
     // double anchoNombre = userName.length.toDouble();
     // print(anchoNombre);
-    final List<Map<String,String>> ads1 = [
-      {
-        "source" : "assets/quemados/book.jpg",
-        "name": "Libro de Calculo"
-      },
-      {
-        "source" : "assets/quemados/pantalla_1.jpeg",
-        "name": "Pantalla 21 pulgadas"
-      }
-    ];
-
-    final List<Map<String,String>> ads2 = [
-      {
-        "source" : "assets/quemados/computador_1.jpeg",
-        "name": "Se vende computador Acer"
-      },
-      {
-        "source" : "assets/quemados/shoes.jpg",
-        "name": "Zapatos Dama"
-      },
-    ];
-
-    final List<Map<String,String>> ads3 = [
-      {
-        "source" : "assets/quemados/toy.jpg",
-        "name": "Juguete Halo"
-      },
-      {
-        "source" : "assets/quemados/book2.jpg",
-        "name": "Libro de Algebra"
-      },
-    ];
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -100,9 +68,9 @@ class MainPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   children: [
-                    CardTable( images: ads1), 
-                    CardTable( images: ads2 ),
-                    CardTable( images: ads3 )
+                    // CardTable( images: ads1 ), 
+                    // CardTable( images: ads2 ),
+                    // CardTable( images: ads3 )
                   ],
                 ),
               ),
