@@ -4,10 +4,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/models/city.dart';
 import 'package:uisads_app/src/models/register_request.dart';
 import 'package:uisads_app/src/models/register_response.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
+import 'package:uisads_app/src/services/city_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/utils/utils_navigator.dart';
@@ -156,29 +158,30 @@ class _InputCiudadRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _registerForm = Provider.of<RegisterFormProvider>(context);
-    return FutureBuilder (
-      future: _registerForm.getCities(),
+    final _cityService = CityService();
+    return FutureBuilder<List<City>> (
+      future: _cityService.getCities(),
       initialData: const [],
-      builder: (context, AsyncSnapshot<dynamic> snapshot) {
+      builder: (context, AsyncSnapshot<List<City>> snapshot) {
         if ( snapshot.hasData ) {
-          List<dynamic> cities = snapshot.data;
+          List<City> cities = snapshot.data!;
           final Widget dropdownCity = DropdownButtonFormField<dynamic>(
             decoration: decorationInputCustom(
               Icons.location_city_rounded,
               'Ingrese la ciudad'
             ),
-            items: cities.map((dynamic value) {
+            items: cities.map((City city) {
               return DropdownMenuItem<dynamic>(
-                value: value['_id'],
-                child: Text( value['name'] ),
+                value: city.id,
+                child: Text( city.name ),
               );
             }).toList(),
             onChanged: ( dynamic value ) => _registerForm.city = value,
-            onSaved: ( dynamic value ) => _registerForm.city = value ?? '',
+            onSaved: ( dynamic value ) => _registerForm.city = value
           );
           return InputCustom(labelText: 'Ciudad', input: dropdownCity);
         } else {
-          return const Center();
+          return const CircularProgressIndicator();
         }
       },
     );

@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
+import 'package:uisads_app/src/models/city.dart';
 import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/providers/edit_profile_provider.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
+import 'package:uisads_app/src/services/city_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/alert_custom.dart';
@@ -235,22 +237,23 @@ class _InputCity extends StatelessWidget {
   Widget build(BuildContext context) {
     final _registerForm = Provider.of<RegisterFormProvider>(context);
     final _editProfileProvider = Provider.of<EditProfileProvider>(context);
-    return FutureBuilder (
-      future: _registerForm.getCities(),
+    final _cityService = CityService();
+    return FutureBuilder<List<City>> (
+      future: _cityService.getCities(),
       initialData: const [],
-      builder: (context, AsyncSnapshot<dynamic> snapshot) {
+      builder: (context, AsyncSnapshot<List<City>> snapshot) {
         if ( snapshot.hasData ) {
-          List<dynamic> cities = snapshot.data;
+          List<City> cities = snapshot.data!;
           final Widget dropdownCity = DropdownButtonFormField<dynamic>(
             value: city,
             decoration: decorationInputCustom(
               Icons.location_city_rounded,
               'Ingrese la ciudad'
             ),
-            items: cities.map((dynamic value) {
+            items: cities.map((City city) {
               return DropdownMenuItem<dynamic>(
-                value: value['_id'],
-                child: Text( value['name'] ),
+                value: city.id,
+                child: Text( city.name ),
               );
             }).toList(),
             onChanged: ( dynamic value ) => _editProfileProvider.city = value,
@@ -258,7 +261,7 @@ class _InputCity extends StatelessWidget {
           );
           return InputCustom(labelText: 'Ciudad', input: dropdownCity);
         } else {
-          return const Center();
+          return const CircularProgressIndicator();
         }
       },
     );

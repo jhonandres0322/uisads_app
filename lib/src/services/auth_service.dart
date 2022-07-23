@@ -32,9 +32,4 @@ class AuthService with HttpHandler {
     final resp = await getPut('/profile/$idProfile', profile);
     return resp;
   }
-
-  Future<dynamic> getCities() async {
-    final resp = await getGet('/city');
-    return resp;
-  }
 }

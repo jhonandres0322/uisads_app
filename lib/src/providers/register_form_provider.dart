@@ -62,9 +62,5 @@ class RegisterFormProvider with ChangeNotifier {
     });
   }
 
-  Future<dynamic> getCities() async {
-    final authService = AuthService();
-    final resp = await authService.getCities();
-    return resp['cities'];
-  }
+
 }
