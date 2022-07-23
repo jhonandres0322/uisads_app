@@ -4,10 +4,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/models/register_request.dart';
+import 'package:uisads_app/src/models/register_response.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
+import 'package:uisads_app/src/utils/utils_navigator.dart';
 import 'package:uisads_app/src/widgets/alert_custom.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 
@@ -17,58 +20,37 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => RegisterFormProvider(),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-                color: AppColors.subtitles,
-                icon: const Icon(Icons.arrow_back_ios_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-          ),
-          backgroundColor: AppColors.mainThirdContrast,
-          elevation: 2.0,
-          actions: [
-            const Spacer(),
-            TextButton(
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+              color: AppColors.subtitles,
+              icon: const Icon(Icons.arrow_back_ios_outlined),
               onPressed: () {
-                // Navigator.popAndPushNamed(context, 'login');
-                Navigator.pushNamedAndRemoveUntil(context, 'login', (Route<dynamic> route) => false);
+                Navigator.pop(context);
               },
-              child: const Text(
-                'Iniciar Sesión',
-                style: TextStyle(
-                  color: AppColors.third,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Roboto',
-                  fontSize: 16.0
-                ),
+        ),
+        backgroundColor: AppColors.mainThirdContrast,
+        elevation: 2.0,
+        actions: [
+          const Spacer(),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(context, 'login', (Route<dynamic> route) => false);
+            },
+            child: const Text(
+              'Iniciar Sesión',
+              style: TextStyle(
+                color: AppColors.third,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Roboto',
+                fontSize: 16.0
               ),
             ),
-            const SizedBox(width: 20,),
-          ],
-          // title: TextButton(
-          //   onPressed: () {
-          //     Navigator.popAndPushNamed(context, 'login');
-          //   },
-          //   child: Padding(
-          //     padding: EdgeInsets.only(left: size.width * 0.5),
-          //     child: const Text(
-          //       'Iniciar Sesión',
-          //       style: TextStyle(
-          //         color: AppColors.third,
-          //         fontWeight: FontWeight.w600,
-          //         fontFamily: 'Roboto',
-          //         fontSize: 15.0
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ),
-        body: SingleChildScrollView(child: _RegisterForm()),
+          ),
+          const SizedBox(width: 20,),
+        ],
       ),
+      body: SingleChildScrollView(child: _RegisterForm()),
     );
   }
 }
@@ -80,77 +62,22 @@ class _RegisterForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     // print('size: ${size.height}');
-    return Column(
-      children: [
-        SizedBox(height: size.height * 0.05),
-        const _InputEmailRegister(),
-        const _InputUsuarioRegister(),
-        const _InputCelularRegister(),
-        const _InputCiudadRegister(),
-        const _InputPasswordLogin(),
-        // SizedBox(height: size.height * spacingInputs),
-        // _createInputUser(),
-        // SizedBox(height: size.height * spacingInputs),
-        // _createInputCellphone(),
-        // SizedBox(height: size.height * spacingInputs),
-        // _createInputPassword(),
-        SizedBox(height: size.height * 0.08),
-        _ButtonRegister(size:size)
-      ],
-    );
-  }
-
-  // void _registerUser () {
-    
-  // }
-
-  // void _onChangedExample(String text) {
-  //   // ignore: avoid_print
-  //   print('text $text');
-  // }
-}
-
-///Clase que crea el boton para el registro
-class _ButtonRegister extends StatelessWidget {
-  final Size size;
-
-  const _ButtonRegister({
-    Key? key,
-    required this.size,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _registerProvider = Provider.of<RegisterFormProvider>(context);
-    return SizedBox(
-      height: size.height * 0.065,
-      width: size.width * 0.70,
-      child: ElevatedButton(
-          onPressed: () async {
-            final userRegister = _registerProvider.getData();
-            final authService = AuthService();
-            final resp = await authService.registerUser(userRegister);
-            if( resp['error'] ) {
-              ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], true));
-            } else {
-              Preferences _preferences = Preferences();
-              ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], false));
-              _preferences.token = resp['token'];
-              Navigator.pushNamedAndRemoveUntil(context, 'main', (Route<dynamic> route) => false);
-            }
-          },
-          child: const Text('Crear Cuenta',
-            style: TextStyle(
-              color: Colors.white, 
-              fontSize: 17, 
-              fontWeight: FontWeight.w600, 
-              fontFamily: 'Roboto'
-            )
-          ),
-          style: ElevatedButton.styleFrom(
-              primary: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0)))),
+    final registerFormProvider = Provider.of<RegisterFormProvider>(context); 
+    return Form(
+      key: registerFormProvider.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Column(
+        children: [
+          SizedBox(height: size.height * 0.05),
+          const _InputEmailRegister(),
+          const _InputUsuarioRegister(),
+          const _InputCelularRegister(),
+          const _InputCiudadRegister(),
+          const _InputPasswordLogin(),
+          SizedBox(height: size.height * 0.08),
+          _ButtonRegister(size:size)
+        ],
+      ),
     );
   }
 }
@@ -168,8 +95,7 @@ class _InputEmailRegister extends StatelessWidget {
       autofocus: false,
       obscureText: false,
       keyboardType: TextInputType.emailAddress,
-      onChanged: (value) => registerForm.email = value,
-      // validator: registerForm.email,
+      onSaved: (value) => registerForm.email = value ?? '',
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.email, 'example@example.com'),
     );
@@ -190,7 +116,7 @@ class _InputUsuarioRegister extends StatelessWidget {
       autofocus: false,
       obscureText: false,
       keyboardType: TextInputType.name,
-      onChanged: (value) => registerForm.name = value,
+      onSaved: (value) => registerForm.name = value ?? '',
       // validator: registerForm.email,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.person, 'Ingrese su nombre'),
@@ -212,7 +138,7 @@ class _InputCelularRegister extends StatelessWidget {
       autofocus: false,
       obscureText: false,
       keyboardType: TextInputType.phone,
-      onChanged: (value) => registerForm.cellphone = value,
+      onSaved: (value) => registerForm.cellphone = value ?? '',
       // validator: registerForm.email,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.mobile_friendly, 'Ingrese su celular'),
@@ -247,7 +173,8 @@ class _InputCiudadRegister extends StatelessWidget {
                 child: Text( value['name'] ),
               );
             }).toList(),
-            onChanged: ( dynamic value ) => _registerForm.city = value
+            onChanged: ( dynamic value ) => _registerForm.city = value,
+            onSaved: ( dynamic value ) => _registerForm.city = value ?? '',
           );
           return InputCustom(labelText: 'Ciudad', input: dropdownCity);
         } else {
@@ -255,10 +182,6 @@ class _InputCiudadRegister extends StatelessWidget {
         }
       },
     );
-  }
-
-  Future<dynamic> getCities( RegisterFormProvider registerFormProvider ) async {
-    return await registerFormProvider.getCities();
   }
 }
 
@@ -276,11 +199,57 @@ class _InputPasswordLogin extends StatelessWidget {
       autofocus: false,
       obscureText: true,
       keyboardType: TextInputType.text,
-      onChanged: (value) => registerForm.password = value,
+      onSaved: (value) => registerForm.password = value ?? '',
       // validator: registerForm.email,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.lock, 'Ingrese su contraseña'),
     );
     return InputCustom(labelText: 'Contraseña', input: inputPassword);
   }
+}
+
+///Clase que crea el boton para el registro
+class _ButtonRegister extends StatelessWidget {
+  final Size size;
+
+  const _ButtonRegister({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final registerProvider = Provider.of<RegisterFormProvider>(context);
+    return SizedBox(
+      height: size.height * 0.065,
+      width: size.width * 0.70,
+      child: ElevatedButton(
+          onPressed: () async {
+            registerProvider.formKey.currentState?.save();
+            _registerUser( context, registerProvider.organizeData() );
+          },
+          child: const Text('Crear Cuenta',
+            style: TextStyle(
+              color: Colors.white, 
+              fontSize: 17, 
+              fontWeight: FontWeight.w600, 
+              fontFamily: 'Roboto'
+            )
+          ),
+          style: ElevatedButton.styleFrom(
+              primary: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0)))),
+    );
+  }
+
+  void _registerUser( BuildContext context, RegisterRequest registerRequest ) async {
+    final _authService = AuthService();
+    final RegisterResponse registerResponse = await _authService.registerUser( registerRequest );
+    ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( registerResponse.msg, registerResponse.error ) );
+    if( !registerResponse.error ) {
+      navigatorAuth( context, registerResponse.token, registerResponse.profile.uid );
+    }
+  }
+
 }

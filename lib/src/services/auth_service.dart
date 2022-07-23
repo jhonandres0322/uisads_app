@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:uisads_app/src/models/login_request.dart';
 import 'package:uisads_app/src/models/login_response.dart';
 import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/user_register.dart';
+import 'package:uisads_app/src/models/register_request.dart';
+import 'package:uisads_app/src/models/register_response.dart';
 import 'package:uisads_app/src/utils/http_handler.dart';
 
 class AuthService with HttpHandler {
@@ -14,10 +15,10 @@ class AuthService with HttpHandler {
     return loginResponse;
   }
 
-  Future<Map<String,dynamic>> registerUser( Map<String, dynamic> user ) async {
-    UserRegister userRegister = UserRegister.fromJson(user);
-    final resp = await getPost('/auth/register', userRegister.toJson());
-    return resp;
+  Future<RegisterResponse> registerUser( RegisterRequest registerRequest ) async {
+    final resp = await getPost('/auth/register', registerRequest.toMap() );
+    RegisterResponse registerResponse = RegisterResponse.fromMap( resp );
+    return registerResponse;
   }
 
   Future<Profile> getProfile( String idProfile ) async {

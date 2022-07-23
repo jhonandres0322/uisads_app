@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:uisads_app/src/models/register_request.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 
 class RegisterFormProvider with ChangeNotifier {
@@ -49,17 +52,15 @@ class RegisterFormProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, dynamic> getData() {
-    return {
+  RegisterRequest organizeData( ) {
+    return RegisterRequest.fromMap({
       "email": _email,
       "name": _name,
       "cellphone": _cellphone,
       "password": _password,
       "city": _city
-    };
+    });
   }
-
-  bool isValidForm() => formKey.currentState?.validate() ?? false;
 
   Future<dynamic> getCities() async {
     final authService = AuthService();

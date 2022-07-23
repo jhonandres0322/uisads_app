@@ -10,6 +10,7 @@ import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/providers/login_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
+import 'package:uisads_app/src/utils/utils_navigator.dart';
 import 'package:uisads_app/src/widgets/alert_custom.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 import 'package:uisads_app/src/widgets/logo_app.dart';
@@ -22,45 +23,42 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return ChangeNotifierProvider(
-      create: (_) => LoginFormProvider(),
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            const Spacer(),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'register');
-              },
-              child: const Text(
-                'Registrarse',
-                style: TextStyle(
-                    color: AppColors.third,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Roboto',
-                    fontSize: 16.0),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          const Spacer(),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'register');
+            },
+            child: const Text(
+              'Registrarse',
+              style: TextStyle(
+                  color: AppColors.third,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Roboto',
+                  fontSize: 16.0),
             ),
-            const SizedBox(
-              width: 20,
-            ),
-          ],
-          leading: Container(),
-          backgroundColor: AppColors.mainThirdContrast,
-          elevation: 0,
-        ),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                // SizedBox(height: size.height * 0.07),
-                LogoApp(height: size.height * 0.45 ),
-                _LoginForm(),
-                const SizedBox(height: 10.0),
-              ],
-            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+        ],
+        leading: Container(),
+        backgroundColor: AppColors.mainThirdContrast,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Container(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              // SizedBox(height: size.height * 0.07),
+              LogoApp(height: size.height * 0.45 ),
+              _LoginForm(),
+              const SizedBox(height: 10.0),
+            ],
           ),
         ),
       ),
@@ -71,12 +69,12 @@ class LoginPage extends StatelessWidget {
 class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final loginForm = Provider.of<LoginFormProvider>(context);
+    final loginFormProvider = Provider.of<LoginFormProvider>(context);
     final Size size = MediaQuery.of(context).size;
     // ignore: avoid_unnecessary_containers
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      key: loginForm.formKey,
+      key: loginFormProvider.formKey,
       child: Column(
         children: [
           const _InputEmailLogin(),
@@ -159,20 +157,26 @@ class _ButtonLogin extends StatelessWidget {
       height: size.height * 0.065,
       width: size.width * 0.70,
       child: ElevatedButton(
-          onPressed: () {
-            loginForm.formKey.currentState?.save();
-            _loginUser( context, loginForm.email, loginForm.password );
-          },
-          child: const Text('Iniciar sesión',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Roboto')),
-          style: ElevatedButton.styleFrom(
-              primary: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)))),
+        onPressed: () {
+          loginForm.formKey.currentState?.save();
+          _loginUser( context, loginForm.email, loginForm.password );
+        },
+        child: const Text(
+          'Iniciar sesión',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Roboto'
+          )
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: AppColors.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+          )
+        )
+      ),
     );
   }
 
@@ -185,10 +189,7 @@ class _ButtonLogin extends StatelessWidget {
     LoginResponse loginResponse = await _authService.loginUser(loginRequest);
     ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( loginResponse.message, loginResponse.error ) );
     if( !loginResponse.error ) {
-      Preferences _preferencs = Preferences();
-      _preferencs.token = loginResponse.token;
-      _preferencs.profile = loginResponse.profile.uid;
-      Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+      navigatorAuth( context, loginResponse.token, loginResponse.profile.uid );
     } 
   }
 }
