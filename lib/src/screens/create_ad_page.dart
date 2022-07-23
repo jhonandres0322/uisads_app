@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:uisads_app/src/constants/categories.dart';
@@ -6,11 +11,13 @@ import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
 import 'package:uisads_app/src/services/ad_service.dart';
+import 'package:uisads_app/src/services/category_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/categoria_widget.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
+import 'package:uisads_app/src/widgets/list_category.dart';
 
 class CreateAdPage extends StatelessWidget {
   const CreateAdPage({Key? key}) : super(key: key);
@@ -46,8 +53,10 @@ class CreateAdPage extends StatelessWidget {
         ]
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
-      body: const SingleChildScrollView(
-        child: FormCreateAd(),
+      body: SingleChildScrollView(
+        child: Container(
+          child: const FormCreateAd(),
+        ),
       )
     );
   }
@@ -61,26 +70,27 @@ class FormCreateAd extends StatelessWidget {
     final _createAdProvider = Provider.of<CreateAdProvider>(context);
     final formKey = _createAdProvider.formKey;
     final Size size = MediaQuery.of(context).size;
-    return Container(
-      child: Center(
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              const _InputTitle(),
-              const _InputDescription(),
-              const _InputPhotos(),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              const _InputCategories(),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              const _InputVisible()
-            ],
-          )
-        ),
+    return Center(
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const _InputTitle(),
+            const _InputDescription(),
+            SizedBox(
+              height: size.height * 0.02,
+            ),
+            const _InputPhotos(),
+            SizedBox(
+              height: size.height * 0.02,
+            ),
+            const _InputCategories(),
+            SizedBox(
+              height: size.height * 0.02,
+            ),
+            const _InputVisible()
+          ],
+        )
       ),
     );
   }
@@ -97,29 +107,7 @@ class _InputTitle extends StatelessWidget {
       obscureText: false,
       keyboardType: TextInputType.text,
       onSaved: (value) => _createAdProvider.title = value ?? '',
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0)
-        ),
-        hintText: '    Pon aqui tu anuncio',
-        hintStyle: const TextStyle(
-          fontSize: 13.0, 
-          color: AppColors.subtitles,
-        ),
-        prefixIconColor: AppColors.primary,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: AppColors.primary, width: 1.5
-          )
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-          color: AppColors.primary, width: 1.5)
-        )
-      )
+      decoration: decorationInputCustom(Icons.abc, 'Pon aqui el titulo')
     );
     return InputCustom(labelText: '', input: inputTitle);
   }
@@ -133,17 +121,15 @@ class _InputDescription extends StatelessWidget {
     final _createAdProvider = Provider.of<CreateAdProvider>(context);
     final Widget inputDescription =  TextFormField(
       autofocus: false,
-      obscureText: false,
-      textAlign: TextAlign.center,
-  
-      keyboardType: TextInputType.text,
+      obscureText: false,  
+      keyboardType: TextInputType.multiline,
       onSaved: (value) => _createAdProvider.description = value ?? '',
       maxLines: 6,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0)
         ),
-        hintText: '                                                                                                  Describe tu anuncio',
+        hintText: 'Describe tu anuncio!',
         hintStyle: const TextStyle(
           fontSize: 13.0, 
           color: AppColors.subtitles,
@@ -171,48 +157,184 @@ class _InputPhotos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          _CarreteImageElement( image: 'assets/images/no-image.png'),
-          _CarreteImageElement( image: 'assets/images/no-image.png'),
-          _CarreteImageElement( image: 'assets/images/no-image.png'),
-          _CarreteImageElement( image: 'assets/images/no-image.png'),
-          _CarreteImageElement( image: 'assets/images/no-image.png'),
-        ],
+    final Size _size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: _size.height * 0.1,
+      width: _size.width * 0.9,
+      child: ListView.builder(
+        itemCount: 5,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return Row(
+            children: [
+              _CarreteImageElement( index: index ),
+              SizedBox(
+                width: _size.width * 0.01,
+              )
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-class _CarreteImageElement extends StatelessWidget {
+class _CarreteImageElement extends StatefulWidget {
   const _CarreteImageElement({
     Key? key,
-    required this.image
+    required this.index
   }) : super(key: key);
-  final String image;
+
+  final int index;
+
+  @override
+  State<_CarreteImageElement> createState() => _CarreteImageElementState();
+}
+
+class _CarreteImageElementState extends State<_CarreteImageElement> {
+
+  XFile? _image;
+  final _picker = ImagePicker();
+  final _pathImagePlaceholder = 'assets/images/jar-loading.gif';
+  final _pathNoImage =  'assets/images/no-image.png';
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9),
-        border: Border.all(
-          color: AppColors.logoSchoolPrimary,
-          width: 2,
+    final Size _size = MediaQuery.of(context).size;
+    final double _sizeCard = _size.width * 0.17;
+    return InkWell(
+      onTap: () {
+        if( _image != null ) {
+          _showImage( context );
+        } else {
+          _openImagePicker();
+        }
+      },
+      child: Container(
+        width: _sizeCard,
+        height: _sizeCard,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(9),
+          border: Border.all(
+            color: AppColors.logoSchoolPrimary,
+            width: 2,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: _image != null 
+          ? Image.file( 
+              File( _image!.path ), 
+              fit: BoxFit.cover 
+            )
+          : FadeInImage(
+              placeholder: AssetImage( _pathImagePlaceholder ), 
+              image: AssetImage( _pathNoImage ),
+              fit: BoxFit.cover,
+            )
         ),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(9),
-        child: FadeInImage(
-          image: AssetImage( image ),
-          placeholder: const AssetImage('assets/images/jar-loading.gif'),
-          fit: BoxFit.cover,
-        ),
-      ),
+    );
+  }
+
+  Future<void> _openImagePicker() async {
+    final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery, maxHeight: 350, maxWidth: 350);
+    if( pickedImage != null ) {
+      setState(() {
+        _image = XFile( pickedImage.path );
+      });
+    }
+  }
+
+  Future<dynamic> convertFileToBase64( ) async {
+    final imageBytes = await  _image!.readAsBytes();
+    final base64String =  base64Encode( imageBytes )  ;
+    log( "${base64String.length}" );
+    return base64String;
+  }
+
+
+  Future<void> _showImage( BuildContext context ) async {
+
+    final Size _size = MediaQuery.of(context).size;
+    return showDialog(
+      context: context, 
+      builder: ( context ) {
+        convertFileToBase64();
+        return AlertDialog(
+          scrollable: false,
+          title: Row(
+            children: [
+              const Expanded(child: SizedBox()),
+              IconButton(
+                icon: const Icon( Icons.close ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular( 10.0 )
+          ),
+          contentPadding: EdgeInsets.all( _size.height * 0.01  ),
+          content: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(
+                color: AppColors.logoSchoolPrimary,
+                width: 2,
+              ),
+            ),
+            child: ClipRRect(
+              child: Image.file( File( _image!.path ), fit: BoxFit.cover ),
+              borderRadius: BorderRadius.circular( 10 ),
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    onPrimary: AppColors.reject,
+                    primary: AppColors.mainThirdContrast,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular( 20.0 ),
+                      side: const BorderSide(color: AppColors.reject )
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _image = null;
+                      Navigator.pop(context);
+                    });
+                  }, 
+                  child: const Text('Eliminar'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _openImagePicker();
+                      Navigator.pop(context);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    onPrimary: AppColors.mainThirdContrast,
+                    primary: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular( 20.0 ),
+                      side: const BorderSide(color: AppColors.primary )
+                    ),
+                  ),
+                  child: const Text('Modificar')
+                ),
+                const SizedBox()
+              ],
+            )
+          ],
+        );
+      }
     );
   }
 }
@@ -252,31 +374,7 @@ class _ListaCategorias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _adService = AdService();
-    return FutureBuilder(
-      future: _adService.getCategories(),
-      builder: (context, snapshot) {
-        if( snapshot.hasData ) {
-          final data = snapshot.data as Map<String,dynamic>;
-          List categories = data['categories'];
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return CategoriaButton(
-                id: categories[index]['_id'],
-                icono: getIcon( categories[index]['name'] ),
-                nombre: categories[index]['name'],
-              );
-            },
-          );
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+    return const ListCategory();
   }
 }
 
@@ -321,7 +419,7 @@ class _InputVisible extends StatelessWidget {
             labels: const ['Desactivado', 'Activado'],
             radiusStyle: true,
             onToggle: (index) {
-              print('switched to: $index');
+              log('switched to: $index');
             },
           ),
         ),

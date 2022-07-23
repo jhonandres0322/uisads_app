@@ -2,15 +2,26 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:uisads_app/src/models/ad.dart';
+import 'package:uisads_app/src/models/upload.dart';
 
 class CreateAdProvider with ChangeNotifier {
   
   String _title = '';
   String _description = '';
-  List<String> _images = [];
+  final List<Upload> _images = [];
   String _publisher = '';
   String _category = '';
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool _isVisible = true;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  GlobalKey<FormState> get formKey => _formKey;
+
+  bool get isVisible => _isVisible;
+  set isVisible ( bool value ) {
+    _isVisible = value;
+    notifyListeners();
+  }
 
   String get title => _title;
   set title ( String value ) {
@@ -24,7 +35,7 @@ class CreateAdProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> get images => _images;
+  List<Upload> get images => _images;
 
   String get publisher => _publisher;
   set publisher ( String value ) {
@@ -36,5 +47,17 @@ class CreateAdProvider with ChangeNotifier {
   set category ( String value ) {
     _category = category;
     notifyListeners();
+  }
+
+  Ad handlerData() {
+    Map<String,dynamic> jsonAd = {
+      "title": _title,
+      "description": _description,
+      "images": _images,
+      "publisher": _publisher,
+      "category": _category,
+      "visible": _isVisible
+    };
+    return Ad.fromJson(jsonAd);
   }
 }

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:uisads_app/src/models/upload.dart';
+
 
 Ad adFromJson(String str) => Ad.fromJson(json.decode(str));
 
@@ -11,6 +13,7 @@ String adToJson(Ad data) => json.encode(data.toJson());
 
 class Ad {
   Ad({
+    this.id = '',
     required this.title,
     required this.description,
     required this.publisher,
@@ -18,41 +21,52 @@ class Ad {
     required this.category,
     required this.state,
     required this.rating,
+    required this.positivePoints,
+    required this.negativePoints,
     required this.createdAt,
     required this.updatedAt,
   });
 
+  String id;
   String title;
   String description;
   dynamic publisher;
-  List<dynamic> images;
+  List<Upload> images;
   dynamic category;
   bool state;
-  dynamic rating;
-  DateTime createdAt;
-  DateTime updatedAt;
+  int rating;
+  int positivePoints;
+  int negativePoints;
+  String createdAt;
+  String updatedAt;
 
   factory Ad.fromJson(Map<String, dynamic> json) => Ad(
+        id: json["_id"] ?? '',
         title: json["title"],
         description: json["description"],
         publisher: json["publisher"],
-        images: List<String>.from(json["images"].map((x) => x)),
+        images: List<Upload>.from(json["images"].map((x) => x)),
         category: json["category"],
         state: json["state"],
+        positivePoints: json["positive_points"],
+        negativePoints: json["negative_pints"],
         rating: json["rating"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
       );
 
   Map<String, dynamic> toJson() => {
+        "_id": id,
         "title": title,
         "description": description,
         "publisher": publisher,
-        "images": List<dynamic>.from(images.map((x) => x)),
+        "images": List<Upload>.from(images.map((x) => x)),
         "category": category,
         "state": state,
         "rating": rating,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "positive_points": positivePoints,
+        "negative_pints": negativePoints,
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
       };
 }

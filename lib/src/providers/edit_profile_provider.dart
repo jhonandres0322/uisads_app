@@ -8,8 +8,9 @@ class EditProfileProvider with ChangeNotifier{
   String _email = '';
   String _city = '';
   String _description = '';
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
+  GlobalKey<FormState> get formKey => _formKey;
 
   String get name => _name;
   set name( String value ) {

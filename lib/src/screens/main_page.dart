@@ -2,19 +2,16 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/categories.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/services/ad_service.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:uisads_app/src/widgets/card_table.dart';
-import 'package:uisads_app/src/widgets/categoria_widget.dart';
 import 'package:uisads_app/src/widgets/drawer_custom.dart';
+import 'package:uisads_app/src/widgets/list_ad.dart';
+import 'package:uisads_app/src/widgets/list_category.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -57,35 +54,19 @@ class MainPage extends StatelessWidget {
         body: Column(
           children: [
             // Widget Horizontal con la lista de categorias
-            Container(
+            const SizedBox(
                 width: double.infinity,
                 // color: Colors.yellow,
                 height: 90,
-                child: _ListaCategorias()),
+                child: _ListaCategorias()
+            ),
             // CardTable para los anuncios mostrados
             Flexible(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    // CardTable( images: ads1 ), 
-                    // CardTable( images: ads2 ),
-                    // CardTable( images: ads3 )
-                  ],
-                ),
+                child: const ListAd(),
               ),
             )
-            // Flexible(
-            //     // flex: 1,
-            //   child: ListView.builder(
-            //   itemCount: 4,
-            //   itemBuilder: (BuildContext context, int index) {
-            //     return Container(
-            //       padding: const EdgeInsets.symmetric(horizontal: 10),
-            //       child: CardTable(),
-            //     );
-            //   },
-            // )),
           ],
         ),
         bottomNavigationBar: const BottomNavigatonBarUisAds(),
@@ -206,31 +187,7 @@ class _ListaCategorias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _adService = AdService();
-    return FutureBuilder(
-      future: _adService.getCategories(),
-      builder: (context, snapshot) {
-        if( snapshot.hasData ) {
-          final data = snapshot.data as Map<String,dynamic>;
-          List categories = data['categories'];
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return CategoriaButton(
-                id: categories[index]['_id'],
-                icono: getIcon( categories[index]['name'] ),
-                nombre: categories[index]['name'],
-              );
-            },
-          );
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+    return const ListCategory();
   }
 }
 

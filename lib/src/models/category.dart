@@ -1,37 +1,41 @@
 // To parse this JSON data, do
 //
-//     final category = categoryFromJson(jsonString);
+//     final category = categoryFromMap(jsonString);
 
 import 'dart:convert';
 
-Category categoryFromJson(String str) => Category.fromJson(json.decode(str));
+Category categoryFromMap(String str) => Category.fromMap(json.decode(str));
 
-String categoryToJson(Category data) => json.encode(data.toJson());
+String categoryToMap(Category data) => json.encode(data.toMap());
 
 class Category {
-  Category({
-    required this.name,
-    required this.key,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    Category({
+        required this.id,
+        required this.name,
+        required this.key,
+        required this.createdAt,
+        required this.updatedAt,
+    });
 
-  String name;
-  String key;
-  DateTime createdAt;
-  DateTime updatedAt;
+    String id;
+    String name;
+    String key;
+    String createdAt;
+    String updatedAt;
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
+    factory Category.fromMap(Map<String, dynamic> json) => Category(
+        id: json["_id"],
         name: json["name"],
         key: json["key"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
+        "_id": id, 
         "name": name,
         "key": key,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
+    };
 }
