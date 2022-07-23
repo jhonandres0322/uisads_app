@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uisads_app/src/models/profile.dart';
 
 
 class EditProfileProvider with ChangeNotifier{
@@ -42,13 +43,13 @@ class EditProfileProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Map<String, dynamic> getData() {
-    return {
+  Profile getData() {
+    return Profile.fromMap({
       "name" : _name,
       "cellphone" : _cellphone,
       "email" : _email,
       "city" : _city,
       "description" : _description
-    };
+    }); 
   }
 }

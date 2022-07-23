@@ -5,6 +5,7 @@ import 'package:uisads_app/src/models/login_response.dart';
 import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/models/register_request.dart';
 import 'package:uisads_app/src/models/register_response.dart';
+import 'package:uisads_app/src/models/response.dart';
 import 'package:uisads_app/src/utils/http_handler.dart';
 
 class AuthService with HttpHandler {
@@ -28,8 +29,10 @@ class AuthService with HttpHandler {
     return profile;
   }
 
-  Future<Map<String,dynamic>> editProfile( String idProfile, Map<String,dynamic> profile ) async {
-    final resp = await getPut('/profile/$idProfile', profile);
-    return resp;
+  Future<Response> editProfile( String idProfile, Profile profile ) async {
+    log('entrando al servicio editProfile');
+    final resp = await getPut('/profile/$idProfile', profile.toMap() );
+    final Response response = Response.fromMap( resp );
+    return response;
   }
 }

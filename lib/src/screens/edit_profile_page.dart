@@ -6,8 +6,8 @@ import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/models/city.dart';
 import 'package:uisads_app/src/models/profile.dart';
+import 'package:uisads_app/src/models/response.dart';
 import 'package:uisads_app/src/providers/edit_profile_provider.dart';
-import 'package:uisads_app/src/providers/register_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/services/city_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
@@ -70,12 +70,9 @@ class EditProfilePage extends StatelessWidget {
     final _preferences = Preferences();
     final _editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     _editProfileProvider.formKey.currentState?.save();
-    Map<String,dynamic> infoEditedProfile = _editProfileProvider.getData();
-    log('infoEditedProfile --> $infoEditedProfile');
-    Map<String, dynamic> resp = await _authService.editProfile( _preferences.profile , infoEditedProfile);
-    if( !resp['error'] ) {
-      ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( resp['msg'], false) );
-    }
+    Profile infoEditedProfile = _editProfileProvider.getData();
+    Response response = await _authService.editProfile( _preferences.profile , infoEditedProfile);
+    ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( response.message, response.error ));
   }
 }
 
@@ -139,25 +136,22 @@ class _FormEditProfile extends StatelessWidget {
       key:  formKey,
       child: FutureBuilder(
         future: _authService.getProfile( _preferences.profile ),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<Profile> snapshot) {
           if ( snapshot.hasData ) {
-            return const Center();
-            // Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
-            // Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
-            // String _email = data['email'];
-            // return Column(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     _InputName( name: _profile.name ),
-            //     _InputPhone( cellphone: _profile.cellphone,),
-            //     _InputEmail( email: _email ),
-            //     _InputCity( city: _profile.city),
-            //     _InputDescription( description: _profile.description),
-            //     SizedBox(height: size.height * 0.02),
-            //     const _ButtonChangePassword(),
-            //     SizedBox(height: size.height * 0.02),
-            //   ],
-            // );
+            Profile _profile = snapshot.data!;
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _InputName( name: _profile.name ),
+                _InputPhone( cellphone: _profile.cellphone,),
+                _InputEmail( email: _profile.email ),
+                _InputCity( city: _profile.city),
+                _InputDescription( description: _profile.description),
+                SizedBox(height: size.height * 0.02),
+                const _ButtonChangePassword(),
+                SizedBox(height: size.height * 0.02),
+              ],
+            );
           }
           return const 
           Center(child:CircularProgressIndicator());
@@ -235,7 +229,6 @@ class _InputCity extends StatelessWidget {
   final String city;
   @override
   Widget build(BuildContext context) {
-    final _registerForm = Provider.of<RegisterFormProvider>(context);
     final _editProfileProvider = Provider.of<EditProfileProvider>(context);
     final _cityService = CityService();
     return FutureBuilder<List<City>> (
@@ -278,8 +271,8 @@ class _InputDescription extends StatelessWidget {
       initialValue: description,
       autofocus: false,
       obscureText: false,
-      keyboardType: TextInputType.text,
-      maxLines: 3,
+      keyboardType: TextInputType.multiline,
+      maxLines: 5,
       onSaved: (value) => _editProfileProvider.description = value ?? '',
       // validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,

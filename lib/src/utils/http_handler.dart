@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:uisads_app/src/constants/env.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
@@ -59,12 +60,12 @@ class HttpHandler {
   }
 
   // ignore: unused_element
-  Future<Map<String, dynamic>> getPut(
-      String endpoint, Map<String, dynamic> request) async {
+  Future<Map<String, dynamic>> getPut( String endpoint, Map<String, dynamic> request) async {
     Map<String, String> getHeaders = _getHeaders();
+    log('request put --> $request');
+    log('endpoint --> $endpoint');
     String url = _getEndpoint(endpoint);
-    final resp =
-        await http.put(Uri.parse(url), headers: getHeaders, body: request);
+    final resp = await http.put(Uri.parse(url), headers: getHeaders, body: request);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
     Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
