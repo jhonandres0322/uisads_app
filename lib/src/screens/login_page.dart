@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uisads_app/src/models/login_request.dart';
+import 'package:uisads_app/src/models/login_response.dart';
 import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
@@ -108,7 +110,7 @@ class _InputEmailLogin extends StatelessWidget {
       autofocus: false,
       obscureText: false,
       keyboardType: TextInputType.emailAddress,
-      onChanged: (value) => loginForm.email = value,
+      onSaved: (value) => loginForm.email = value ?? '',
       // validator: loginForm.validateEmail,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.email, 'example@example.com'),
@@ -130,7 +132,7 @@ class _InputPasswordLogin extends StatelessWidget {
       autofocus: false,
       obscureText: true,
       keyboardType: TextInputType.text,
-      onChanged: (value) => loginForm.password = value,
+      onSaved: (value) => loginForm.password = value ?? '',
       // validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.lock, '*******'),
@@ -158,12 +160,8 @@ class _ButtonLogin extends StatelessWidget {
       width: size.width * 0.70,
       child: ElevatedButton(
           onPressed: () {
-            // if( loginForm.formKey.)
-            Map<String, dynamic> user = {
-              "email": loginForm.email,
-              "password": loginForm.password
-            };
-            _loginUser(context, user);
+            loginForm.formKey.currentState?.save();
+            _loginUser( context, loginForm.email, loginForm.password );
           },
           child: const Text('Iniciar sesión',
               style: TextStyle(
@@ -178,19 +176,20 @@ class _ButtonLogin extends StatelessWidget {
     );
   }
 
-  void _loginUser(BuildContext context, Map<String, dynamic> user) async {
+  void _loginUser(BuildContext context, String email, String password ) async {
     final _authService = AuthService();
-    final resp = await _authService.loginUser(user);
-    if( resp['error'] ) {
-      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], true));
-    } else {
-      Preferences _preferences = Preferences();
-      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(resp['msg'], false));
-      _preferences.token = resp['token'];
-      Profile _profile = Profile.fromJson(resp['profile']);
-      _preferences.profile = _profile.id;
-      Navigator.pushNamedAndRemoveUntil(context, 'main', (Route<dynamic> route) => false);
-    }
+    LoginRequest loginRequest = LoginRequest.fromMap({
+      "email": email,
+      "password": password
+    });
+    LoginResponse loginResponse = await _authService.loginUser(loginRequest);
+    ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( loginResponse.message, loginResponse.error ) );
+    if( !loginResponse.error ) {
+      Preferences _preferencs = Preferences();
+      _preferencs.token = loginResponse.token;
+      _preferencs.profile = loginResponse.profile.uid;
+      Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+    } 
   }
 }
 

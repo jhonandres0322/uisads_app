@@ -64,18 +64,17 @@ class CardInfoProfile extends StatelessWidget {
             SizedBox(width: size.width * 0.03),
             FutureBuilder(
               future: _authService.getProfile( _preferences.profile ),
-              builder: (context, snapshot) {
+              builder: (context, AsyncSnapshot<Profile> snapshot) {
                 if( snapshot.hasData ) {
-                  Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
-                  String email = data['email'];
-                  Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
+                  log("snapshot data --> ${snapshot.data}");
+                  Profile profile =  snapshot.data!;
                   Widget widget = Flexible(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _profile.name,
+                          profile.name,
                           style: const TextStyle(
                             fontSize: 12.0,
                             fontWeight: FontWeight.bold,
@@ -84,7 +83,7 @@ class CardInfoProfile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          email,
+                          profile.email,
                           style: const TextStyle(
                             fontSize: 10.0,
                             color: AppColors.mainThirdContrast,

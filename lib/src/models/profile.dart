@@ -1,61 +1,61 @@
 // To parse this JSON data, do
 //
-//     final profile = profileFromJson(jsonString);
+//     final profile = profileFromMap(jsonString);
 
 import 'dart:convert';
 
-Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
+Profile profileFromMap(String str) => Profile.fromMap(json.decode(str));
 
-String profileToJson(Profile data) => json.encode(data.toJson());
+String profileToMap(Profile data) => json.encode(data.toMap());
 
 class Profile {
-  Profile({
-    this.id = '',
-    this.name = '',
-    this.cellphone = '',
-    this.city = '',
-    this.image = '',
-    this.description = '',
-    this.user,
-    this.score,
-    this.createdAt,
-    this.updatedAt,
-  });
+    Profile({
+        required this.name,
+        required this.cellphone,
+        required this.email,
+        required this.state,
+        required this.score,
+        required this.city,
+        required this.createdAt,
+        required this.updatedAt,
+        required this.description,
+        required this.uid,
+    });
 
-  String id;
-  String name;
-  String cellphone;
-  String city;
-  dynamic image;
-  String description;
-  dynamic user;
-  dynamic score;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+    String name;
+    String cellphone;
+    String email;
+    bool state;
+    int score;
+    String city;
+    String createdAt;
+    String updatedAt;
+    String description;
+    String uid;
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json["uid"] ?? '',
+    factory Profile.fromMap(Map<String, dynamic> json) => Profile(
         name: json["name"] ?? '',
         cellphone: json["cellphone"] ?? '',
+        email: json["email"] ?? '',
+        state: json["state"] ?? true,
+        score: json["score"] ?? 0,
         city: json["city"] ?? '',
-        image: json["image"] ?? '',
-        description: json["description"] ?? ''  ,
-        user: json["user"] ?? '',
-        score: json["score"] ?? '',
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
+        description: json["description"] ?? '',
+        uid: json["uid"] ?? '',
+    );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
+    Map<String, dynamic> toMap() => {
         "name": name,
         "cellphone": cellphone,
-        "city": city,
-        "image": image,
-        "description": description,
-        "user": user,
+        "email": email,
+        "state": state,
         "score": score,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-      };
+        "city": city,
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
+        "description": description,
+        "uid": uid,
+    };
 }

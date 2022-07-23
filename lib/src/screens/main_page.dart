@@ -220,10 +220,9 @@ class CirclePerfilAvatar extends StatelessWidget {
             // Entre mas abajo del stack mas arriba en pantalla estará
             FutureBuilder(
               future: _authService.getProfile( _preferences.profile ),
-              builder: ((context, snapshot) {
+              builder: ((context, AsyncSnapshot<Profile> snapshot) {
                 if( snapshot.hasData ) {
-                  Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
-                  Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
+                  Profile _profile = snapshot.data!;
                   return _BarraPerfilNombre(
                     // width: width ,
                     height: height,

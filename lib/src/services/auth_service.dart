@@ -1,16 +1,17 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-import 'package:uisads_app/src/models/user_login.dart';
+import 'package:uisads_app/src/models/login_request.dart';
+import 'package:uisads_app/src/models/login_response.dart';
+import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/models/user_register.dart';
 import 'package:uisads_app/src/utils/http_handler.dart';
 
 class AuthService with HttpHandler {
   
-  Future<Map<String,dynamic>> loginUser(Map<String, dynamic> user) async {
-    UserLogin userLogin = UserLogin.fromJson(user);
-    final resp = await getPost('/auth/login', userLogin.toJson());
-    return resp;
+  Future<LoginResponse> loginUser( LoginRequest user) async {
+    final resp = await getPost('/auth/login', user.toMap() );
+    LoginResponse loginResponse = LoginResponse.fromMap( resp );
+    return loginResponse;
   }
 
   Future<Map<String,dynamic>> registerUser( Map<String, dynamic> user ) async {
@@ -19,9 +20,11 @@ class AuthService with HttpHandler {
     return resp;
   }
 
-  Future<Map<String,dynamic>> getProfile( String idProfile ) async {
+  Future<Profile> getProfile( String idProfile ) async {
     final resp = await getGet('/profile/$idProfile');
-    return resp;
+    resp['profile']['email'] = resp['email'];
+    Profile profile = Profile.fromMap( resp['profile'] );
+    return profile;
   }
 
   Future<Map<String,dynamic>> editProfile( String idProfile, Map<String,dynamic> profile ) async {

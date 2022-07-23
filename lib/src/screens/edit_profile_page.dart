@@ -139,22 +139,23 @@ class _FormEditProfile extends StatelessWidget {
         future: _authService.getProfile( _preferences.profile ),
         builder: (context, snapshot) {
           if ( snapshot.hasData ) {
-              Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
-              Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
-              String _email = data['email'];
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _InputName( name: _profile.name ),
-                  _InputPhone( cellphone: _profile.cellphone,),
-                  _InputEmail( email: _email ),
-                  _InputCity( city: _profile.city),
-                  _InputDescription( description: _profile.description),
-                  SizedBox(height: size.height * 0.02),
-                  const _ButtonChangePassword(),
-                  SizedBox(height: size.height * 0.02),
-                ],
-              );
+            return const Center();
+            // Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
+            // Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
+            // String _email = data['email'];
+            // return Column(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     _InputName( name: _profile.name ),
+            //     _InputPhone( cellphone: _profile.cellphone,),
+            //     _InputEmail( email: _email ),
+            //     _InputCity( city: _profile.city),
+            //     _InputDescription( description: _profile.description),
+            //     SizedBox(height: size.height * 0.02),
+            //     const _ButtonChangePassword(),
+            //     SizedBox(height: size.height * 0.02),
+            //   ],
+            // );
           }
           return const 
           Center(child:CircularProgressIndicator());

@@ -77,10 +77,9 @@ class _InfoProfile extends StatelessWidget {
     return Container(
       child: FutureBuilder(
         future: _authService.getProfile( _preferences.profile ),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<Profile> snapshot) {
           if( snapshot.hasData ) {
-            Map<String,dynamic> data =  snapshot.data as Map<String,dynamic>;
-            Profile _profile = Profile.fromJson( data['profile'] as Map<String,dynamic> );
+            Profile _profile = snapshot.data!;
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
