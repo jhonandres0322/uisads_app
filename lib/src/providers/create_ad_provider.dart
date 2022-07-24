@@ -49,15 +49,15 @@ class CreateAdProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Ad handlerData() {
-    Map<String,dynamic> jsonAd = {
-      "title": _title,
-      "description": _description,
-      "images": _images,
-      "publisher": _publisher,
-      "category": _category,
-      "visible": _isVisible
-    };
-    return Ad.fromJson(jsonAd);
-  }
+  // Ad handlerData() {
+  //   Map<String,dynamic> jsonAd = {
+  //     "title": _title,
+  //     "description": _description,
+  //     "images": _images,
+  //     "publisher": _publisher,
+  //     "category": _category,
+  //     "visible": _isVisible
+  //   };
+  //   return Ad.fromJson(jsonAd);
+  // }
 }

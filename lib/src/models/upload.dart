@@ -1,33 +1,37 @@
 // To parse this JSON data, do
 //
-//     final upload = uploadFromJson(jsonString);
+//     final upload = uploadFromMap(jsonString);
 
 import 'dart:convert';
 
-Upload uploadFromJson(String str) => Upload.fromJson(json.decode(str));
+Upload uploadFromMap(String str) => Upload.fromMap(json.decode(str));
 
-String uploadToJson(Upload data) => json.encode(data.toJson());
+String uploadToMap(Upload data) => json.encode(data.toMap());
 
 class Upload {
     Upload({
-        required this.name,
-        required this.type,
+        required this.id,
         required this.content,
+        required this.type,
+        required this.name,
     });
 
-    String name;
-    String type;
+    String id;
     String content;
+    String type;
+    String name;
 
-    factory Upload.fromJson(Map<String, dynamic> json) => Upload(
-        name: json["name"],
-        type: json["type"],
+    factory Upload.fromMap(Map<String, dynamic> json) => Upload(
+        id: json["_id"],
         content: json["content"],
+        type: json["type"],
+        name: json["name"],
     );
 
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "type": type,
+    Map<String, dynamic> toMap() => {
+        "_id": id,
         "content": content,
+        "type": type,
+        "name": name,
     };
 }

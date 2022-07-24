@@ -6,16 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:uisads_app/src/constants/categories.dart';
 import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
-import 'package:uisads_app/src/services/ad_service.dart';
-import 'package:uisads_app/src/services/category_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:uisads_app/src/widgets/categoria_widget.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 import 'package:uisads_app/src/widgets/list_category.dart';
 
@@ -402,7 +396,7 @@ class _InputVisible extends StatelessWidget {
           // color: Colors.yellow,
           height: 50,
           child: ToggleSwitch(
-            minWidth: size.height * 0.15,
+            minWidth: size.width * 0.3,
             activeBorders: [
               Border.all(
                 color: AppColors.primary,

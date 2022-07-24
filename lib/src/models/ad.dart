@@ -1,72 +1,71 @@
 // To parse this JSON data, do
 //
-//     final ad = adFromJson(jsonString);
+//     final ad = adFromMap(jsonString);
 
 import 'dart:convert';
 
 import 'package:uisads_app/src/models/upload.dart';
 
+Ad adFromMap(String str) => Ad.fromMap(json.decode(str));
 
-Ad adFromJson(String str) => Ad.fromJson(json.decode(str));
-
-String adToJson(Ad data) => json.encode(data.toJson());
+String adToMap(Ad data) => json.encode(data.toMap());
 
 class Ad {
-  Ad({
-    this.id = '',
-    required this.title,
-    required this.description,
-    required this.publisher,
-    required this.images,
-    required this.category,
-    required this.state,
-    required this.rating,
-    required this.positivePoints,
-    required this.negativePoints,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    Ad({
+        required this.id,
+        required this.title,
+        required this.description,
+        required this.publisher,
+        required this.images,
+        required this.category,
+        required this.state,
+        required this.positvePoints,
+        required this.negativePoints,
+        required this.rating,
+        required this.createdAt,
+        required this.updatedAt,
+    });
 
-  String id;
-  String title;
-  String description;
-  dynamic publisher;
-  List<Upload> images;
-  dynamic category;
-  bool state;
-  int rating;
-  int positivePoints;
-  int negativePoints;
-  String createdAt;
-  String updatedAt;
+    String id;
+    String title;
+    String description;
+    String publisher;
+    List<Upload> images;
+    String category;
+    bool state;
+    int positvePoints;
+    int negativePoints;
+    int rating;
+    String createdAt;
+    String updatedAt;
 
-  factory Ad.fromJson(Map<String, dynamic> json) => Ad(
-        id: json["_id"] ?? '',
-        title: json["title"],
-        description: json["description"],
-        publisher: json["publisher"],
-        images: List<Upload>.from(json["images"].map((x) => x)),
+    factory Ad.fromMap(Map<String, dynamic> json) => Ad(
+        id: json["id"] ?? '',
+        title: json["title"] ?? '',
+        description: json["description"] ?? '',
+        publisher: json["publisher"] ?? '',
+        images: List<Upload>.from( json['images'].map( (x) => Upload.fromMap(x) )) ,
         category: json["category"],
         state: json["state"],
-        positivePoints: json["positive_points"],
-        negativePoints: json["negative_pints"],
+        positvePoints: json["positvePoints"],
+        negativePoints: json["negativePoints"],
         rating: json["rating"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
-      );
+    );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
+    Map<String, dynamic> toMap() => {
+        "id": id,
         "title": title,
         "description": description,
         "publisher": publisher,
-        "images": List<Upload>.from(images.map((x) => x)),
+        "images": images,
         "category": category,
         "state": state,
+        "positvePoints": positvePoints,
+        "negativePoints": negativePoints,
         "rating": rating,
-        "positive_points": positivePoints,
-        "negative_pints": negativePoints,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
-      };
+    };
 }
