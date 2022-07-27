@@ -10,11 +10,12 @@ import 'package:uisads_app/src/utils/http_handler.dart';
 
 class AdService with HttpHandler {
 
-  void createAd( Ad ad ) async {
+  Future<Response> createAd( Ad ad ) async {
     log('entrando al servicio');
     final resp = await getPost('/ad', ad.toMap() );
     log(' resp --> $resp');
-    // return resp;
+    Response _response = Response.fromMap( resp );
+    return _response;
   }
 
 

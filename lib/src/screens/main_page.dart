@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/models/profile.dart';
+import 'package:uisads_app/src/providers/category_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
@@ -18,6 +20,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context);
     // const String userName = 'Hola, Armandosasas';
     // double anchoNombre = userName.length.toDouble();
     // print(anchoNombre);
@@ -73,6 +76,7 @@ class MainPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.primary,
           onPressed: () {
+            _categoryProvider.categorySelect = '';
             Navigator.pushNamed(context, 'create-ad');
           },
           child: const Icon(

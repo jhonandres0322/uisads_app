@@ -52,6 +52,7 @@ class CreateAdProvider with ChangeNotifier {
   }
 
   Ad handlerData() {
+    log('visible --> $_isVisible');
     return Ad.fromMap({
       "title": _title,
       "description": _description,

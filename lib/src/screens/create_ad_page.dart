@@ -13,6 +13,7 @@ import 'package:uisads_app/src/providers/category_provider.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
 import 'package:uisads_app/src/services/ad_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
+import 'package:uisads_app/src/widgets/alert_custom.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 import 'package:uisads_app/src/widgets/list_category.dart';
@@ -24,53 +25,61 @@ class CreateAdPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
-    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.mainThirdContrast,
-        elevation: 10.0,
-        title:  const Text(
-          'Crear Anuncio',
-          style: TextStyle(
-            color: AppColors.subtitles
-          ),
-      ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.symmetric( vertical: 10, horizontal: 10 ),
-            child: ElevatedButton(
-              child: const Text('Publicar'),
-              onPressed: () {
-                createAdProvider.formKey.currentState?.save();
-                log('category select --> ${categoryProvider.categorySelect}');
-                createAdProvider.category = categoryProvider.categorySelect;
-                Ad adRequest = createAdProvider.handlerData();
-                _createAd(adRequest);
-              },
-              style: ElevatedButton.styleFrom(
-                onPrimary: AppColors.mainThirdContrast,
-                primary: AppColors.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular( 20.0 )
+    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
+    return WillPopScope(
+      onWillPop:  () async {
+        categoryProvider.categorySelect = '';
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.mainThirdContrast,
+          elevation: 10.0,
+          title:  const Text(
+            'Crear Anuncio',
+            style: TextStyle(
+              color: AppColors.subtitles
+            ),
+        ),
+          actions: [
+            Container(
+              margin: const EdgeInsets.symmetric( vertical: 10, horizontal: 10 ),
+              child: ElevatedButton(
+                child: const Text('Publicar'),
+                onPressed: () {
+                  createAdProvider.formKey.currentState?.save();
+                  log('category select --> ${categoryProvider.categorySelect}');
+                  createAdProvider.category = categoryProvider.categorySelect;
+                  Ad adRequest = createAdProvider.handlerData();
+                  _createAd(context, adRequest);
+                },
+                style: ElevatedButton.styleFrom(
+                  onPrimary: AppColors.mainThirdContrast,
+                  primary: AppColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular( 20.0 )
+                  ),
                 ),
               ),
-            ),
-          )
-        ]
-      ),
-      bottomNavigationBar: const BottomNavigatonBarUisAds(),
-      body: SingleChildScrollView(
-        child: Container(
-          child: const FormCreateAd(),
+            )
+          ]
         ),
-      )
+        bottomNavigationBar: const BottomNavigatonBarUisAds(),
+        body: SingleChildScrollView(
+          child: Container(
+            child: const FormCreateAd(),
+          ),
+        )
+      ),
     );
   }
 
 
-  void _createAd( Ad adRequest) {
+  void _createAd( BuildContext context, Ad adRequest) async {
     final adService = AdService();
-    final resp = adService.createAd( adRequest ); 
+    final response = await adService.createAd( adRequest );
+    ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( response.message , response.error));
+    Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
   }
 }
 
@@ -410,8 +419,14 @@ class _ListaCategorias extends StatelessWidget {
   }
 }
 
-class _InputVisible extends StatelessWidget {
+class _InputVisible extends StatefulWidget {
   const _InputVisible({Key? key}) : super(key: key);
+
+  @override
+  State<_InputVisible> createState() => _InputVisibleState();
+}
+
+class _InputVisibleState extends State<_InputVisible> {
 
   @override
   Widget build(BuildContext context) {
@@ -447,12 +462,12 @@ class _InputVisible extends StatelessWidget {
             activeFgColor: AppColors.third,
             inactiveBgColor: const Color(0xFFE8E8E8),
             inactiveFgColor: const Color(0xFF8798AD),
-            initialLabelIndex: 1,
+            initialLabelIndex: createAdProvider.isVisible ? 1 : 0,
             totalSwitches: 2,
             labels: const ['Desactivado', 'Activado'],
             radiusStyle: true,
             onToggle: (index) {
-              createAdProvider.isVisible = index == 1 ? true : false;
+              createAdProvider.isVisible = !createAdProvider.isVisible;
             },
           ),
         ),

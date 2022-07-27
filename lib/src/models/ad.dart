@@ -20,6 +20,7 @@ class Ad {
         required this.images,
         required this.category,
         required this.state,
+        required this.visible,
         required this.positvePoints,
         required this.negativePoints,
         required this.rating,
@@ -34,6 +35,7 @@ class Ad {
     List<Upload> images;
     String category;
     bool state;
+    bool visible;
     int positvePoints;
     int negativePoints;
     int rating;
@@ -48,6 +50,7 @@ class Ad {
         images: json['images'] ,
         category: json["category"] ?? '',
         state: json["state"] ?? true,
+        visible: json["visible"] ?? true,
         positvePoints: json["positvePoints"] ?? 0,
         negativePoints: json["negativePoints"] ?? 0,
         rating: json["rating"] ?? 0,
@@ -63,6 +66,7 @@ class Ad {
         "images":   json.encode( images.map((e) => e.toMap() ).toList() ) ,
         "category": category,
         "state": state.toString(),
+        "visible": visible.toString(),
         "positvePoints": positvePoints.toString(),
         "negativePoints": negativePoints.toString(),
         "rating": rating.toString(),

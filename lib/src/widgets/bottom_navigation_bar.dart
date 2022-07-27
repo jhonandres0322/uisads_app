@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
+import 'package:uisads_app/src/providers/category_provider.dart';
 
 /// Widget bottomNavigation Bar para el control de las rutas de navegacion y ejecucion del drawer
 /// El drawer se muestra en el lado izquierdo de la pantalla
@@ -16,7 +17,7 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
   Widget build(BuildContext context) {
     // Llamado al provider
     final navegacionProvider = Provider.of<BottomNavigationBarProvider>(context);
-
+    final categoryProvider = Provider.of<CategoryProvider>(context);
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       unselectedItemColor: AppColors.titles.withOpacity(0.35),
@@ -52,8 +53,10 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
             Navigator.pushNamed(context, 'main');
             break;
           case 1:
-          break;  
+            Navigator.pushNamed(context, 'search');
+            break;  
           case 2:
+            categoryProvider.categorySelect = '';
             Navigator.pushNamed(context, 'create-ad');
             break;
           case 3:
