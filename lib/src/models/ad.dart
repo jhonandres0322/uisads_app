@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:uisads_app/src/models/upload.dart';
 
+
 Ad adFromMap(String str) => Ad.fromMap(json.decode(str));
 
 String adToMap(Ad data) => json.encode(data.toMap());
@@ -40,31 +41,31 @@ class Ad {
     String updatedAt;
 
     factory Ad.fromMap(Map<String, dynamic> json) => Ad(
-        id: json["id"] ?? '',
+        id: json["_id"] ?? '',
         title: json["title"] ?? '',
         description: json["description"] ?? '',
         publisher: json["publisher"] ?? '',
-        images: List<Upload>.from( json['images'].map( (x) => Upload.fromMap(x) )) ,
-        category: json["category"],
-        state: json["state"],
-        positvePoints: json["positvePoints"],
-        negativePoints: json["negativePoints"],
-        rating: json["rating"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
+        images: json['images'] ,
+        category: json["category"] ?? '',
+        state: json["state"] ?? true,
+        positvePoints: json["positvePoints"] ?? 0,
+        negativePoints: json["negativePoints"] ?? 0,
+        rating: json["rating"] ?? 0,
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
     );
 
     Map<String, dynamic> toMap() => {
-        "id": id,
+        "_id": id,
         "title": title,
         "description": description,
         "publisher": publisher,
-        "images": images,
+        "images":   json.encode( images.map((e) => e.toMap() ).toList() ) ,
         "category": category,
-        "state": state,
-        "positvePoints": positvePoints,
-        "negativePoints": negativePoints,
-        "rating": rating,
+        "state": state.toString(),
+        "positvePoints": positvePoints.toString(),
+        "negativePoints": negativePoints.toString(),
+        "rating": rating.toString(),
         "createdAt": createdAt,
         "updatedAt": updatedAt,
     };

@@ -1,6 +1,8 @@
 
 
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/models/ad.dart';
 import 'package:uisads_app/src/models/upload.dart';
@@ -45,19 +47,18 @@ class CreateAdProvider with ChangeNotifier {
 
   String get category => _category;
   set category ( String value ) {
-    _category = category;
+    _category = value;
     notifyListeners();
   }
 
-  // Ad handlerData() {
-  //   Map<String,dynamic> jsonAd = {
-  //     "title": _title,
-  //     "description": _description,
-  //     "images": _images,
-  //     "publisher": _publisher,
-  //     "category": _category,
-  //     "visible": _isVisible
-  //   };
-  //   return Ad.fromJson(jsonAd);
-  // }
+  Ad handlerData() {
+    return Ad.fromMap({
+      "title": _title,
+      "description": _description,
+      "images": _images,
+      "publisher": _publisher,
+      "category": _category,
+      "visible": _isVisible
+    });
+  }
 }

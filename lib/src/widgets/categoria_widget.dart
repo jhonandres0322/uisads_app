@@ -26,7 +26,7 @@ class _CategoriaButtonState extends State<CategoriaButton> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final _categoryProvider = Provider.of<CategoryProvider>(context);
+    final _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     return FocusableActionDetector(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),

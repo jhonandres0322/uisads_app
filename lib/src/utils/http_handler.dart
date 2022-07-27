@@ -44,8 +44,7 @@ class HttpHandler {
   }
 
   // ignore: unused_element
-  Future<Map<String, dynamic>> getPost(
-      String endpoint, Map<String, dynamic> request) async {
+  Future<Map<String, dynamic>> getPost( String endpoint, Map<String, dynamic> request) async {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
     final resp = await http.post(Uri.parse(url), headers: getHeaders, body: request);

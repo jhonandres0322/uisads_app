@@ -7,7 +7,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/models/ad.dart';
+import 'package:uisads_app/src/models/upload.dart';
+import 'package:uisads_app/src/providers/category_provider.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
+import 'package:uisads_app/src/services/ad_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
@@ -19,6 +23,8 @@ class CreateAdPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
+    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.mainThirdContrast,
@@ -34,7 +40,13 @@ class CreateAdPage extends StatelessWidget {
             margin: const EdgeInsets.symmetric( vertical: 10, horizontal: 10 ),
             child: ElevatedButton(
               child: const Text('Publicar'),
-              onPressed: () {},
+              onPressed: () {
+                createAdProvider.formKey.currentState?.save();
+                log('category select --> ${categoryProvider.categorySelect}');
+                createAdProvider.category = categoryProvider.categorySelect;
+                Ad adRequest = createAdProvider.handlerData();
+                _createAd(adRequest);
+              },
               style: ElevatedButton.styleFrom(
                 onPrimary: AppColors.mainThirdContrast,
                 primary: AppColors.primary,
@@ -53,6 +65,12 @@ class CreateAdPage extends StatelessWidget {
         ),
       )
     );
+  }
+
+
+  void _createAd( Ad adRequest) {
+    final adService = AdService();
+    final resp = adService.createAd( adRequest ); 
   }
 }
 
@@ -191,6 +209,8 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
   final _picker = ImagePicker();
   final _pathImagePlaceholder = 'assets/images/jar-loading.gif';
   final _pathNoImage =  'assets/images/no-image.png';
+
+
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -200,7 +220,7 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
         if( _image != null ) {
           _showImage( context );
         } else {
-          _openImagePicker();
+          _openImagePicker( context );
         }
       },
       child: Container(
@@ -230,8 +250,29 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
     );
   }
 
-  Future<void> _openImagePicker() async {
+  Future<void> _openImagePicker( BuildContext context ) async {
     final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery, maxHeight: 350, maxWidth: 350);
+    
+    int index = widget.index;
+    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
+    String content = convertFileToBase64( pickedImage!.path);
+    final Upload upload = Upload.fromMap({
+      "content": content,
+      "name": pickedImage.name,
+      "type": pickedImage.name.split('.')[1],
+      "index": index.toString()
+    });
+    final indexList = createAdProvider.images.indexWhere((element) => element.index == index );
+    log('indexList --> $indexList');
+    if( indexList >= 0 ) {
+      log('existe debe actualizar la imagen');
+      createAdProvider.images.remove( createAdProvider.images[indexList] );
+      createAdProvider.images.add( upload );
+    } else {
+      log('se agrega a la lista');
+      createAdProvider.images.add( upload );
+    }
+    log('array images --> ${createAdProvider.images}');
     if( pickedImage != null ) {
       setState(() {
         _image = XFile( pickedImage.path );
@@ -239,21 +280,18 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
     }
   }
 
-  Future<dynamic> convertFileToBase64( ) async {
-    final imageBytes = await  _image!.readAsBytes();
+  String convertFileToBase64( String path ) {
+    final imageBytes = File( path ).readAsBytesSync();
     final base64String =  base64Encode( imageBytes )  ;
-    log( "${base64String.length}" );
     return base64String;
   }
 
 
   Future<void> _showImage( BuildContext context ) async {
-
     final Size _size = MediaQuery.of(context).size;
     return showDialog(
       context: context, 
       builder: ( context ) {
-        convertFileToBase64();
         return AlertDialog(
           scrollable: false,
           title: Row(
@@ -309,7 +347,7 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      _openImagePicker();
+                      _openImagePicker( context );
                       Navigator.pop(context);
                     });
                   },
@@ -378,6 +416,7 @@ class _InputVisible extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context);
     return Column(
       children: [
         Container(
@@ -413,7 +452,7 @@ class _InputVisible extends StatelessWidget {
             labels: const ['Desactivado', 'Activado'],
             radiusStyle: true,
             onToggle: (index) {
-              log('switched to: $index');
+              createAdProvider.isVisible = index == 1 ? true : false;
             },
           ),
         ),
