@@ -7,8 +7,7 @@ import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class HttpHandler {
   final String _baseUrl = Env.getEndpoint('dev');
-  final Preferences _preferences = Preferences();
-  late String token = _preferences.token.isNotEmpty ? _preferences.token : '' ;
+  late String token = Preferences.token.isNotEmpty ? Preferences.token : '' ;
 
 
   final Map<String, String> _headers = {
@@ -61,8 +60,6 @@ class HttpHandler {
   // ignore: unused_element
   Future<Map<String, dynamic>> getPut( String endpoint, Map<String, dynamic> request) async {
     Map<String, String> getHeaders = _getHeaders();
-    log('request put --> $request');
-    log('endpoint --> $endpoint');
     String url = _getEndpoint(endpoint);
     final resp = await http.put(Uri.parse(url), headers: getHeaders, body: request);
     Map<String, dynamic> jsonDecode = json.decode(resp.body);

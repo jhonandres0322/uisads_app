@@ -14,6 +14,7 @@ import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/drawer_custom.dart';
 import 'package:uisads_app/src/widgets/list_ad.dart';
 import 'package:uisads_app/src/widgets/list_category.dart';
+import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -209,8 +210,6 @@ class CirclePerfilAvatar extends StatelessWidget {
   final String userName;
   @override
   Widget build(BuildContext context) {
-    AuthService _authService = AuthService();
-    Preferences _preferences = Preferences();
     // Obtenemos los valores de la pantalla
     return InkWell(
       onTap: () {
@@ -221,23 +220,14 @@ class CirclePerfilAvatar extends StatelessWidget {
         child: Stack(
           alignment: Alignment.centerLeft,
           children: [
-            // Entre mas abajo del stack mas arriba en pantalla estará
-            FutureBuilder(
-              future: _authService.getProfile( _preferences.profile ),
-              builder: ((context, AsyncSnapshot<Profile> snapshot) {
-                if( snapshot.hasData ) {
-                  Profile _profile = snapshot.data!;
-                  return _BarraPerfilNombre(
-                    // width: width ,
-                    height: height,
-                    nombreUser: _profile.name,
-                  );
-                }
-                return const CircularProgressIndicator();
-
-            })),
+            _BarraPerfilNombre(
+              // width: width ,
+              height: height,
+              nombreUser: Preferences.name,
+            ),
             // Stack con el circulo de perfil
-            PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
+            const ProfileAvatar( radius:  0.025 )
+            // PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
           ],
         ),
       ),

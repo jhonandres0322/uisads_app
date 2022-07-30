@@ -10,9 +10,7 @@ SnackBar showAlertCustom(String text, bool isError) {
     ),
     action: SnackBarAction(
       label: 'Cerrar',
-      onPressed: () {
-        log("entering button close snackbar");
-      },
+      onPressed: () {},
       textColor: AppColors.mainThirdContrast,
     ),
     elevation: 1.0,

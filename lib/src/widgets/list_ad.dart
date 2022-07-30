@@ -25,7 +25,6 @@ class _ListAdState extends State<ListAd> {
     super.initState();
     _scrollController.addListener(() { 
       if ( _scrollController.position.pixels + 200  >= _scrollController.position.maxScrollExtent ) {
-        log("llegando al final de la pagina");
         // addAds();
         fetchData();
       }

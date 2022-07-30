@@ -12,6 +12,7 @@ import 'package:uisads_app/src/models/upload.dart';
 import 'package:uisads_app/src/providers/category_provider.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
 import 'package:uisads_app/src/services/ad_service.dart';
+import 'package:uisads_app/src/utils/handler_image.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/alert_custom.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
@@ -48,7 +49,6 @@ class CreateAdPage extends StatelessWidget {
                 child: const Text('Publicar'),
                 onPressed: () {
                   createAdProvider.formKey.currentState?.save();
-                  log('category select --> ${categoryProvider.categorySelect}');
                   createAdProvider.category = categoryProvider.categorySelect;
                   Ad adRequest = createAdProvider.handlerData();
                   _createAd(context, adRequest);
@@ -77,9 +77,11 @@ class CreateAdPage extends StatelessWidget {
 
   void _createAd( BuildContext context, Ad adRequest) async {
     final adService = AdService();
+    final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     final response = await adService.createAd( adRequest );
     ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( response.message , response.error));
     Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+    _categoryProvider.categorySelect = '';
   }
 }
 
@@ -264,37 +266,27 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
     
     int index = widget.index;
     final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
-    String content = convertFileToBase64( pickedImage!.path);
-    final Upload upload = Upload.fromMap({
-      "content": content,
-      "name": pickedImage.name,
-      "type": pickedImage.name.split('.')[1],
-      "index": index.toString()
-    });
-    final indexList = createAdProvider.images.indexWhere((element) => element.index == index );
-    log('indexList --> $indexList');
-    if( indexList >= 0 ) {
-      log('existe debe actualizar la imagen');
-      createAdProvider.images.remove( createAdProvider.images[indexList] );
-      createAdProvider.images.add( upload );
-    } else {
-      log('se agrega a la lista');
-      createAdProvider.images.add( upload );
-    }
-    log('array images --> ${createAdProvider.images}');
     if( pickedImage != null ) {
+      String content = '';
+      content = convertFileToBase64( pickedImage.path);
+      final Upload upload = Upload.fromMap({
+        "content": content,
+        "name": pickedImage.name,
+        "type": pickedImage.name.split('.')[1],
+        "index": index.toString()
+      });
+      final indexList = createAdProvider.images.indexWhere((element) => element.index == index );
+      if( indexList >= 0 ) {
+        createAdProvider.images.remove( createAdProvider.images[indexList] );
+        createAdProvider.images.add( upload );
+      } else {
+        createAdProvider.images.add( upload );
+      }
       setState(() {
         _image = XFile( pickedImage.path );
       });
     }
   }
-
-  String convertFileToBase64( String path ) {
-    final imageBytes = File( path ).readAsBytesSync();
-    final base64String =  base64Encode( imageBytes )  ;
-    return base64String;
-  }
-
 
   Future<void> _showImage( BuildContext context ) async {
     final Size _size = MediaQuery.of(context).size;

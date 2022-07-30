@@ -251,7 +251,7 @@ class _ButtonRegister extends StatelessWidget {
     final RegisterResponse registerResponse = await _authService.registerUser( registerRequest );
     ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( registerResponse.msg, registerResponse.error ) );
     if( !registerResponse.error ) {
-      navigatorAuth( context, registerResponse.token, registerResponse.profile.uid );
+      navigatorAuth( context, registerResponse.token, registerResponse.profile, registerResponse.user );
     }
   }
 

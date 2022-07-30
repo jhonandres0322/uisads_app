@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:uisads_app/src/models/upload.dart';
+
 Profile profileFromMap(String str) => Profile.fromMap(json.decode(str));
 
 String profileToMap(Profile data) => json.encode(data.toMap());
@@ -16,6 +18,7 @@ class Profile {
         required this.state,
         required this.score,
         required this.city,
+        required this.image,
         required this.createdAt,
         required this.updatedAt,
         required this.description,
@@ -28,6 +31,7 @@ class Profile {
     bool state;
     int score;
     String city;
+    Upload image;
     String createdAt;
     String updatedAt;
     String description;
@@ -40,6 +44,7 @@ class Profile {
         state: json["state"] ?? true,
         score: json["score"] ?? 0,
         city: json["city"] ?? '',
+        image: Upload.fromMap( json["image"] ?? {}),
         createdAt: json["createdAt"] ?? '',
         updatedAt: json["updatedAt"] ?? '',
         description: json["description"] ?? '',
@@ -53,6 +58,7 @@ class Profile {
         "state": state.toString(),
         "score": score.toString(),
         "city": city,
+        "image":  json.encode( image.toMap() ),
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "description": description,

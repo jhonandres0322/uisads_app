@@ -10,6 +10,7 @@ import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/logo_app.dart';
+import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
 class DrawerCustom extends StatelessWidget {
   const DrawerCustom({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class DrawerCustom extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              CardInfoProfile(),
+              const CardInfoProfile(),
               SizedBox(height: size.height * 0.05),
               Expanded(
                 child: ListView.builder(
@@ -43,13 +44,11 @@ class DrawerCustom extends StatelessWidget {
 }
 
 class CardInfoProfile extends StatelessWidget {
-  CardInfoProfile({Key? key}) : super(key: key);
+  const CardInfoProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final _authService = AuthService();
-    final _preferences = Preferences();
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, 'profile', arguments: {
@@ -60,43 +59,32 @@ class CardInfoProfile extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(width: size.width * 0.05),
-            const PerfilCirculoUsuario(radio: 30.0),
+            const ProfileAvatar(radius: 0.03),
             SizedBox(width: size.width * 0.03),
-            FutureBuilder(
-              future: _authService.getProfile( _preferences.profile ),
-              builder: (context, AsyncSnapshot<Profile> snapshot) {
-                if( snapshot.hasData ) {
-                  log("snapshot data --> ${snapshot.data}");
-                  Profile profile =  snapshot.data!;
-                  Widget widget = Flexible(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          profile.name,
-                          style: const TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.mainThirdContrast,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          profile.email,
-                          style: const TextStyle(
-                            fontSize: 10.0,
-                            color: AppColors.mainThirdContrast,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      ],
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    Preferences.name,
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.mainThirdContrast,
                     ),
-                  );
-                  return widget;
-                }
-                return const CircularProgressIndicator();
-              },
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    Preferences.email,
+                    style: const TextStyle(
+                      fontSize: 10.0,
+                      color: AppColors.mainThirdContrast,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              ),
             )
           ],
         ),
@@ -168,8 +156,7 @@ class ItemDrawer extends StatelessWidget {
       showAboutApp(context);
     } else {
       if( routeName == 'login' ) {
-        Preferences _preferences = Preferences();
-        _preferences.token = '';
+        Preferences.clearInfo();
       }
       Navigator.pushNamedAndRemoveUntil( context, routeName, (Route<dynamic> route) => false);
     }

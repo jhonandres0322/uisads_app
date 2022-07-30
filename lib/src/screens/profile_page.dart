@@ -8,9 +8,9 @@ import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
+import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -71,32 +71,20 @@ class _InfoProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = AuthService();
-    final _preferences = Preferences();
     final Size size = MediaQuery.of(context).size;
     return Container(
-      child: FutureBuilder(
-        future: _authService.getProfile( _preferences.profile ),
-        builder: (context, AsyncSnapshot<Profile> snapshot) {
-          if( snapshot.hasData ) {
-            Profile _profile = snapshot.data!;
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: size.height * 0.1),
-                _PhotoProfile( arguments: arguments,),
-                SizedBox(height: size.height * 0.02),
-                _NameProfile( name: _profile.name ),
-                SizedBox(height: size.height * 0.02),
-                _DescriptionProfile( description: _profile.description ),
-                SizedBox(height: size.height * 0.02),
-                const _CardInfoProfile(),
-              ],
-            );
-          }
-          return const CircularProgressIndicator();
-        },
-
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: size.height * 0.1),
+          _PhotoProfile( arguments: arguments,),
+          SizedBox(height: size.height * 0.02),
+          _NameProfile( name: Preferences.name ),
+          SizedBox(height: size.height * 0.02),
+          _DescriptionProfile( description: Preferences.description ),
+          SizedBox(height: size.height * 0.02),
+          const _CardInfoProfile(),
+        ],
       ),
       // child: 
       height: size.height * 0.5,
@@ -122,7 +110,8 @@ class _PhotoProfile extends StatelessWidget {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
-        const PerfilCirculoUsuario(radio: 50.0),
+        const ProfileAvatar( radius: 0.065 ),
+        // const PerfilCirculoUsuario(radio: 50.0),
         FloatingActionButton.small(
           child: 
             arguments['type'] == 'user'

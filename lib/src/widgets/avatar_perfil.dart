@@ -1,5 +1,10 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/providers/edit_profile_provider.dart';
 
 /// Widget con el circulo del usuario centrado en el stack
 /// El size pasado al Perfil circulo usuario permite distribuir el tamaño entre ellos
@@ -86,13 +91,20 @@ class _CirculoFrenteAvatar extends StatelessWidget {
   final double xradius;
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
+    final EditProfileProvider _editProfileProvider = Provider.of<EditProfileProvider>(context);
+    return CircleAvatar(
       child: Container(
-        child: const Image(
-          image: AssetImage('assets/images/avatar.png'),
-          width: double.infinity,
+        child: _editProfileProvider.imageProfile.isNotEmpty
+        ? Image.file(
+          File( _editProfileProvider.imageProfile ),
           fit: BoxFit.cover,
-        ),
+        )
+        : const FadeInImage(
+            placeholder: AssetImage( 'assets/images/jar-loading.gif' ), 
+            image: AssetImage( 'assets/images/avatar.png' ),
+            fit: BoxFit.cover,
+          )
+        ,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.blue
