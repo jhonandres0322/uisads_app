@@ -19,6 +19,17 @@ class CreateAdProvider with ChangeNotifier {
 
   GlobalKey<FormState> get formKey => _formKey;
 
+
+  void limpiarObjetos(){
+    _title = '';
+    _description = '';
+    _images.clear();
+    _publisher = '';
+    _category = '';
+    _isVisible = true;
+    _formKey = GlobalKey<FormState>();
+  }
+
   bool get isVisible => _isVisible;
   set isVisible ( bool value ) {
     _isVisible = value;
@@ -61,4 +72,5 @@ class CreateAdProvider with ChangeNotifier {
       "visible": _isVisible
     });
   }
+
 }
