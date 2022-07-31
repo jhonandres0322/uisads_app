@@ -58,6 +58,22 @@ class Ad {
         updatedAt: json["updatedAt"] ?? '',
     );
 
+    factory Ad.fromMapper(Map<String, dynamic> json) => Ad(
+        id: json["_id"] ?? '',
+        title: json["title"] ?? '',
+        description: json["description"] ?? '',
+        publisher: json["publisher"] ?? '',
+        images: uploadsFromMap(json['images']) ,
+        category: json["category"] ?? '',
+        state: json["state"] ?? true,
+        visible: json["visible"] ?? true,
+        positvePoints: json["positvePoints"] ?? 0,
+        negativePoints: json["negativePoints"] ?? 0,
+        rating: json["rating"] ?? 0,
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
+    );
+
     Map<String, dynamic> toMap() => {
         "_id": id,
         "title": title,

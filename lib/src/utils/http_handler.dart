@@ -32,6 +32,7 @@ class HttpHandler {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);
     final resp = await http.get(Uri.parse(url), headers: getHeaders);
+    
     Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
     Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/categories.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
+import 'package:uisads_app/src/models/ad.dart';
+import 'package:uisads_app/src/services/ad_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
 import 'package:uisads_app/src/widgets/dropdown_custom.dart';
@@ -9,7 +11,6 @@ import 'package:uisads_app/src/widgets/input_custom.dart';
 import 'package:uisads_app/src/widgets/search_widget.dart';
 
 class SearchDelegateUis extends SearchDelegate {
-  
   // Mostrar el icono de limpiar busqueda, o hasta los filtros se pueden incluir en el searchBar
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -39,9 +40,9 @@ class SearchDelegateUis extends SearchDelegate {
           }
         },
       ),
-      
     ];
   }
+
   // Mostrar el icono Leading de la barra
   @override
   Widget buildLeading(BuildContext context) {
@@ -52,33 +53,113 @@ class SearchDelegateUis extends SearchDelegate {
       },
     );
   }
+
   // Mostrar resultados de la busqueda
   @override
   Widget buildResults(BuildContext context) {
+
+    final _adService = new AdService();
+
+    if (query.trim().length == 0) {
+      return Center(
+        child: Text(
+          'No se encontraron resultados',
+          style: TextStyle(
+            color: AppColors.subtitles,
+            fontSize: 20,
+          ),
+        ),
+      );
+    }
+    return FutureBuilder(
+      future: _adService.searchAds(query),
+      builder: (BuildContext context, AsyncSnapshot<List<Ad>> snapshot) {
+        
+        if (snapshot.hasData) {
+
+          List<Ad> ads = snapshot.data ?? [];
+
+          return ListView.builder(
+            itemCount: ads.length,
+            itemBuilder: (context, index) => Container(
+              child: Column(
+                children: [
+                  Text(ads[index].title),
+                  Text(ads[index].description),
+                ]
+              ),
+            ),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      }
+    );
+    // Aqui realizar la busqueda de los resultados
+    // return Center(
+    //   child: Text(
+    //     'Resultados de la busqueda: $query',
+    //     style: TextStyle(
+    //       color: AppColors.subtitles,
+    //       fontSize: 20,
+    //     ),
+    //   ),
+    // );
     // Construccion de los resultados
-    return Flexible(
-        // flex: 1,
-        child: ListView.builder(
-      itemCount: 10,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          // child: CardTable(),
-        );
-      },
-    ));
+    // return Flexible(
+    //     // flex: 1,
+    //     child: ListView.builder(
+    //   itemCount: 10,
+    //   itemBuilder: (BuildContext context, int index) {
+    //     return Container(
+    //       padding: const EdgeInsets.symmetric(horizontal: 10),
+    //       child: Container(),
+    //     );
+    //   },
+    // ));
   }
+
   // Mostrar las sugerencias de la busqueda
   @override
   Widget buildSuggestions(BuildContext context) {
+    if (query.isEmpty) {
+      return Container(
+        child: Center(
+            child: Container(
+          height: 200,
+          child: Column(
+            children: [
+              Container(
+                child: Icon(
+                  CustomUisIcons.advertising,
+                  size: 100,
+                  color: AppColors.subtitles,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'No se ha realizado ninguna búsqueda',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: AppColors.subtitles,
+                ),
+              )
+            ],
+          ),
+        )),
+      );
+    }
     return Container();
   }
 }
 
-
 class _BottomSheet extends StatelessWidget {
-  const _BottomSheet({ Key? key }) : super(key: key);
-  
+  const _BottomSheet({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // Creacion de los DropdownCustoms, quedaria pendiente revisar si se optimiza de una mejor forma
@@ -108,7 +189,8 @@ class _BottomSheet extends StatelessWidget {
       child: Column(
         children: [
           InputCustom(labelText: 'Por Relevancia', input: dropdownRelevancia),
-          InputCustom(labelText: 'Por Fecha de Publicacion', input: dropdownFecha),
+          InputCustom(
+              labelText: 'Por Fecha de Publicacion', input: dropdownFecha),
           InputCustom(labelText: 'Por Categoria', input: dropdownCategoria),
           SizedBox(
             height: 25,
@@ -122,6 +204,7 @@ class _BottomSheet extends StatelessWidget {
     );
   }
 }
+
 class _ButtonFilter extends StatelessWidget {
   const _ButtonFilter({
     Key? key,
