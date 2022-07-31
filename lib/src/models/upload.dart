@@ -3,7 +3,7 @@
 //     final upload = uploadFromMap(jsonString);
 
 import 'dart:convert';
-List<Upload> uploadsFromMap(List<dynamic> list) => List<Upload>.from(list.map((x) => Upload.fromMapper(x.toString())));
+List<Upload> uploadsFromMap(List<dynamic> list) => List<Upload>.from(list.map((x) => Upload.fromMapper(x)));
 
 Upload uploadFromMap(String str) => Upload.fromMap(json.decode(str));
 // Upload uploadFromMapper(String str) => Upload.fromMapper(str);
@@ -35,10 +35,10 @@ class Upload {
     // Temporal
     factory Upload.fromMapper(String str) => Upload(
         id: str,
-        // content: json["content"] ?? '',
-        // type: json["type"] ?? '',
-        // name: json["name"] ?? '',
-        // index: json["index"] ?? ''
+        content: '',
+        type: '',
+        name: '',
+        index: ''
     );
 
     Map<String, dynamic> toMap() => {

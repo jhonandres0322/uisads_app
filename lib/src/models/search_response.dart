@@ -22,10 +22,7 @@ class SearchResponse {
 
   factory SearchResponse.fromMap(Map<String, dynamic> json) => SearchResponse(
         totalRows: json["totalRows"],
-        ads: List<Ad>.from(json["ads"].map((x) => {
-          // TODO: Implement Ad.fromMap() debido a que la lista de imagenes es una lista de Ids.
-          // Ad.fromMapper(x)
-        })),
+        ads: List<Ad>.from(json["ads"].map((x) => Ad.fromMapper(x)).toList()),
       );
 
   // Map<String, dynamic> toMap() => {

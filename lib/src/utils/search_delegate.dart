@@ -5,6 +5,7 @@ import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/models/ad.dart';
 import 'package:uisads_app/src/services/ad_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
+import 'package:uisads_app/src/widgets/ad_card.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
 import 'package:uisads_app/src/widgets/dropdown_custom.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
@@ -57,7 +58,7 @@ class SearchDelegateUis extends SearchDelegate {
   // Mostrar resultados de la busqueda
   @override
   Widget buildResults(BuildContext context) {
-
+    ScrollController _scrollController = ScrollController();
     final _adService = new AdService();
 
     if (query.trim().length == 0) {
@@ -72,31 +73,64 @@ class SearchDelegateUis extends SearchDelegate {
       );
     }
     return FutureBuilder(
-      future: _adService.searchAds(query),
-      builder: (BuildContext context, AsyncSnapshot<List<Ad>> snapshot) {
-        
-        if (snapshot.hasData) {
-
-          List<Ad> ads = snapshot.data ?? [];
-
-          return ListView.builder(
-            itemCount: ads.length,
-            itemBuilder: (context, index) => Container(
-              child: Column(
-                children: [
-                  Text(ads[index].title),
-                  Text(ads[index].description),
-                ]
-              ),
-            ),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      }
-    );
+        future: _adService.searchAds(query),
+        builder: (BuildContext context, AsyncSnapshot<List<Ad>> snapshot) {
+          if (snapshot.hasData) {
+            List<Ad> ads = snapshot.data!;
+            if (ads.length == 0) {
+              return Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  height: 200,
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Icon(
+                          Icons.warning,
+                          size: 100,
+                          color: AppColors.subtitles,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'No se ha encontrado ningun anuncio con los criterios especificados',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: AppColors.subtitles,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              // Desplegamos la lista de anuncios
+              return Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: GridView.builder(
+                    controller: _scrollController,
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: ads.length,
+                    itemBuilder: (context, index) {
+                      return AdCard(
+                        title: ads[index].title,
+                      );
+                    }),
+              );
+            }
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
     // Aqui realizar la busqueda de los resultados
     // return Center(
     //   child: Text(

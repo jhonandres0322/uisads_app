@@ -3,8 +3,12 @@ import 'package:uisads_app/src/constants/colors.dart';
 
 
 class AdCard extends StatelessWidget {
-  const AdCard({Key? key}) : super(key: key);
+  const AdCard({
+    Key? key, 
+    this.title = 'Titulo Anuncio',
+  }) : super(key: key);
 
+  final String title;
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -40,8 +44,8 @@ class AdCard extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only( left: widthCard * 0.04),
                     width: widthCard * 0.55,
-                    child: const Text(
-                      'Anuncio',
+                    child: Text(
+                      title,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 10,
