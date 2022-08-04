@@ -3,20 +3,27 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/models/ad.dart';
 import 'package:uisads_app/src/widgets/ad_card.dart';
 import 'package:uisads_app/src/widgets/card_table.dart';
 
 
 class ListAd extends StatefulWidget {
-  const ListAd({Key? key}) : super(key: key);
+  final List<Ad> ads;
+  final Function onNextPage;
+
+  const ListAd({
+    Key? key,
+    required this.ads,
+    required this.onNextPage
+  }) : super(key: key);
 
   @override
   State<ListAd> createState() => _ListAdState();
 }
 
 class _ListAdState extends State<ListAd> {
-  List<int> ads = [1,2,3,4,5,6,7,8,9,10,11,12,13];
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
 
   @override
@@ -26,29 +33,11 @@ class _ListAdState extends State<ListAd> {
     _scrollController.addListener(() { 
       if ( _scrollController.position.pixels + 200  >= _scrollController.position.maxScrollExtent ) {
         // addAds();
-        fetchData();
+        widget.onNextPage;
       }
     });
   }
 
-
-  void  addAds() {
-    int indexLast = ads.last;
-    ads.addAll(
-      [1,2,3,4,5].map((e) => indexLast + e )
-    );
-    setState(() { });
-  }
-
-  Future fetchData() async {
-    if ( _isLoading ) return;
-    _isLoading = true;
-    setState(() { });
-    await Future.delayed( const Duration( seconds:  3 ) );
-    addAds();
-    _isLoading = false;
-    setState(() { });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +52,12 @@ class _ListAdState extends State<ListAd> {
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               physics: const BouncingScrollPhysics(),
-              itemCount: ads.length,
+              itemCount: widget.ads.length,
               itemBuilder: (context, index) {
-                return const AdCard();
+                return AdCard(
+                  title: widget.ads[index].title,
+                  mainPage: widget.ads[index].mainPage,
+                );
               }
             ),
             if( _isLoading ) 
@@ -80,12 +72,6 @@ class _ListAdState extends State<ListAd> {
         ),
       ),
     );
-  }
-
-  Future _onrefresh() async {
-    Future.delayed( const Duration( seconds: 2) );
-    ads.add( 1 );
-    setState(() {});
   }
 }
 

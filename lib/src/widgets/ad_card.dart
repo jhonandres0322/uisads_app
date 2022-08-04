@@ -1,9 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/models/upload.dart';
+import 'package:uisads_app/src/utils/handler_image.dart';
 
 
 class AdCard extends StatelessWidget {
-  const AdCard({Key? key}) : super(key: key);
+  final Upload mainPage;
+  final String title;
+  
+  const AdCard({
+    Key? key,
+    required this.mainPage,
+    required this.title
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +37,26 @@ class AdCard extends StatelessWidget {
           SizedBox(
             height: widthCard * 0.8,
             width: widthCard,
-            child: Image.asset(
-              'assets/images/anuncio.jpg',
-              fit: BoxFit.cover,
-            )
+            // child: Image.asset(
+            //   'assets/images/anuncio.jpg',
+            //   fit: BoxFit.cover,
+            // )
+            child: FutureBuilder(
+              future: getImageBase64( mainPage ),
+              builder: (context, AsyncSnapshot<String> snapshot) {
+                if( snapshot.hasData ) {
+                  return Image.file(
+                    File( snapshot.data! ),
+                    fit: BoxFit.cover,
+                  );
+                } else {
+                  return Image.asset(
+                    'assets/images/anuncio.jpg',
+                    fit: BoxFit.cover,
+                  );
+                }
+              },
+            ),
           ),
           Flexible(
             child: SizedBox(
@@ -40,10 +67,10 @@ class AdCard extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only( left: widthCard * 0.04),
                     width: widthCard * 0.55,
-                    child: const Text(
-                      'Anuncio',
+                    child: Text(
+                      title,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 10,
                         fontWeight:  FontWeight.w500,
                         fontFamily: 'Roboto'
