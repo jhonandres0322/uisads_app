@@ -16,4 +16,9 @@ class AdService with HttpHandler {
   }
 
 
+  Future<Map<String,dynamic>> getAds( int page ) async {
+    final resp = await getGet('/ad/$page');
+    return resp;
+  }
+
 }

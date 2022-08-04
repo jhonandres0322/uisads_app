@@ -12,12 +12,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uisads_app/src/models/upload.dart';
 
 Future<String> getImageBase64( Upload image ) async {
-  Uint8List bytes = base64.decode( image.content );
-  String dir = (await getApplicationDocumentsDirectory()).path;
-  String dateNow = DateTime.now().millisecondsSinceEpoch.toString(); 
-  File file = File( "$dir/$dateNow.${image.type}");
-  file.writeAsBytesSync( bytes );
-  return file.path;
+  if( image.content.isNotEmpty ) {
+    Uint8List bytes = base64.decode( image.content ); 
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File( "$dir/${image.name}");
+    file.writeAsBytesSync( bytes );
+    return file.path;
+  }
+  return '';
 }
 
 String convertFileToBase64( String path ) {

@@ -7,6 +7,7 @@ import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/providers/category_provider.dart';
+import 'package:uisads_app/src/providers/main_page_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/avatar_perfil.dart';
@@ -18,13 +19,12 @@ import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context);
-    // const String userName = 'Hola, Armandosasas';
-    // double anchoNombre = userName.length.toDouble();
-    // print(anchoNombre);
+    final MainPageProvider _mainPageProvider = Provider.of<MainPageProvider>(context);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -68,7 +68,10 @@ class MainPage extends StatelessWidget {
             Flexible(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: const ListAd(),
+                child: ListAd(
+                  ads: _mainPageProvider.ads,
+                  onNextPage: () => _mainPageProvider.getAds()
+                ),
               ),
             )
           ],

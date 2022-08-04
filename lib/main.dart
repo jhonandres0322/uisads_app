@@ -11,6 +11,7 @@ import 'package:uisads_app/src/providers/category_provider.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
 import 'package:uisads_app/src/providers/edit_profile_provider.dart';
 import 'package:uisads_app/src/providers/login_form_provider.dart';
+import 'package:uisads_app/src/providers/main_page_provider.dart';
 import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
 import 'package:uisads_app/src/utils/screen_size.dart';
@@ -32,6 +33,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CreateAdProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => LoginFormProvider()),
+        ChangeNotifierProvider(create: (_) => MainPageProvider()),
       ],
       child: const App(),
     );
