@@ -7,10 +7,10 @@ import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/providers/category_provider.dart';
+import 'package:uisads_app/src/providers/edit_profile_provider.dart';
 import 'package:uisads_app/src/providers/main_page_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/drawer_custom.dart';
 import 'package:uisads_app/src/widgets/list_ad.dart';
@@ -38,7 +38,6 @@ class MainPage extends StatelessWidget {
             const CirclePerfilAvatar(
               width: 91,
               height: 44,
-              userName: 'Usuario',
             ),
             // PerfilCirculoUsuario(radio: 22, radioInterno: 2),
             const Spacer(),
@@ -49,10 +48,6 @@ class MainPage extends StatelessWidget {
               },
             ),
           ],
-          // flexibleSpace: const FlexibleSpaceBar(
-          //   title: CirclePerfilAvatar(width: 150, height: 35,),
-          //   // centerTitle: true,
-          // ),
         ),
         drawer: const DrawerCustom(),
         body: Column(
@@ -205,12 +200,10 @@ class CirclePerfilAvatar extends StatelessWidget {
     Key? key,
     required this.width,
     required this.height,
-    required this.userName,
   }) : super(key: key);
 
   final double width;
   final double height;
-  final String userName;
   @override
   Widget build(BuildContext context) {
     // Obtenemos los valores de la pantalla
@@ -229,7 +222,10 @@ class CirclePerfilAvatar extends StatelessWidget {
               nombreUser: Preferences.name,
             ),
             // Stack con el circulo de perfil
-            const ProfileAvatar( radius:  0.025 )
+            ProfileAvatar( 
+              radius:  0.025,
+              image: Preferences.image,
+            )
             // PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
           ],
         ),

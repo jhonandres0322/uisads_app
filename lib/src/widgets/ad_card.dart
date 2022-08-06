@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,11 +10,13 @@ import 'package:uisads_app/src/utils/handler_image.dart';
 class AdCard extends StatelessWidget {
   final Upload mainPage;
   final String title;
+  final String id;
   
   const AdCard({
     Key? key,
     required this.mainPage,
-    required this.title
+    required this.title,
+    required this.id
   }) : super(key: key);
 
   @override
@@ -37,10 +40,6 @@ class AdCard extends StatelessWidget {
           SizedBox(
             height: widthCard * 0.8,
             width: widthCard,
-            // child: Image.asset(
-            //   'assets/images/anuncio.jpg',
-            //   fit: BoxFit.cover,
-            // )
             child: FutureBuilder(
               future: getImageBase64( mainPage ),
               builder: (context, AsyncSnapshot<String> snapshot) {
@@ -93,7 +92,9 @@ class AdCard extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, 'ad');
+                      Navigator.pushNamed(context, 'ad', arguments: {
+                        'id' : id
+                      });
                     },
                   ),
                 ),

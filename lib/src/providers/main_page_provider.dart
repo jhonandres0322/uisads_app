@@ -28,7 +28,6 @@ class MainPageProvider with ChangeNotifier {
     final resp = await _adService.getAds(_page);
     final ResponseAds responseAds = ResponseAds.fromMap(resp);
     ads = [ ...ads, ...responseAds.ads ];
-    log('ads --> $ads');
     notifyListeners();
   }
 
