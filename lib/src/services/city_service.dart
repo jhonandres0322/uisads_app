@@ -17,4 +17,9 @@ class CityService with HttpHandler {
     return cities;
   }
 
+  Future<City> getCityId( String id ) async { 
+    final resp = await getGet('/city/$id');
+    final City city = City.fromMap( resp['city'] );
+    return city;
+  }
 }
