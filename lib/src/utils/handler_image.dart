@@ -3,11 +3,9 @@
 
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uisads_app/src/models/upload.dart';
 
