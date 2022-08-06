@@ -24,11 +24,11 @@ class Category {
     String updatedAt;
 
     factory Category.fromMap(Map<String, dynamic> json) => Category(
-        id: json["_id"],
-        name: json["name"],
-        key: json["key"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
+        id: json["_id"] ?? '',
+        name: json["name"] ?? '',
+        key: json["key"] ?? '',
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
     );
 
     Map<String, dynamic> toMap() => {
