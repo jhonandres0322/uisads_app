@@ -19,7 +19,7 @@ class Response {
 
     factory Response.fromMap(Map<String, dynamic> json) => Response(
         message: json["msg"] ?? '',
-        error: json["error"] ?? true,
+        error: json["error"] ?? false,
     );
 
     Map<String, dynamic> toMap() => {
