@@ -25,10 +25,8 @@ class CreateAdPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final CreateAdProvider createAdProvider =
-        Provider.of<CreateAdProvider>(context, listen: false);
-    final CategoryProvider categoryProvider =
-        Provider.of<CategoryProvider>(context);
+    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
+    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         categoryProvider.categorySelect = '';
@@ -53,8 +51,7 @@ class CreateAdPage extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(showAlertCustom("Por favor seleccione una categoria, si no encuentra la suya seleccione Variados", true));
                       } else {
                         createAdProvider.formKey.currentState?.save();
-                        createAdProvider.category =
-                            categoryProvider.categorySelect;
+                        createAdProvider.category = categoryProvider.categorySelect;
                         Ad adRequest = createAdProvider.handlerData();
                         _createAd(context, adRequest);
                         createAdProvider.limpiarObjetos();
@@ -79,14 +76,13 @@ class CreateAdPage extends StatelessWidget {
   }
 
   void _createAd(BuildContext context, Ad adRequest) async {
+    log(' adRequest --> ${adRequest.toMap()}');
     final adService = AdService();
-    final CategoryProvider _categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
+    final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     final response = await adService.createAd(adRequest);
-    ScaffoldMessenger.of(context)
-        .showSnackBar(showAlertCustom(response.message, response.error));
-    Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+    ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
     _categoryProvider.categorySelect = '';
+    Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
   }
 }
 
