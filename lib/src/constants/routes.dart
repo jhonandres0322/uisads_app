@@ -15,18 +15,25 @@ import 'package:uisads_app/src/screens/recovery_password_code.dart';
 import 'package:uisads_app/src/screens/register_page.dart';
 import 'package:uisads_app/src/screens/search_page.dart';
 
-Map<String, WidgetBuilder> appRoutes = {
-  'home': ( BuildContext context ) => const HomePage(),
-  'ad': ( BuildContext context ) => const AdPage(),
-  'change-password': (BuildContext context ) => const ChangePasswordPage(),
-  'login': (BuildContext context ) => const LoginPage(),
-  'main': ( BuildContext context ) => MainPage(),
-  'profile': ( BuildContext context ) => const ProfilePage(),
-  'recovery-password': ( BuildContext context ) => const RecoveryPasswordPage(),
-  'register': ( BuildContext context ) => const RegisterPage(),
-  'recovery-password-code' : ( BuildContext context ) => const RecoveryPasswordCode(),
-  'create-ad' : (BuildContext context) => const CreateAdPage(),
-  'edit-profile': (BuildContext context ) => EditProfilePage(),
-  'new-password' :(BuildContext context) => const NewPasswordPage(), 
-  'search' : (BuildContext context) => const SearchPage(),
-};
+
+class RoutesApp {
+
+  static Map< String, WidgetBuilder> routes = {
+    'home': ( BuildContext context ) => const HomePage(),
+    'ad': ( BuildContext context ) => const AdPage(),
+    'change-password': (BuildContext context ) => const ChangePasswordPage(),
+    'login': (BuildContext context ) => const LoginPage(),
+    'main': ( BuildContext context ) => const MainPage(),
+    'profile': ( BuildContext context ) => const ProfilePage(),
+    'recovery-password': ( BuildContext context ) => const RecoveryPasswordPage(),
+    'register': ( BuildContext context ) => const RegisterPage(),
+    'recovery-password-code' : ( BuildContext context ) => const RecoveryPasswordCode(),
+    'create-ad' : (BuildContext context) => const CreateAdPage(),
+    'edit-profile': (BuildContext context ) => const EditProfilePage(),
+    'new-password' :(BuildContext context) => const NewPasswordPage(), 
+    'search' : (BuildContext context) => const SearchPage(),
+  };
+
+}
+
+

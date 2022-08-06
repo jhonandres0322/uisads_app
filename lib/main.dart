@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:uisads_app/src/constants/routes.dart';
 import 'package:uisads_app/src/constants/themes.dart';
+import 'package:uisads_app/src/providers/ad_page_provider.dart';
 import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
 import 'package:uisads_app/src/providers/category_provider.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
@@ -34,6 +35,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => LoginFormProvider()),
         ChangeNotifierProvider(create: (_) => MainPageProvider()),
+        ChangeNotifierProvider(create: (_) => AdPageProvider()),
       ],
       child: const App(),
     );
@@ -54,7 +56,7 @@ class App extends StatelessWidget {
           builder: () {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              routes: appRoutes,
+              routes: RoutesApp.routes,
               initialRoute: 'home', //home por defecto
               theme: AppTheme.themePrimary,
               localizationsDelegates: const [
