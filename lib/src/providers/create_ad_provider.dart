@@ -11,7 +11,7 @@ class CreateAdProvider with ChangeNotifier {
   
   String _title = '';
   String _description = '';
-  final List<Upload> _images = [];
+  List<Upload> _images = [];
   String _publisher = '';
   String _category = '';
   bool _isVisible = true;
@@ -23,7 +23,7 @@ class CreateAdProvider with ChangeNotifier {
   void limpiarObjetos(){
     _title = '';
     _description = '';
-    _images.clear();
+    _images = [];
     _publisher = '';
     _category = '';
     _isVisible = true;
@@ -49,6 +49,10 @@ class CreateAdProvider with ChangeNotifier {
   }
 
   List<Upload> get images => _images;
+  set images( List<Upload> value ) {
+    _images = value;
+    notifyListeners();
+  }
 
   String get publisher => _publisher;
   set publisher ( String value ) {
