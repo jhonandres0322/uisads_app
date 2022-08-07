@@ -3,7 +3,7 @@
 //     final upload = uploadFromMap(jsonString);
 
 import 'dart:convert';
-List<Upload> uploadsFromMap(List<dynamic> list) => List<Upload>.from(list.map((x) => Upload.fromMapper(x)));
+List<Upload> uploadsFromMap(List<dynamic> list) => List<Upload>.from(list.map((x) => Upload.fromMapper(x.toString())));
 
 Upload uploadFromMap(String str) => Upload.fromMap(json.decode(str));
 // Upload uploadFromMapper(String str) => Upload.fromMapper(str);
