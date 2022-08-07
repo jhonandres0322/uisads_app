@@ -4,6 +4,7 @@ import 'package:uisads_app/src/models/login_response.dart';
 import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/models/register_request.dart';
 import 'package:uisads_app/src/models/register_response.dart';
+import 'package:uisads_app/src/models/request_change_password.dart';
 import 'package:uisads_app/src/models/response.dart';
 import 'package:uisads_app/src/models/response_score_profile.dart';
 import 'package:uisads_app/src/utils/http_handler.dart';
@@ -41,5 +42,11 @@ class AuthService with HttpHandler {
     });
     ResponseScoreProfile _response = ResponseScoreProfile.fromMap( resp );
     return _response;
+  }
+  
+  Future<Response> changePassword( RequestChangePassword request ) async {
+    log('entrando al servicio para cambiar contraseña');
+    final resp = await getPost('/auth/change-password', request.toMap());
+    return Response.fromMap( resp );
   }
 }

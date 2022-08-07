@@ -1,7 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/models/response.dart';
+import 'package:uisads_app/src/providers/change_password_provider.dart';
+import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
 import 'package:uisads_app/src/utils/utils_recovery_page.dart';
+import 'package:uisads_app/src/widgets/alert_custom.dart';
 import 'package:uisads_app/src/widgets/background_top_recovery.dart';
 import 'package:uisads_app/src/widgets/button_arrow_back.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
@@ -20,7 +27,7 @@ class NewPasswordPage extends StatelessWidget {
               Stack(children: const [
                 BackgroundTopRecovery(),
                 LogoApp(),
-                ButtonArrowBack(),
+                ButtonArrowBack( routeName: 'edit-profile'),
                 _ContainerInfo(),
                 _ContainerForm()
               ])
@@ -61,7 +68,7 @@ class _ContainerForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-return Padding(
+    return Padding(
       padding: EdgeInsets.only(
           bottom: size.height * 0.18, top: size.height * 0.32),
       child: Center(
@@ -92,25 +99,26 @@ class _FormNewPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return SizedBox(
       width: size.width * 0.5,
-      child: Column(
-        children: [
-          const _InputPasswordOld(),
-          const _InputPasswordNew(),
-          const _InputPasswordNewConfirm(),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
-          ButtonRecovery(
-              routeName: 'edit-profile',
-              text: 'Actualizar Contraseña',
-              navigator: 'push'
-          )
-        ],
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const _InputPasswordOld(),
+            const _InputPasswordNew(),
+            const _InputPasswordNewConfirm(),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            _ButtonChangeNewPassword( formKey: formKey)
+          ],
+        ),
       ),
     );
   }
+
 }
 
 class _InputPasswordOld extends StatelessWidget {
@@ -118,11 +126,12 @@ class _InputPasswordOld extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final changePasswordProvider = Provider.of<ChangePasswordProvider>(context); 
     final Widget inputPassword = TextFormField(
       autofocus: false,
       obscureText: true,
       keyboardType: TextInputType.text,
-      //onChanged: (value) => loginForm.password = value,
+      onSaved: (value) => changePasswordProvider.oldPassword = value ?? '',
       //validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.lock, 'Antigua Contraseña'),
@@ -136,11 +145,12 @@ class _InputPasswordNew extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final changePasswordProvider = Provider.of<ChangePasswordProvider>(context); 
     final Widget inputPassword = TextFormField(
       autofocus: false,
       obscureText: true,
       keyboardType: TextInputType.text,
-      //onChanged: (value) => loginForm.password = value,
+      onSaved: (value) => changePasswordProvider.newPassword = value ?? '',
       //validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.lock, 'Nueva Contraseña'),
@@ -151,14 +161,14 @@ class _InputPasswordNew extends StatelessWidget {
 
 class _InputPasswordNewConfirm extends StatelessWidget {
   const _InputPasswordNewConfirm({ Key? key }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final changePasswordProvider = Provider.of<ChangePasswordProvider>(context); 
     final Widget inputPassword = TextFormField(
       autofocus: false,
       obscureText: true,
       keyboardType: TextInputType.text,
-      //onChanged: (value) => loginForm.password = value,
+      onSaved: (value) => changePasswordProvider.confirmNewPassword = value ?? '',
       //validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: decorationInputCustom(Icons.lock, 'Confirme Nueva contraseña'),
@@ -167,4 +177,43 @@ class _InputPasswordNewConfirm extends StatelessWidget {
   }
 }
 
+
+class _ButtonChangeNewPassword extends StatelessWidget {
+  const _ButtonChangeNewPassword({
+    Key? key,
+    required this.formKey
+  }) : super(key: key);
+
+  final GlobalKey<FormState> formKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.height * 0.065,
+      width: size.width * 0.75,
+      child: ElevatedButton(
+          onPressed: () async {
+            bool isNavigator = await changePassword(context, formKey);
+            if ( isNavigator ) {
+              Navigator.popAndPushNamed( context, 'edit-profile');
+            }
+          },
+          child: const Text('Cambiar Contraseña'),
+          style: ElevatedButton.styleFrom(
+              primary: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0)))),
+    );
+  }
+
+    Future<bool> changePassword( BuildContext context, GlobalKey<FormState> formKey ) async {
+      final changePasswordProvider = Provider.of<ChangePasswordProvider>(context, listen: false);
+      final authService = AuthService();
+      formKey.currentState?.save();
+      final Response response = await authService.changePassword( changePasswordProvider.getData() );
+      ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( response.message , response.error ));
+      return response.error ? false : true;
+    }
+}
 

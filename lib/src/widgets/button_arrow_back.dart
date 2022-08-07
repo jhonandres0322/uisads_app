@@ -4,9 +4,11 @@ import 'package:uisads_app/src/constants/colors.dart';
 
 class ButtonArrowBack extends StatelessWidget {
   final Color color;
+  final String routeName;
   const ButtonArrowBack({ 
     Key? key,
     this.color =AppColors.mainThirdContrast,
+    required this.routeName
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class ButtonArrowBack extends StatelessWidget {
               color: color,
               icon: const Icon(Icons.arrow_back_ios_outlined),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, routeName);
               },
         )
     );
