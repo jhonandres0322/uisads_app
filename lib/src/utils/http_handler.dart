@@ -7,7 +7,7 @@ import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class HttpHandler {
   final String _baseUrl = Env.getEndpoint('dev');
-  late String token = Preferences.token.isNotEmpty ? Preferences.token : '' ;
+  final String _token = Preferences.token.isNotEmpty ? Preferences.token : '' ;
 
 
   final Map<String, String> _headers = {
@@ -19,8 +19,8 @@ class HttpHandler {
   String _getEndpoint(String endpoint) => _baseUrl + endpoint;
 
   Map<String, String> _getHeaders() {
-    if (token.isNotEmpty) {
-      Map<String, String> accessToken = {'access-token': token};
+    if (_token.isNotEmpty) {
+      Map<String, String> accessToken = {'access-token': _token};
       _headers.addAll(accessToken);
       return _headers;
     }

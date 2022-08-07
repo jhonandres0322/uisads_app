@@ -4,6 +4,8 @@ import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
 import 'package:uisads_app/src/providers/category_provider.dart';
+import 'package:uisads_app/src/providers/profile_provider.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 /// Widget bottomNavigation Bar para el control de las rutas de navegacion y ejecucion del drawer
 /// El drawer se muestra en el lado izquierdo de la pantalla
@@ -16,8 +18,9 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Llamado al provider
-    final navegacionProvider = Provider.of<BottomNavigationBarProvider>(context);
-    final categoryProvider = Provider.of<CategoryProvider>(context);
+    final BottomNavigationBarProvider navegacionProvider = Provider.of<BottomNavigationBarProvider>(context);
+    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
+    final ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       unselectedItemColor: AppColors.titles.withOpacity(0.35),
@@ -47,22 +50,31 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
       selectedItemColor: AppColors.titles,
       onTap: (int index) {
         navegacionProvider.currentPage = index;
-        //TODO: Codigo para ejecutar el drawer se necesita revisar la mejor ubicacion de este
+        final String? nameRoute = ModalRoute.of(context)?.settings.name;
         switch (index) {
           case 0:
-            Navigator.pushNamed(context, 'main');
+            if ( nameRoute != 'main' ) {
+              Navigator.pushNamed(context, 'main');
+            }
             break;
           case 1:
-            Navigator.pushNamed(context, 'search');
+            if ( nameRoute != 'search' ) {
+              Navigator.pushNamed(context, 'search');
+            }
             break;  
           case 2:
-            categoryProvider.categorySelect = '';
-            Navigator.pushNamed(context, 'create-ad');
+            if ( nameRoute != 'create-ad' ) {
+              categoryProvider.categorySelect = '';
+              Navigator.pushNamed(context, 'create-ad');
+            }
             break;
           case 3:
-            Navigator.pushNamed(context, 'profile', arguments: {
-              'type': 'user'
-            });
+            if ( nameRoute != 'profile' ) {
+              profileProvider.uid = Preferences.uid;
+              Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false ,arguments: {
+                'type': 'user'
+              });
+            }
           break;  
           default:
         }

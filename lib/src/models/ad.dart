@@ -18,6 +18,7 @@ class Ad {
         required this.description,
         required this.publisher,
         required this.images,
+        required this.mainPage,
         required this.category,
         required this.state,
         required this.visible,
@@ -33,6 +34,7 @@ class Ad {
     String description;
     String publisher;
     List<Upload> images;
+    Upload mainPage;
     String category;
     bool state;
     bool visible;
@@ -47,12 +49,13 @@ class Ad {
         title: json["title"] ?? '',
         description: json["description"] ?? '',
         publisher: json["publisher"] ?? '',
-        images: json['images'] ,
+        images: json['images'] ?? [],
+        mainPage: Upload.fromMap( json['main_page'] ?? {} ) ,
         category: json["category"] ?? '',
         state: json["state"] ?? true,
         visible: json["visible"] ?? true,
-        positvePoints: json["positvePoints"] ?? 0,
-        negativePoints: json["negativePoints"] ?? 0,
+        positvePoints: json["positive_points"] ?? 0,
+        negativePoints: json["negative_points"] ?? 0,
         rating: json["rating"] ?? 0,
         createdAt: json["createdAt"] ?? '',
         updatedAt: json["updatedAt"] ?? '',
@@ -80,6 +83,7 @@ class Ad {
         "description": description,
         "publisher": publisher,
         "images":   json.encode( images.map((e) => e.toMap() ).toList() ) ,
+        "main_page": json.encode( mainPage.toMap() ),
         "category": category,
         "state": state.toString(),
         "visible": visible.toString(),

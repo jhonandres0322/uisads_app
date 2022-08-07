@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 
@@ -68,12 +70,14 @@ class ButtonRecovery extends StatelessWidget {
   String routeName;
   String text;
   String navigator;
+  void Function() onPressed; 
   ButtonRecovery(
       {Key? key,
       required this.routeName,
       required this.text,
-      required this.navigator})
-      : super(key: key);
+      required this.navigator,
+      required this.onPressed
+    }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +87,8 @@ class ButtonRecovery extends StatelessWidget {
       width: size.width * 0.75,
       child: ElevatedButton(
           onPressed: () {
+            log('entrando al onPressed del boton');
+            onPressed;
             switch (navigator) {
               case 'pop':
                 Navigator.popAndPushNamed(context, routeName);

@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 import 'package:uisads_app/src/models/profile.dart';
+import 'package:uisads_app/src/models/response_score_profile.dart';
+import 'package:uisads_app/src/models/upload.dart';
+import 'package:uisads_app/src/providers/edit_profile_provider.dart';
 import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
@@ -18,7 +21,10 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    String type = arguments['type'];
     final Size size = MediaQuery.of(context).size;
+    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context);
+    final AuthService _authService = AuthService();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -52,12 +58,29 @@ class ProfilePage extends StatelessWidget {
         ),     
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _InfoProfile( arguments: arguments ), 
-            const _BarTabProfile(), 
-            const _ListAdsProfile()
-          ],
+        child: Builder(
+          builder: (context) {
+            return FutureBuilder(
+              future: _authService.getProfile( _profileProvider.uid ),
+              builder: (context,  AsyncSnapshot<Profile> snapshot) {
+                if( snapshot.hasData ) {
+                  _profileProvider.saveInfoProfile( snapshot.data! );
+                  return Column(
+                    children: [
+                      _InfoProfile( arguments: type, profile: snapshot.data! ), 
+                      const _BarTabProfile(), 
+                      const _ListAdsProfile()
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                
+              }
+            );
+          }
         ),
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
@@ -66,8 +89,14 @@ class ProfilePage extends StatelessWidget {
 }
 
 class _InfoProfile extends StatelessWidget {
-  const _InfoProfile({Key? key, required this.arguments}) : super(key: key);
-  final arguments;
+  const _InfoProfile({
+    Key? key, 
+    required this.arguments,
+    required this.profile
+  }) : super(key: key);
+  
+  final String arguments;
+  final Profile profile;
 
   @override
   Widget build(BuildContext context) {
@@ -77,13 +106,13 @@ class _InfoProfile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: size.height * 0.1),
-          _PhotoProfile( arguments: arguments,),
+          _PhotoProfile( argument: arguments, image: profile.image ),
           SizedBox(height: size.height * 0.02),
-          _NameProfile( name: Preferences.name ),
+          _NameProfile( name: profile.name ),
           SizedBox(height: size.height * 0.02),
-          _DescriptionProfile( description: Preferences.description ),
+          _DescriptionProfile( description: profile.description ),
           SizedBox(height: size.height * 0.02),
-          const _CardInfoProfile(),
+          _CardInfoProfile( idProfile:  profile.uid ),
         ],
       ),
       // child: 
@@ -103,23 +132,33 @@ class _InfoProfile extends StatelessWidget {
 }
 
 class _PhotoProfile extends StatelessWidget {
-  const _PhotoProfile({Key? key, required this.arguments}) : super(key: key);
-  final arguments;
+  const _PhotoProfile({
+    Key? key, 
+    required this.argument, 
+    required this.image
+  }) : super(key: key);
+  
+  final String argument;
+  final Upload image;
+  
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
-        const ProfileAvatar( radius: 0.065 ),
-        // const PerfilCirculoUsuario(radio: 50.0),
+        ProfileAvatar( 
+          radius: 0.065,
+          image: image ,
+        ),
         FloatingActionButton.small(
           child: 
-            arguments['type'] == 'user'
+            argument == 'user'
             ? const Icon(CustomUisIcons.pencil_square)
             : const Icon(CustomUisIcons.whatsapp),
           onPressed: () {
-            String route = arguments['type'] == 'user' ? 'edit-profile': 'wpp';
-            Navigator.pushNamed(context, route );
+            if( argument == 'user' ) {
+              Navigator.pushNamed(context, 'edit-profile' );
+            } else { }
           },
           backgroundColor: AppColors.primary,
         )
@@ -165,22 +204,39 @@ class _DescriptionProfile extends StatelessWidget {
 }
 
 class _CardInfoProfile extends StatelessWidget {
-  const _CardInfoProfile({Key? key}) : super(key: key);
+  const _CardInfoProfile({
+    Key? key,
+    required this.idProfile
+  }) : super(key: key);
+
+  final String idProfile;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Container(
-      color: AppColors.mainThirdContrast,
-      height: size.height * 0.1,
-      margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
-          _ItemCardInfoProfile(label: 'Publicaciones', value: '4'),
-          _ItemCardInfoProfile(label: 'Puntaje', value: '2'),  // Like - Dislikes
-          _ItemCardInfoProfile(label: 'Valoraciones', value: '3'), // Like + Dislikes
-        ],
-      ),
+    final AuthService _authService = AuthService();
+    return FutureBuilder(
+      future: _authService.getScoreProfile(idProfile),
+      builder: (context, AsyncSnapshot<ResponseScoreProfile> snapshot) {
+        if ( snapshot.hasData ) {
+          return Container(
+            color: AppColors.mainThirdContrast,
+            height: size.height * 0.1,
+            margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _ItemCardInfoProfile(label: 'Publicaciones', value: snapshot.data!.publications.toString() ),
+                _ItemCardInfoProfile(label: 'Puntaje', value: snapshot.data!.score.toString()),  // Like - Dislikes
+                _ItemCardInfoProfile(label: 'Valoraciones', value: snapshot.data!.calification.toString() ), // Like + Dislikes
+              ],
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      }
     );
   }
 }

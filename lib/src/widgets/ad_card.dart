@@ -1,14 +1,24 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
+import 'package:uisads_app/src/models/upload.dart';
+import 'package:uisads_app/src/utils/handler_image.dart';
 
 
 class AdCard extends StatelessWidget {
+  final Upload mainPage;
+  final String title;
+  final String id;
+  
   const AdCard({
-    Key? key, 
-    this.title = 'Titulo Anuncio',
+    Key? key,
+    required this.mainPage,
+    required this.title,
+    required this.id
   }) : super(key: key);
 
-  final String title;
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -30,10 +40,22 @@ class AdCard extends StatelessWidget {
           SizedBox(
             height: widthCard * 0.8,
             width: widthCard,
-            child: Image.asset(
-              'assets/images/anuncio.jpg',
-              fit: BoxFit.cover,
-            )
+            child: FutureBuilder(
+              future: getImageBase64( mainPage ),
+              builder: (context, AsyncSnapshot<String> snapshot) {
+                if( snapshot.hasData ) {
+                  return Image.file(
+                    File( snapshot.data! ),
+                    fit: BoxFit.cover,
+                  );
+                } else {
+                  return Image.asset(
+                    'assets/images/anuncio.jpg',
+                    fit: BoxFit.cover,
+                  );
+                }
+              },
+            ),
           ),
           Flexible(
             child: SizedBox(
@@ -47,7 +69,7 @@ class AdCard extends StatelessWidget {
                     child: Text(
                       title,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 10,
                         fontWeight:  FontWeight.w500,
                         fontFamily: 'Roboto'
@@ -70,7 +92,9 @@ class AdCard extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, 'ad');
+                      Navigator.pushNamed(context, 'ad', arguments: {
+                        'id' : id
+                      });
                     },
                   ),
                 ),

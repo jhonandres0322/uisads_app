@@ -36,7 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final EditProfileProvider _editProfileProvider = Provider.of<EditProfileProvider>(context);
     return  WillPopScope(
       onWillPop: () async {
-        _editProfileProvider.imageProfile = '';
+        _editProfileProvider.image = Upload();
         return true;
       },
       child: Scaffold(
@@ -82,22 +82,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  _editProfile(BuildContext context) async {
+  void _editProfile(BuildContext context) async {
     setState(() { });
-    final _authService = AuthService();
-    final EditProfileProvider _editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
-    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final _editProfileProvider = Provider.of<EditProfileProvider>(context, listen : false);
+    final authService = AuthService();
     _editProfileProvider.formKey.currentState?.save();
-    Profile infoEditedProfile = Profile.fromMap( _editProfileProvider.getData() );
-    Response response = await _authService.editProfile( Preferences.uid , infoEditedProfile);
+    Profile infoProfileEdited = _editProfileProvider.getDataEditProfile();
+    Response response = await authService.editProfile( Preferences.uid , infoProfileEdited );
     ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( response.message, response.error ));
-    if( _editProfileProvider.imageProfile.isNotEmpty ) Preferences.image = _editProfileProvider.imageProfile;
-    _profileProvider.updateInfo( _editProfileProvider.getData() );
-    _editProfileProvider.clearData();
-    Navigator.popAndPushNamed(context, 'profile', arguments: {
+    Preferences.updateInfo( infoProfileEdited );
+    _editProfileProvider.clearDataEditProfile();
+    Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false ,arguments: {
       'type': 'user'
-    } );
+    });
   }
+
 }
 
 class _InfoProfile extends StatelessWidget {
@@ -123,42 +122,53 @@ class _InfoProfile extends StatelessWidget {
   }
 }
 
-class _PhotoProfile extends StatelessWidget {
+class _PhotoProfile extends StatefulWidget {
   const _PhotoProfile({Key? key}) : super(key: key);
 
   @override
+  State<_PhotoProfile> createState() => _PhotoProfileState();
+}
+
+class _PhotoProfileState extends State<_PhotoProfile> {
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        // const PerfilCirculoUsuario(radio: 50.0),
-        const ProfileAvatar( radius: 0.065 ),
-        FloatingActionButton.small(
-          child: const Icon(CustomUisIcons.camera),
-          onPressed: () {
-            _openImagePicker(context);
-          },
-          backgroundColor: AppColors.logoSchoolPrimary,
-        )
-      ],
+    final EditProfileProvider _editProfileProvider = Provider.of<EditProfileProvider>(context);
+    final ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    return Builder(
+      builder: (context) {
+        return Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            ProfileAvatar( 
+              radius: 0.065,
+              image:  _editProfileProvider.image.content.isNotEmpty ? _editProfileProvider.image : profileProvider.photo,
+            ),
+            FloatingActionButton.small(
+              child: const Icon(CustomUisIcons.camera),
+              onPressed: () {
+                _openImagePicker(context);
+              },
+              backgroundColor: AppColors.logoSchoolPrimary,
+            )
+          ],
+        );
+      }
     );
   }
 
   Future<void> _openImagePicker( BuildContext context ) async {
+    setState(() { });
     final ImagePicker _picker = ImagePicker();
     final EditProfileProvider _editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery, maxHeight: 350,maxWidth: 350);
     if( pickedImage != null && pickedImage.path.isNotEmpty ) {
-      _editProfileProvider.imageProfile = pickedImage.path;
-      _editProfileProvider.image = {
+      _editProfileProvider.image = Upload.fromMap({
         "content": convertFileToBase64( pickedImage.path ),
         "name": pickedImage.name,
         "type": pickedImage.name.split('.')[1]
-      };
+      });
     }
   }
-
-
 }
 
 
@@ -168,18 +178,19 @@ class _FormEditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
-    final formKey = editProfileProvider.formKey;
+    final ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen : false);
+    GlobalKey<FormState> formKey = editProfileProvider.formKey;
     final Size size = MediaQuery.of(context).size;
     return Form(
       key:  formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _InputName( name: Preferences.name ),
-          _InputPhone( cellphone: Preferences.cellphone,),
-          _InputEmail( email: Preferences.email ),
-          _InputCity( city: Preferences.city),
-          _InputDescription( description: Preferences.description),
+          _InputName( name: profileProvider.name ),
+          _InputPhone( cellphone: profileProvider.cellphone ),
+          _InputEmail( email: profileProvider.email ),
+          _InputCity( city: profileProvider.city ),
+          _InputDescription( description: profileProvider.description ),
           SizedBox(height: size.height * 0.02),
           const _ButtonChangePassword(),
           SizedBox(height: size.height * 0.02),
@@ -203,8 +214,7 @@ class _InputName extends StatelessWidget {
       onSaved: (value) =>_editProfileProvider.name = value ?? '',
       // validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(
-          CustomUisIcons.card_user, 'Nombres y Apellidos'),
+      decoration: decorationInputCustom( CustomUisIcons.card_user , 'Nombres y Apellidos' ),
     );
     return InputCustom(labelText: 'Nombres y Apellidos', input: inputName);
   }
@@ -245,8 +255,7 @@ class _InputEmail extends StatelessWidget {
       onSaved: (value) => _editProfileProvider.email = value ?? '',
       // validator: loginForm.validatePassword,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(
-          CustomUisIcons.call_strong, 'Correo Electronico'),
+      decoration: decorationInputCustom( CustomUisIcons.call_strong, 'Correo Electronico'),
     );
     return InputCustom(labelText: 'Correo Electronico', input: inputEmail);
   }

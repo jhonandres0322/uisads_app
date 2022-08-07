@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/items_drawer.dart';
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/user.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
+import 'package:uisads_app/src/providers/profile_provider.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/widgets/avatar_perfil.dart';
 import 'package:uisads_app/src/widgets/logo_app.dart';
 import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
@@ -49,8 +46,10 @@ class CardInfoProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return InkWell(
+    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context);
+    return GestureDetector(
       onTap: () {
+        _profileProvider.uid = Preferences.uid;
         Navigator.pushNamed(context, 'profile', arguments: {
           'type': 'user'
         });
@@ -59,7 +58,10 @@ class CardInfoProfile extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(width: size.width * 0.05),
-            const ProfileAvatar(radius: 0.03),
+            ProfileAvatar(
+              radius: 0.03,
+              image: Preferences.image,
+            ),
             SizedBox(width: size.width * 0.03),
             Flexible(
               child: Column(
@@ -111,7 +113,7 @@ class ItemDrawer extends StatelessWidget {
     // return Text('${data['label']}');
     final currentRoute = ModalRoute.of(context)?.settings.name;
     return InkWell(
-      onTap: () => getNavigationRoute(context, data['route'],),
+      onTap: () => getNavigationRoute(context, data['route']),
       child: Container(
         padding: EdgeInsets.symmetric(
             horizontal: size.width * 0.05, vertical: size.height * 0.015),
@@ -152,11 +154,14 @@ class ItemDrawer extends StatelessWidget {
       currentRoute == route ? AppColors.primary : AppColors.logoSchoolPrimary;
 
   void getNavigationRoute(BuildContext context, String routeName) {
+    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     if( routeName.isEmpty ) {
       showAboutApp(context);
     } else {
       if( routeName == 'login' ) {
-        Preferences.clearInfo();
+        // Preferences.clearInfo();
+        // _profileProvider.clearInfo();
+        Preferences.clearInfoLogout();
       }
       Navigator.pushNamedAndRemoveUntil( context, routeName, (Route<dynamic> route) => false);
     }

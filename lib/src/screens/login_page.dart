@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -140,7 +141,6 @@ class _InputPasswordLogin extends StatelessWidget {
 }
 
 /// Widget que contiene el boton de login
-// TODO: Implementar como boton personalizado
 class _ButtonLogin extends StatelessWidget {
   const _ButtonLogin({
     Key? key,

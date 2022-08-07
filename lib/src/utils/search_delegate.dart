@@ -119,9 +119,10 @@ class SearchDelegateUis extends SearchDelegate {
                     physics: const BouncingScrollPhysics(),
                     itemCount: ads.length,
                     itemBuilder: (context, index) {
-                      return AdCard(
-                        title: ads[index].title,
-                      );
+                      // return AdCard(
+                      //   title: ads[index].title,
+                      // );
+                      return Container();
                     }),
               );
             }
