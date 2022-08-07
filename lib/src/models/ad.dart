@@ -67,6 +67,7 @@ class Ad {
         description: json["description"] ?? '',
         publisher: json["publisher"] ?? '',
         images: uploadsFromMap(json['images']) ,
+        mainPage: Upload.fromMap( json['main_page'] ?? {} ) ,
         category: json["category"] ?? '',
         state: json["state"] ?? true,
         visible: json["visible"] ?? true,

@@ -18,7 +18,9 @@ class ChangePasswordPage extends StatelessWidget {
           children: const [
             BackgroundTopRecovery(),
             LogoApp(),
-            ButtonArrowBack(),
+            ButtonArrowBack(
+              routeName: 'main',
+            ),
             _ContainerInfo(),
             _ContainerForm()
           ],
@@ -97,7 +99,8 @@ class _FormRecoveryChangePassword extends StatelessWidget {
           ButtonRecovery(
               routeName: 'login',
               text: 'Actualizar Contraseña',
-              navigator: 'until'
+              navigator: 'until',
+              onPressed: () {}
           )
         ],
       ),
