@@ -11,6 +11,7 @@ import 'package:uisads_app/src/models/ad.dart';
 import 'package:uisads_app/src/models/upload.dart';
 import 'package:uisads_app/src/providers/category_provider.dart';
 import 'package:uisads_app/src/providers/create_ad_provider.dart';
+import 'package:uisads_app/src/providers/main_page_provider.dart';
 import 'package:uisads_app/src/services/ad_service.dart';
 import 'package:uisads_app/src/utils/handler_image.dart';
 import 'package:uisads_app/src/utils/input_decoration.dart';
@@ -27,6 +28,7 @@ class CreateAdPage extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
     final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return WillPopScope(
       onWillPop: () async {
         categoryProvider.categorySelect = '';
@@ -50,7 +52,7 @@ class CreateAdPage extends StatelessWidget {
                       if (categoryProvider.categorySelect == '') {
                         ScaffoldMessenger.of(context).showSnackBar(showAlertCustom("Por favor seleccione una categoria, si no encuentra la suya seleccione Variados", true));
                       } else {
-                        createAdProvider.formKey.currentState?.save();
+                        formKey.currentState?.save();
                         createAdProvider.category = categoryProvider.categorySelect;
                         Ad adRequest = createAdProvider.handlerData();
                         _createAd(context, adRequest);
@@ -68,30 +70,32 @@ class CreateAdPage extends StatelessWidget {
               ]),
           bottomNavigationBar: const BottomNavigatonBarUisAds(),
           body: SingleChildScrollView(
-            child: Container(
-              child: const FormCreateAd(),
-            ),
+            child: FormCreateAd( formKey: formKey),
           )),
     );
   }
 
   void _createAd(BuildContext context, Ad adRequest) async {
-    log(' adRequest --> ${adRequest.toMap()}');
     final adService = AdService();
     final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+    final mainPageProvider = Provider.of<MainPageProvider>(context, listen: false);
     final response = await adService.createAd(adRequest);
     ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
     _categoryProvider.categorySelect = '';
+    mainPageProvider.getAds();
     Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
   }
 }
 
 class FormCreateAd extends StatelessWidget {
-  const FormCreateAd({Key? key}) : super(key: key);
+  const FormCreateAd({
+    Key? key,
+    required this.formKey
+  }) : super(key: key);
+
+  final GlobalKey<FormState> formKey;
   @override
   Widget build(BuildContext context) {
-    final _createAdProvider = Provider.of<CreateAdProvider>(context);
-    final formKey = _createAdProvider.formKey;
     final Size size = MediaQuery.of(context).size;
     return Center(
       child: Form(

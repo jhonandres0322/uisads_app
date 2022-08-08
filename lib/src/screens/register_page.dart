@@ -63,10 +63,9 @@ class _RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    // print('size: ${size.height}');
-    final registerFormProvider = Provider.of<RegisterFormProvider>(context); 
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Form(
-      key: registerFormProvider.formKey,
+      key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
@@ -77,7 +76,7 @@ class _RegisterForm extends StatelessWidget {
           const _InputCiudadRegister(),
           const _InputPasswordLogin(),
           SizedBox(height: size.height * 0.08),
-          _ButtonRegister(size:size)
+          _ButtonRegister( size:size, formKey: formKey )
         ],
       ),
     );
@@ -214,10 +213,12 @@ class _InputPasswordLogin extends StatelessWidget {
 ///Clase que crea el boton para el registro
 class _ButtonRegister extends StatelessWidget {
   final Size size;
+  final GlobalKey<FormState> formKey;
 
   const _ButtonRegister({
     Key? key,
     required this.size,
+    required this.formKey
   }) : super(key: key);
 
   @override
@@ -228,7 +229,7 @@ class _ButtonRegister extends StatelessWidget {
       width: size.width * 0.70,
       child: ElevatedButton(
           onPressed: () async {
-            registerProvider.formKey.currentState?.save();
+            formKey.currentState?.save();
             _registerUser( context, registerProvider.organizeData() );
           },
           child: const Text('Crear Cuenta',

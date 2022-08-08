@@ -34,6 +34,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     final EditProfileProvider _editProfileProvider = Provider.of<EditProfileProvider>(context);
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return  WillPopScope(
       onWillPop: () async {
         _editProfileProvider.image = Upload();
@@ -50,7 +51,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           centerTitle: true,
           actions: [
             TextButton(
-              onPressed: () => _editProfile( context ),
+              onPressed: () => _editProfile( context, formKey ),
               child: const Text(
                 'Guardar',
                 style: TextStyle(color: AppColors.mainThirdContrast),
@@ -72,9 +73,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         body: SingleChildScrollView(
           child: Column(
-            children: const [
-              _InfoProfile(), 
-              _FormEditProfile()
+            children: [
+              const _InfoProfile(), 
+              _FormEditProfile( formKey: formKey)
             ],
           ),
         ),
@@ -82,11 +83,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  void _editProfile(BuildContext context) async {
+  void _editProfile(BuildContext context, GlobalKey<FormState> formKey) async {
     setState(() { });
     final _editProfileProvider = Provider.of<EditProfileProvider>(context, listen : false);
     final authService = AuthService();
-    _editProfileProvider.formKey.currentState?.save();
+    formKey.currentState?.save();
     Profile infoProfileEdited = _editProfileProvider.getDataEditProfile();
     Response response = await authService.editProfile( Preferences.uid , infoProfileEdited );
     ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( response.message, response.error ));
@@ -173,13 +174,17 @@ class _PhotoProfileState extends State<_PhotoProfile> {
 
 
 class _FormEditProfile extends StatelessWidget {
-  const _FormEditProfile({Key? key}) : super(key: key);
+  const _FormEditProfile({
+    Key? key,
+    required this.formKey
+  }) : super(key: key);
+
+  final GlobalKey<FormState> formKey;
 
   @override
   Widget build(BuildContext context) {
-    final editProfileProvider = Provider.of<EditProfileProvider>(context);
+    // final editProfileProvider = Provider.of<EditProfileProvider>(context);
     final ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen : false);
-    GlobalKey<FormState> formKey = editProfileProvider.formKey;
     final Size size = MediaQuery.of(context).size;
     return Form(
       key:  formKey,
@@ -331,7 +336,7 @@ class _ButtonChangePassword extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: size.width * 0.10),
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushNamed(context, 'new-password');
+          Navigator.popAndPushNamed(context, 'new-password');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

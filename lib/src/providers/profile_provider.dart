@@ -1,10 +1,8 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/models/ad.dart';
 import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/models/upload.dart';
-import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class ProfileProvider with ChangeNotifier {
   int      currentPage     = 0;

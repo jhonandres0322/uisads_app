@@ -331,7 +331,7 @@ class _SectionInfoProfileCity extends StatelessWidget {
               _profileProvider.uid = publisher;
               String type = '';
               Preferences.uid == publisher ? type = 'user' : type = 'seller'; 
-              Navigator.pushNamed(context, 'profile', arguments: {
+              Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false , arguments: {
                 'type': type
               });
             },

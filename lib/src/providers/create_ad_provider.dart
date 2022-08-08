@@ -15,9 +15,6 @@ class CreateAdProvider with ChangeNotifier {
   String _publisher = '';
   String _category = '';
   bool _isVisible = true;
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  GlobalKey<FormState> get formKey => _formKey;
 
 
   void limpiarObjetos(){
@@ -27,7 +24,6 @@ class CreateAdProvider with ChangeNotifier {
     _publisher = '';
     _category = '';
     _isVisible = true;
-    _formKey = GlobalKey<FormState>();
   }
 
   bool get isVisible => _isVisible;

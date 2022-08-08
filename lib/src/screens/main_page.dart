@@ -1,15 +1,11 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/models/profile.dart';
 import 'package:uisads_app/src/providers/category_provider.dart';
-import 'package:uisads_app/src/providers/edit_profile_provider.dart';
 import 'package:uisads_app/src/providers/main_page_provider.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/drawer_custom.dart';
@@ -17,9 +13,14 @@ import 'package:uisads_app/src/widgets/list_ad.dart';
 import 'package:uisads_app/src/widgets/list_category.dart';
 import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -28,18 +29,16 @@ class MainPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          toolbarHeight: 60,
+          toolbarHeight: size.height * 0.08,
           backgroundColor: Colors.white,
-          // leading:  const CirclePerfilAvatar(width: 91, height: 44,),
           actions: [
-            const SizedBox(
-              width: 20,
+            SizedBox(
+              width: size.width * 0.05,
             ),
-            const CirclePerfilAvatar( 
-              width: 91,
-              height: 44,
+            CirclePerfilAvatar(
+              width: size.width * 0.06,
+              height: size.height * 0.06,
             ),
-            // PerfilCirculoUsuario(radio: 22, radioInterno: 2),
             const Spacer(),
             IconButton(
               icon: const Icon(CustomUisIcons.search_right),
@@ -53,16 +52,16 @@ class MainPage extends StatelessWidget {
         body: Column(
           children: [
             // Widget Horizontal con la lista de categorias
-            const SizedBox(
+            SizedBox(
                 width: double.infinity,
                 // color: Colors.yellow,
-                height: 90,
-                child: _ListaCategorias()
+                height: size.height * 0.1,
+                child: const _ListaCategorias()
             ),
             // CardTable para los anuncios mostrados
             Flexible(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.005 ),
                 child: ListAd(
                   ads: _mainPageProvider.ads,
                   onNextPage: () => _mainPageProvider.getAds()
@@ -86,103 +85,8 @@ class MainPage extends StatelessWidget {
   }
 }
 
-/// Widget placeholder para el CardTable
-class CardTablePlaceholder extends StatelessWidget {
-  const CardTablePlaceholder({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(children: [
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Container(
-                color: Colors.red,
-                height: 100,
-                width: 100,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                color: Colors.red,
-                height: 190,
-                width: 190,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Container(
-                color: Colors.red,
-                height: 190,
-                width: 190,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                color: Colors.red,
-                height: 190,
-                width: 190,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Container(
-                color: Colors.red,
-                height: 190,
-                width: 190,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                color: Colors.red,
-                height: 190,
-                width: 190,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Container(
-                color: Colors.red,
-                height: 190,
-                width: 190,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                color: Colors.red,
-                height: 190,
-                width: 190,
-              ),
-            ],
-          ),
-        ]));
-  }
-}
 
 /// Widget Horizontal con la lista de categorias
-// TODO: Implementar el Widget Horizontal con la lista de categorias y mover de la main page a un archivo separado
 class _ListaCategorias extends StatelessWidget {
   const _ListaCategorias({
     Key? key,

@@ -12,7 +12,6 @@ class EditProfileProvider with ChangeNotifier{
   String city                  = '';
   String description           = '';
   Upload image                 = Upload() ;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>( );
 
 
   Profile getDataEditProfile() {

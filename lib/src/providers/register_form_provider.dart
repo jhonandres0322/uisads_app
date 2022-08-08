@@ -5,16 +5,13 @@ import 'package:uisads_app/src/models/register_request.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 
 class RegisterFormProvider with ChangeNotifier {
-  final _formKey = GlobalKey<FormState>();
 
-  String _email = '';
-  String _name = '';
-  String _cellphone = '';
-  String _city = '';
-  String _password = '';
-  bool _isLoading = false;
-
-  GlobalKey<FormState> get formKey => _formKey;
+  String _email                   = '';
+  String _name                    = '';
+  String _cellphone               = '';
+  String _city                    = '';
+  String _password                = '';
+  bool   _isLoading               = false;
 
   String get email => _email;
   set email(String value) {

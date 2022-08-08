@@ -20,9 +20,7 @@ class RecoveryPasswordPage extends StatelessWidget {
             children: const [
               BackgroundTopRecovery(), 
               LogoApp(),
-              ButtonArrowBack(
-                routeName: 'main',
-              ), 
+              ButtonArrowBack( routeName:  ''), 
               _ContainerInfo(),
               _ContainerForm()
             ],
@@ -104,8 +102,7 @@ class _FormRecoveryPassword extends StatelessWidget {
           ButtonRecovery(
             routeName: 'recovery-password-code', 
             text: 'Recuperar Contraseña', 
-            navigator: 'push',
-            onPressed: (){},
+            navigator: 'push'
           )
         ],
       ),

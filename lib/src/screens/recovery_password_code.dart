@@ -21,9 +21,7 @@ class RecoveryPasswordCode extends StatelessWidget {
                 children: const [
                   BackgroundTopRecovery(),
                   LogoApp(),
-                  ButtonArrowBack(
-                    routeName: 'main',
-                  ),
+                  ButtonArrowBack( routeName: '',),
                   _ContainerInfo(),
                   _ContainerForm()
                 ],
@@ -104,8 +102,7 @@ class _FormRecoveryPasswordCode extends StatelessWidget {
           ButtonRecovery(
             routeName: 'change-password', 
             text: 'Código Verificación', 
-            navigator: 'pop',
-            onPressed: () {},
+            navigator: 'pop'
           )
         ],
       ),
