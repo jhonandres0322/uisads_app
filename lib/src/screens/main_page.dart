@@ -35,7 +35,7 @@ class MainPage extends StatelessWidget {
             const SizedBox(
               width: 20,
             ),
-            const CirclePerfilAvatar(
+            const CirclePerfilAvatar( 
               width: 91,
               height: 44,
             ),

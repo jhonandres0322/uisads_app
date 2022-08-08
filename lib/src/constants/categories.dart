@@ -11,11 +11,11 @@ final List<Categoria> categoriasData = [
       Categoria(icono: CustomUisIcons.key_hand, nombre: 'Alquiler'),
       Categoria(icono: CustomUisIcons.art, nombre: 'Arte'),
       Categoria(icono: CustomUisIcons.sports, nombre: 'Deportes'),
-      Categoria(icono: CustomUisIcons.facilitador, nombre: 'Educación'),
+      Categoria(icono: CustomUisIcons.facilitador, nombre: 'Educacion'),
       Categoria(icono: CustomUisIcons.briefcase, nombre: 'Empleo'),
       Categoria(icono: CustomUisIcons.work_tool, nombre: 'Servicios'),
       Categoria(icono: CustomUisIcons.cloathing, nombre: 'Textil'),
-      Categoria(icono: Icons.laptop, nombre: 'Tecnología'),
+      Categoria(icono: Icons.laptop, nombre: 'Tecnologia'),
 ];
 
 IconData getIcon( String name ) {
