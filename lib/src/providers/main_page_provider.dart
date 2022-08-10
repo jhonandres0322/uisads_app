@@ -12,7 +12,14 @@ class MainPageProvider extends ChangeNotifier {
   List<Ad> ads = [];
   int _page = 0;
   bool _isLoading = true;
+  bool _isRefresh = false;
 
+
+  bool get isRefresh => _isRefresh;
+  set isRefresh( bool value ) {
+    _isRefresh = value;
+    notifyListeners();
+  }
 
   bool get isLoading => _isLoading;
   set isLoading( bool value ) {
@@ -21,20 +28,19 @@ class MainPageProvider extends ChangeNotifier {
   }
 
   MainPageProvider(){
-    log('Inicializando provider');
     getAds();
-  }
-
-  addAd( Ad ad ) {
-    ads.insert(0, ad);
-    notifyListeners();
   }
 
   getAds() async {
     if( isLoading ) {
       final adService = AdService();
-      _page++;
-      log('page --> $_page');
+      if( isRefresh ) {
+        _page = 1;
+        ads = [];
+        isRefresh = false;
+      } else {
+        _page++;
+      }
       final resp = await adService.getAds(_page);
       final ResponseAds responseAds = ResponseAds.fromMap(resp);
       if( responseAds.ads.isEmpty ) {

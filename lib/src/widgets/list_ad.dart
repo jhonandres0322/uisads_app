@@ -50,27 +50,36 @@ class _ListAdState extends State<ListAd> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        GridView.builder(
-          controller: _scrollController,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-          itemCount: widget.ads.length,
-          itemBuilder: (context, index) {
-            return AdCard(
-              title: widget.ads[index].title,
-              mainPage: widget.ads[index].mainPage,
-              id: widget.ads[index].id
-            );
-          }
-        ),
-        if( widget.provider.isLoading ) 
-          Positioned(
-            bottom: 40,
-            left: size.width * 0.5 - 30,
-            child: const _LoadingIcon()
-          )
-      ]
+    return RefreshIndicator(
+      color: AppColors.primary,
+      backgroundColor: AppColors.mainThirdContrast,
+      onRefresh: () async {
+        widget.provider.isLoading = true;
+        widget.provider.isRefresh = true;
+        widget.onNextPage();
+      },
+      child: Stack(
+        children: [
+          GridView.builder(
+            controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemCount: widget.ads.length,
+            itemBuilder: (context, index) {
+              return AdCard(
+                title: widget.ads[index].title,
+                mainPage: widget.ads[index].mainPage,
+                id: widget.ads[index].id
+              );
+            }
+          ),
+          if( widget.provider.isLoading ) 
+            Positioned(
+              bottom: 40,
+              left: size.width * 0.5 - 30,
+              child: const _LoadingIcon()
+            )
+        ]
+      ),
     );
   }
 }
