@@ -4,17 +4,20 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/models/ad.dart';
+import 'package:uisads_app/src/providers/main_page_provider.dart';
 import 'package:uisads_app/src/widgets/ad_card.dart';
 
 
 class ListAd extends StatefulWidget {
   final List<Ad> ads;
   final Function onNextPage;
+  final MainPageProvider provider;
 
   const ListAd({
     Key? key,
     required this.ads,
-    required this.onNextPage
+    required this.onNextPage,
+    required this.provider
   }) : super(key: key);
 
   @override
@@ -23,51 +26,51 @@ class ListAd extends StatefulWidget {
 
 class _ListAdState extends State<ListAd> {
   final ScrollController _scrollController = ScrollController();
-  bool _isLoading = false;
 
+
+  
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() { 
-      if ( _scrollController.position.pixels + 200  >= _scrollController.position.maxScrollExtent ) {
-        // addAds();
-        widget.onNextPage;
+      if( _scrollController.position.pixels >= _scrollController.position.maxScrollExtent ) {
+        widget.provider.isLoading = true;
+        widget.onNextPage();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return MediaQuery.removePadding(
-      context: context,
-      child: Stack(
-        children: [
-          GridView.builder(
-            controller: _scrollController,
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            physics: const BouncingScrollPhysics(),
-            itemCount: widget.ads.length,
-            itemBuilder: (context, index) {
-              return AdCard(
-                title: widget.ads[index].title,
-                mainPage: widget.ads[index].mainPage,
-                id: widget.ads[index].id
-              );
-            }
-          ),
-          if( _isLoading ) 
-              Positioned(
-                bottom: 40,
-                left: size.width * 0.5 - 30,
-                child: const _LoadingIcon()
-              )
-          
-          
-        ]
-      ),
+    return Stack(
+      children: [
+        GridView.builder(
+          controller: _scrollController,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemCount: widget.ads.length,
+          itemBuilder: (context, index) {
+            return AdCard(
+              title: widget.ads[index].title,
+              mainPage: widget.ads[index].mainPage,
+              id: widget.ads[index].id
+            );
+          }
+        ),
+        if( widget.provider.isLoading ) 
+          Positioned(
+            bottom: 40,
+            left: size.width * 0.5 - 30,
+            child: const _LoadingIcon()
+          )
+      ]
     );
   }
 }

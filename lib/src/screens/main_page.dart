@@ -25,63 +25,62 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context);
-    final MainPageProvider _mainPageProvider = Provider.of<MainPageProvider>(context);
+    final mainPageProvider = Provider.of<MainPageProvider>(context);
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: size.height * 0.08,
-          backgroundColor: Colors.white,
-          actions: [
-            SizedBox(
-              width: size.width * 0.05,
-            ),
-            CirclePerfilAvatar(
-              width: size.width * 0.06,
-              height: size.height * 0.06,
-            ),
-            const Spacer(),
-            IconButton(
-              icon: const Icon(CustomUisIcons.search_right),
-              onPressed: () {
-                Navigator.pushNamed( context, 'search');
-              },
-            ),
-          ],
-        ),
-        drawer: const DrawerCustom(),
-        body: Column(
-          children: [
-            // Widget Horizontal con la lista de categorias
-            SizedBox(
-                width: double.infinity,
-                // color: Colors.yellow,
-                height: size.height * 0.1,
-                child: const _ListaCategorias()
-            ),
-            // CardTable para los anuncios mostrados
-            Flexible(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: size.height * 0.005 ),
-                child: ListAd(
-                  ads: _mainPageProvider.ads,
-                  onNextPage: () => _mainPageProvider.getAds()
-                ),
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: const BottomNavigatonBarUisAds(),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: AppColors.primary,
-          onPressed: () {
-            _categoryProvider.categorySelect = '';
-            Navigator.pushNamed(context, 'create-ad');
-          },
-          child: const Icon(
-            CustomUisIcons.megaphone,
-            color: AppColors.logoSchoolPrimary,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: size.height * 0.08,
+        backgroundColor: Colors.white,
+        actions: [
+          SizedBox(
+            width: size.width * 0.05,
           ),
-        ));
+          CirclePerfilAvatar(
+            width: size.width * 0.06,
+            height: size.height * 0.06,
+          ),
+          const Spacer(),
+          IconButton(
+            icon: const Icon(CustomUisIcons.search_right),
+            onPressed: () {
+              Navigator.pushNamed( context, 'search');
+            },
+          ),
+        ],
+      ),
+      drawer: const DrawerCustom(),
+      body: Column(
+        children: [
+          // Widget Horizontal con la lista de categorias
+          SizedBox(
+              width: double.infinity,
+              // color: Colors.yellow,
+              height: size.height * 0.1,
+              child: const _ListaCategorias()
+          ),
+          // CardTable para los anuncios mostrados
+          Expanded(
+            child: ListAd(
+              provider: mainPageProvider,
+              ads: mainPageProvider.ads,
+              onNextPage: () => mainPageProvider.getAds()
+            ),
+          )
+        ],
+      ),
+      bottomNavigationBar: const BottomNavigatonBarUisAds(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        onPressed: () {
+          _categoryProvider.categorySelect = '';
+          Navigator.pushNamed(context, 'create-ad');
+        },
+        child: const Icon(
+          CustomUisIcons.megaphone,
+          color: AppColors.logoSchoolPrimary,
+        ),
+      )
+    );
   }
 }
 
