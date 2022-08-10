@@ -15,6 +15,7 @@ class CreateAdProvider with ChangeNotifier {
   String _publisher = '';
   String _category = '';
   bool _isVisible = true;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
 
   void limpiarObjetos(){
