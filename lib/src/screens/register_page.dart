@@ -7,6 +7,7 @@ import 'package:uisads_app/src/constants/colors.dart';
 import 'package:uisads_app/src/models/city.dart';
 import 'package:uisads_app/src/models/register_request.dart';
 import 'package:uisads_app/src/models/register_response.dart';
+import 'package:uisads_app/src/providers/login_form_provider.dart';
 import 'package:uisads_app/src/providers/register_form_provider.dart';
 import 'package:uisads_app/src/services/auth_service.dart';
 import 'package:uisads_app/src/services/city_service.dart';
@@ -63,7 +64,7 @@ class _RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -4,8 +4,11 @@ class LoginFormProvider with ChangeNotifier {
   String _email = '';
   String _password = '';
   bool _isLoading = false;
+  final _formKey = GlobalKey<FormState>();
   final _regExpEmail = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
+  GlobalKey<FormState> get formKey => _formKey;
 
   String get email {
     return _email;

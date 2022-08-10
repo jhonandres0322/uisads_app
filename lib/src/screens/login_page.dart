@@ -70,11 +70,12 @@ class LoginPage extends StatelessWidget {
 class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final loginFormProvider = Provider.of<LoginFormProvider>(context);
     final Size size = MediaQuery.of(context).size;
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    // ignore: avoid_unnecessary_containers
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      key: formKey,
+      key: loginFormProvider.formKey,
       child: Column(
         children: [
           const _InputEmailLogin(),
@@ -85,7 +86,7 @@ class _LoginForm extends StatelessWidget {
           SizedBox(
             height: size.height * 0.03,
           ),
-          _ButtonLogin( formKey: formKey),
+          _ButtonLogin(size: size),
           const _TextForgotPasswordLogin(),
           SizedBox(height: size.height * 0.05),
         ],
@@ -143,21 +144,21 @@ class _InputPasswordLogin extends StatelessWidget {
 class _ButtonLogin extends StatelessWidget {
   const _ButtonLogin({
     Key? key,
-    required this.formKey
+    required this.size,
   }) : super(key: key);
 
-  final GlobalKey<FormState> formKey;
+  // Declaramos una variable de tipo Size
+  final Size size;
   @override
   Widget build(BuildContext context) {
     // Declaracion del provider del formulario
     final loginForm = Provider.of<LoginFormProvider>(context);
-    final Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.70,
       child: ElevatedButton(
         onPressed: () {
-          formKey.currentState?.save();
+          loginForm.formKey.currentState?.save();
           _loginUser( context, loginForm.email, loginForm.password );
         },
         child: const Text(

@@ -20,15 +20,20 @@ import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
 import 'package:uisads_app/src/widgets/input_custom.dart';
 import 'package:uisads_app/src/widgets/list_category.dart';
 
-class CreateAdPage extends StatelessWidget {
+class CreateAdPage extends StatefulWidget {
   const CreateAdPage({Key? key}) : super(key: key);
+
+  @override
+  State<CreateAdPage> createState() => _CreateAdPageState();
+}
+
+class _CreateAdPageState extends State<CreateAdPage> {
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
     final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return WillPopScope(
       onWillPop: () async {
         categoryProvider.categorySelect = '';
@@ -52,7 +57,7 @@ class CreateAdPage extends StatelessWidget {
                       if (categoryProvider.categorySelect == '') {
                         ScaffoldMessenger.of(context).showSnackBar(showAlertCustom("Por favor seleccione una categoria, si no encuentra la suya seleccione Variados", true));
                       } else {
-                        formKey.currentState?.save();
+                        createAdProvider.formKey.currentState?.save();
                         createAdProvider.category = categoryProvider.categorySelect;
                         Ad adRequest = createAdProvider.handlerData();
                         _createAd(context, adRequest);
@@ -69,8 +74,8 @@ class CreateAdPage extends StatelessWidget {
                 )
               ]),
           bottomNavigationBar: const BottomNavigatonBarUisAds(),
-          body: SingleChildScrollView(
-            child: FormCreateAd( formKey: formKey),
+          body: const SingleChildScrollView(
+            child: FormCreateAd(),
           )),
     );
   }
@@ -78,11 +83,9 @@ class CreateAdPage extends StatelessWidget {
   void _createAd(BuildContext context, Ad adRequest) async {
     final adService = AdService();
     final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
-    final mainPageProvider = Provider.of<MainPageProvider>(context, listen: false);
     final response = await adService.createAd(adRequest);
     ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
     _categoryProvider.categorySelect = '';
-    mainPageProvider.getAds();
     Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
   }
 }
@@ -90,34 +93,37 @@ class CreateAdPage extends StatelessWidget {
 class FormCreateAd extends StatelessWidget {
   const FormCreateAd({
     Key? key,
-    required this.formKey
   }) : super(key: key);
 
-  final GlobalKey<FormState> formKey;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final createAdProvider = Provider.of<CreateAdProvider>(context);
     return Center(
-      child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              const _InputTitle(),
-              const _InputDescription(),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              const _InputPhotos(),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              const _InputCategories(),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              const _InputVisible()
-            ],
-          )),
+      child: Builder(
+        builder: (context) {
+          return Form(
+              key: createAdProvider.formKey,
+              child: Column(
+                children: [
+                  const _InputTitle(),
+                  const _InputDescription(),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  const _InputPhotos(),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  const _InputCategories(),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  const _InputVisible()
+                ],
+              ));
+        }
+      ),
     );
   }
 }
