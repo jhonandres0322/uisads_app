@@ -74,7 +74,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              const _InfoProfile(), 
+              const _InfoProfile(),
               _FormEditProfile( formKey: formKey)
             ],
           ),
@@ -158,7 +158,6 @@ class _PhotoProfileState extends State<_PhotoProfile> {
   }
 
   Future<void> _openImagePicker( BuildContext context ) async {
-    setState(() { });
     final ImagePicker _picker = ImagePicker();
     final EditProfileProvider _editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery, maxHeight: 350,maxWidth: 350);
@@ -168,6 +167,7 @@ class _PhotoProfileState extends State<_PhotoProfile> {
         "name": pickedImage.name,
         "type": pickedImage.name.split('.')[1]
       });
+      setState(() {});
     }
   }
 }
@@ -226,7 +226,7 @@ class _InputName extends StatelessWidget {
 }
 
 class _InputPhone extends StatelessWidget {
-  const 
+  const
   _InputPhone({Key? key, required this.cellphone}) : super(key: key);
   final String cellphone;
   @override
