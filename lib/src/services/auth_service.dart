@@ -45,7 +45,6 @@ class AuthService with HttpHandler {
   }
   
   Future<Response> changePassword( RequestChangePassword request ) async {
-    log('entrando al servicio para cambiar contraseña');
     final resp = await getPost('/auth/change-password', request.toMap());
     return Response.fromMap( resp );
   }

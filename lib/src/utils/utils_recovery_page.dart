@@ -87,7 +87,6 @@ class ButtonRecovery extends StatelessWidget {
       width: size.width * 0.75,
       child: ElevatedButton(
           onPressed: () {
-            log('entrando al onPressed del boton');
             onPressed;
             switch (navigator) {
               case 'pop':

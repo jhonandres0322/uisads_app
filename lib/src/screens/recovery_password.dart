@@ -102,7 +102,8 @@ class _FormRecoveryPassword extends StatelessWidget {
           ButtonRecovery(
             routeName: 'recovery-password-code', 
             text: 'Recuperar Contraseña', 
-            navigator: 'push'
+            navigator: 'push',
+            onPressed: () {},
           )
         ],
       ),

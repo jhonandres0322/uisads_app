@@ -102,7 +102,8 @@ class _FormRecoveryPasswordCode extends StatelessWidget {
           ButtonRecovery(
             routeName: 'change-password', 
             text: 'Código Verificación', 
-            navigator: 'pop'
+            navigator: 'pop',
+            onPressed: () {},
           )
         ],
       ),
