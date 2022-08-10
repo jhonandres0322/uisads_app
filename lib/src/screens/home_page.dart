@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/widgets/logo_app.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

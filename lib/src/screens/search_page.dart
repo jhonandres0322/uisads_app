@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/categories.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/utils/search_delegate.dart';
-import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:uisads_app/src/widgets/bottom_sheet.dart';
-import 'package:uisads_app/src/widgets/card_table.dart';
-import 'package:uisads_app/src/widgets/categoria_card.dart';
-import 'package:uisads_app/src/widgets/categoria_widget.dart';
-import 'package:uisads_app/src/widgets/dropdown_custom.dart';
-import 'package:uisads_app/src/widgets/input_custom.dart';
-import 'package:uisads_app/src/widgets/search_widget.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);

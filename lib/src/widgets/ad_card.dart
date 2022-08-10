@@ -1,11 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/models/upload.dart';
-import 'package:uisads_app/src/utils/handler_image.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 
 class AdCard extends StatelessWidget {
   final Upload mainPage;

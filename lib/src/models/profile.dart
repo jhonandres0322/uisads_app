@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:uisads_app/src/models/upload.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
 
 Profile profileFromMap(String str) => Profile.fromMap(json.decode(str));
 

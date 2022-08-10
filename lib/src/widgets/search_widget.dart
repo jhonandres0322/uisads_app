@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/widgets/bottom_sheet.dart';
-
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 
 class SearchWidget extends StatelessWidget {
-   const SearchWidget({
+  const SearchWidget({
     Key? key,
   }) : super(key: key);
 

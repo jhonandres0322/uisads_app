@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
 
 /// Clase Modelo para realizar el montaje de las categorias de los anuncios
 class Categoria {

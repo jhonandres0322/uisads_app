@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
 
 /// Widget Dropdown Custom para el dropdown de los filtros y pueda ser reutilizado en otros lugares
 class DropdownCustom<T> extends StatelessWidget {

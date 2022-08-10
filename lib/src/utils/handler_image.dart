@@ -1,13 +1,9 @@
-
-
-
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:path_provider/path_provider.dart';
-import 'package:uisads_app/src/models/upload.dart';
+
+import 'package:uisads_app/src/constants/import_models.dart';
 
 Future<String> getImageBase64( Upload image ) async {
   if( image.content.isNotEmpty ) {

@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/upload.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
 
 class Preferences {
 

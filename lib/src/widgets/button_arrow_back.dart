@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
 
 class ButtonArrowBack extends StatelessWidget {
   final Color color;

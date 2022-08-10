@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/user.dart';
+
+import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 /// Metodo para realizar la navegacion Autenticada con la info del login

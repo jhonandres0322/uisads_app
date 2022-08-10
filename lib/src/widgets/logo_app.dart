@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 // Widget Logo de la aplicacion puede ser reeutilizado
 class LogoApp extends StatelessWidget {
   const LogoApp({

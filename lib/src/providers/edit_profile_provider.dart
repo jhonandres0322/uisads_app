@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/models/profile.dart';
-
-import '../models/upload.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
 
 
 class EditProfileProvider with ChangeNotifier{

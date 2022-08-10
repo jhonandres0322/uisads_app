@@ -1,18 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/providers/category_provider.dart';
-import 'package:uisads_app/src/providers/main_page_provider.dart';
-import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:uisads_app/src/widgets/drawer_custom.dart';
-import 'package:uisads_app/src/widgets/list_ad.dart';
-import 'package:uisads_app/src/widgets/list_category.dart';
-import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 

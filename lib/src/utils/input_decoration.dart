@@ -1,7 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
 
 // Clase para definir la decoracion de un input
 InputDecoration decorationInputCustom(IconData icon, String hintText, [Color? iconColor = AppColors.subtitles, bool iconButton  = false]) {

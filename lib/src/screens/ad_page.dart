@@ -1,30 +1,16 @@
-import 'dart:developer';
 import 'dart:io';
-
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/choices.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/models/category.dart';
-import 'package:uisads_app/src/models/city.dart';
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/response.dart';
-import 'package:uisads_app/src/models/upload.dart';
-import 'package:uisads_app/src/providers/ad_page_provider.dart';
-import 'package:uisads_app/src/providers/profile_provider.dart';
-import 'package:uisads_app/src/services/ad_service.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
-import 'package:uisads_app/src/services/category_service.dart';
-import 'package:uisads_app/src/services/city_service.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/utils/handler_image.dart';
-import 'package:uisads_app/src/widgets/alert_custom.dart';
-import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:uisads_app/src/widgets/profile_avatar.dart';
 
 class AdPage extends StatelessWidget {
   const AdPage({Key? key}) : super(key: key);

@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/models/register_request.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
 
+import 'package:uisads_app/src/constants/import_models.dart';
 class RegisterFormProvider with ChangeNotifier {
 
   String _email                   = '';

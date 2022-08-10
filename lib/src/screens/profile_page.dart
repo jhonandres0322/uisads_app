@@ -1,19 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/response_score_profile.dart';
-import 'package:uisads_app/src/models/upload.dart';
-import 'package:uisads_app/src/providers/edit_profile_provider.dart';
-import 'package:uisads_app/src/providers/profile_provider.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
-import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:uisads_app/src/widgets/card_table.dart';
-import 'package:uisads_app/src/widgets/profile_avatar.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);

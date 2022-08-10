@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/utils/utils_recovery_page.dart';
-import 'package:uisads_app/src/widgets/background_top_recovery.dart';
-import 'package:uisads_app/src/widgets/button_arrow_back.dart';
-import 'package:uisads_app/src/widgets/input_custom.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class RecoveryPasswordPage extends StatelessWidget {
   const RecoveryPasswordPage({Key? key}) : super(key: key);
@@ -19,7 +17,7 @@ class RecoveryPasswordPage extends StatelessWidget {
           Stack(
             children: const [
               BackgroundTopRecovery(), 
-              LogoApp(),
+              LogoAppRecovery(),
               ButtonArrowBack( routeName:  ''), 
               _ContainerInfo(),
               _ContainerForm()

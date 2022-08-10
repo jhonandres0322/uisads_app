@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/categories.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/models/ad.dart';
-import 'package:uisads_app/src/services/ad_service.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/widgets/ad_card.dart';
-import 'package:uisads_app/src/widgets/card_table.dart';
-import 'package:uisads_app/src/widgets/dropdown_custom.dart';
-import 'package:uisads_app/src/widgets/input_custom.dart';
-import 'package:uisads_app/src/widgets/search_widget.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 class SearchDelegateUis extends SearchDelegate {
   // Mostrar el icono de limpiar busqueda, o hasta los filtros se pueden incluir en el searchBar
   @override

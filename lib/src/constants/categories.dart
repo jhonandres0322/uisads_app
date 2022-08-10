@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/constants/style_text.dart';
-import 'package:uisads_app/src/utils/categoria_model.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+
 // Lista de categorias 
 final List<Categoria> categoriasData = [
       Categoria(icono: CustomUisIcons.geometry_icon, nombre: 'Variados'),

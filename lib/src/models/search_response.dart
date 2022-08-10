@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:uisads_app/src/models/ad.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
 
 SearchResponse searchResponsefromMap(String str) =>
     SearchResponse.fromMap(json.decode(str));

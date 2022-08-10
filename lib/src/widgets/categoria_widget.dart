@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/providers/category_provider.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 
 class CategoriaButton extends StatefulWidget {
   const CategoriaButton({

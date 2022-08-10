@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
 
-class LogoApp extends StatelessWidget {
-  const LogoApp({Key? key}) : super(key: key);
+import 'package:uisads_app/src/constants/import_constants.dart';
+
+class LogoAppRecovery extends StatelessWidget {
+  const LogoAppRecovery({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

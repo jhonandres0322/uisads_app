@@ -1,4 +1,4 @@
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
+import 'package:uisads_app/src/constants/import_constants.dart';
 
 List<Map<String, dynamic>> listDrawer = [
   {

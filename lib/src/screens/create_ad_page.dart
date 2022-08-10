@@ -1,24 +1,15 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/models/ad.dart';
-import 'package:uisads_app/src/models/upload.dart';
-import 'package:uisads_app/src/providers/category_provider.dart';
-import 'package:uisads_app/src/providers/create_ad_provider.dart';
-import 'package:uisads_app/src/providers/main_page_provider.dart';
-import 'package:uisads_app/src/services/ad_service.dart';
-import 'package:uisads_app/src/utils/handler_image.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/widgets/alert_custom.dart';
-import 'package:uisads_app/src/widgets/bottom_navigation_bar.dart';
-import 'package:uisads_app/src/widgets/input_custom.dart';
-import 'package:uisads_app/src/widgets/list_category.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class CreateAdPage extends StatefulWidget {
   const CreateAdPage({Key? key}) : super(key: key);

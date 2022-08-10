@@ -1,13 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/items_drawer.dart';
-import 'package:uisads_app/src/providers/profile_provider.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/widgets/logo_app.dart';
-import 'package:uisads_app/src/widgets/profile_avatar.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class DrawerCustom extends StatelessWidget {
   const DrawerCustom({Key? key}) : super(key: key);

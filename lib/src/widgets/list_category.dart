@@ -1,13 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/categories.dart';
-import 'package:uisads_app/src/models/category.dart';
-import 'package:uisads_app/src/providers/category_provider.dart';
-import 'package:uisads_app/src/services/category_service.dart';
-import 'package:uisads_app/src/widgets/categoria_widget.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 class ListCategory extends StatelessWidget {
   const ListCategory({Key? key}) : super(key: key);
 

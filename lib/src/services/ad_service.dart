@@ -1,15 +1,5 @@
-
-
-
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:uisads_app/src/models/ad.dart';
-import 'package:uisads_app/src/models/request_manage_calification.dart';
-import 'package:uisads_app/src/models/response.dart';
-import 'package:uisads_app/src/models/search_response.dart';
-import 'package:uisads_app/src/models/upload.dart';
-import 'package:uisads_app/src/utils/http_handler.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 
 /// Esta clase es la responsable del servicio de anuncios, asi como tambien su busqueda.
 class AdService with HttpHandler {

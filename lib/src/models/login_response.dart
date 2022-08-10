@@ -4,8 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/user.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
 
 LoginResponse loginResponseFromMap(String str) => LoginResponse.fromMap(json.decode(str));
 

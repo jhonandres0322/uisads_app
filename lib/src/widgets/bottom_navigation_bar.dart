@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/constants/custom_uis_icons_icons.dart';
-import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
-import 'package:uisads_app/src/providers/category_provider.dart';
-import 'package:uisads_app/src/providers/profile_provider.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 /// Widget bottomNavigation Bar para el control de las rutas de navegacion y ejecucion del drawer

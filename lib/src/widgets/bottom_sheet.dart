@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/categories.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/widgets/dropdown_custom.dart';
-import 'package:uisads_app/src/widgets/input_custom.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 /// Widget del bottomSheet para las opciones de los filtro
 class BottomSheetFilter extends StatelessWidget {

@@ -1,12 +1,10 @@
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/models/ad.dart';
-import 'package:uisads_app/src/providers/main_page_provider.dart';
-import 'package:uisads_app/src/widgets/ad_card.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class ListAd extends StatefulWidget {
   final List<Ad> ads;

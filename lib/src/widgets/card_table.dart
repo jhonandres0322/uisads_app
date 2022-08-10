@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
 
 class CardTable extends StatelessWidget {
   const CardTable({Key? key, required this.images }) : super(key: key);

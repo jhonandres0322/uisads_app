@@ -2,13 +2,7 @@
 //
 //     final category = categoryFromMap(jsonString);
 
-import 'dart:convert';
-
-import 'package:uisads_app/src/models/category.dart';
-
-Category categoryFromMap(String str) => Category.fromMap(json.decode(str));
-
-String categoryToMap(Category data) => json.encode(data.toMap());
+import 'package:uisads_app/src/constants/import_models.dart';
 
 class CategoryResponse {
     CategoryResponse({

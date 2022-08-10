@@ -1,17 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/constants/colors.dart';
-import 'package:uisads_app/src/models/response.dart';
-import 'package:uisads_app/src/providers/change_password_provider.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/utils/utils_recovery_page.dart';
-import 'package:uisads_app/src/widgets/alert_custom.dart';
-import 'package:uisads_app/src/widgets/background_top_recovery.dart';
-import 'package:uisads_app/src/widgets/button_arrow_back.dart';
-import 'package:uisads_app/src/widgets/input_custom.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class NewPasswordPage extends StatelessWidget {
   const NewPasswordPage({Key? key}) : super(key: key);
@@ -26,7 +21,7 @@ class NewPasswordPage extends StatelessWidget {
             children: [
               Stack(children: const [
                 BackgroundTopRecovery(),
-                LogoApp(),
+                LogoAppRecovery(),
                 ButtonArrowBack( routeName: 'edit-profile'),
                 _ContainerInfo(),
                 _ContainerForm()

@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:uisads_app/src/constants/colors.dart';
+
+import 'package:uisads_app/src/constants/import_constants.dart';
 
 SnackBar showAlertCustom(String text, bool isError) {
   return SnackBar(

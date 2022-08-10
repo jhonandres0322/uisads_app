@@ -1,22 +1,12 @@
-
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uisads_app/src/models/login_request.dart';
-import 'package:uisads_app/src/models/login_response.dart';
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/shared_preferences/preferences.dart';
-import 'package:uisads_app/src/utils/input_decoration.dart';
-import 'package:uisads_app/src/providers/login_form_provider.dart';
-import 'package:uisads_app/src/services/auth_service.dart';
-import 'package:uisads_app/src/utils/utils_navigator.dart';
-import 'package:uisads_app/src/widgets/alert_custom.dart';
-import 'package:uisads_app/src/widgets/input_custom.dart';
-import 'package:uisads_app/src/widgets/logo_app.dart';
 
-import '../constants/colors.dart';
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);

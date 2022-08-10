@@ -1,13 +1,5 @@
-import 'dart:developer';
-import 'package:uisads_app/src/models/login_request.dart';
-import 'package:uisads_app/src/models/login_response.dart';
-import 'package:uisads_app/src/models/profile.dart';
-import 'package:uisads_app/src/models/register_request.dart';
-import 'package:uisads_app/src/models/register_response.dart';
-import 'package:uisads_app/src/models/request_change_password.dart';
-import 'package:uisads_app/src/models/response.dart';
-import 'package:uisads_app/src/models/response_score_profile.dart';
-import 'package:uisads_app/src/utils/http_handler.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 
 class AuthService with HttpHandler {
   
