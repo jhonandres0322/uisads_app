@@ -13,29 +13,17 @@ class ListCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _categoryService = CategoryService();
     final _categoryProvider = Provider.of<CategoryProvider>(context);
-    return FutureBuilder(
-      future: _categoryService.getCategories(),
-      builder: (context, AsyncSnapshot<List<Category>> snapshot) {
-        if( snapshot.hasData ) {
-          final List<Category> categories = snapshot.data!;
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return CategoriaButton(
-                id: categories[index].id,
-                icon: getIcon( categories[index].name ),
-                name: categories[index].name,
-                enabled: _categoryProvider.categorySelect == categories[index].id ? true : false,
-              );
-            },
-          );
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      itemCount: _categoryProvider.categories.length,
+      itemBuilder: (context, index) {
+        return CategoriaButton(
+          id: _categoryProvider.categories[index].id,
+          icon: getIcon( _categoryProvider.categories[index].name ),
+          name: _categoryProvider.categories[index].name,
+          enabled: _categoryProvider.categorySelect == _categoryProvider.categories[index].id ? true : false,
         );
       },
     );
