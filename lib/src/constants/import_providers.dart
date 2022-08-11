@@ -9,3 +9,4 @@ export 'package:uisads_app/src/providers/login_form_provider.dart';
 export 'package:uisads_app/src/providers/main_page_provider.dart';
 export 'package:uisads_app/src/providers/profile_provider.dart';
 export 'package:uisads_app/src/providers/register_form_provider.dart';
+export 'package:uisads_app/src/providers/search_ads_provider.dart';

@@ -5,6 +5,7 @@ import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -35,7 +36,10 @@ class _MainPageState extends State<MainPage> {
           IconButton(
             icon: const Icon(CustomUisIcons.search_right),
             onPressed: () {
-              Navigator.pushNamed( context, 'search');
+              showSearch(
+                context: context, 
+                delegate: SearchDelegateUis()
+              );
             },
           ),
         ],

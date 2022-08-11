@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+
+
 class SearchDelegateUis extends SearchDelegate {
   // Mostrar el icono de limpiar busqueda, o hasta los filtros se pueden incluir en el searchBar
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(CustomUisIcons.filter),
+        icon: const Icon(CustomUisIcons.filter),
         color: AppColors.subtitles,
         onPressed: () => showModalBottomSheet(
           context: context,
           // isScrollControlled: true ,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(20),
             ),
           ),
-          builder: (context) => _BottomSheet(),
+          builder: (context) => const _BottomSheet(),
         ),
         // iconSize: size.height * 0.06,
       ),
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           if (query.isEmpty) {
             close(context, null);
@@ -42,7 +46,7 @@ class SearchDelegateUis extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -54,9 +58,10 @@ class SearchDelegateUis extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     ScrollController _scrollController = ScrollController();
     final _adService = new AdService();
+    final searchProvider = Provider.of<SearchAdsProvider>(context);
 
     if (query.trim().length == 0) {
-      return Center(
+      return const Center(
         child: Text(
           'No se encontraron resultados',
           style: TextStyle(
@@ -65,9 +70,10 @@ class SearchDelegateUis extends SearchDelegate {
           ),
         ),
       );
-    }
-    return FutureBuilder(
-        future: _adService.searchAds(query),
+    } else {
+      searchProvider.query = query;
+      return FutureBuilder(
+        future: _adService.searchAds(searchProvider.organizeData()),
         builder: (BuildContext context, AsyncSnapshot<List<Ad>> snapshot) {
           if (snapshot.hasData) {
             List<Ad> ads = snapshot.data!;
@@ -79,16 +85,16 @@ class SearchDelegateUis extends SearchDelegate {
                   child: Column(
                     children: [
                       Container(
-                        child: Icon(
+                        child: const Icon(
                           Icons.warning,
                           size: 100,
                           color: AppColors.subtitles,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text(
+                      const Text(
                         'No se ha encontrado ningun anuncio con los criterios especificados',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -118,38 +124,17 @@ class SearchDelegateUis extends SearchDelegate {
                         mainPage: ads[index].mainPage,
                         id: ads[index].id,
                       );
-                      return Container();
                     }),
               );
             }
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
         });
-    // Aqui realizar la busqueda de los resultados
-    // return Center(
-    //   child: Text(
-    //     'Resultados de la busqueda: $query',
-    //     style: TextStyle(
-    //       color: AppColors.subtitles,
-    //       fontSize: 20,
-    //     ),
-    //   ),
-    // );
-    // Construccion de los resultados
-    // return Flexible(
-    //     // flex: 1,
-    //     child: ListView.builder(
-    //   itemCount: 10,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return Container(
-    //       padding: const EdgeInsets.symmetric(horizontal: 10),
-    //       child: Container(),
-    //     );
-    //   },
-    // ));
+    }
+    
   }
 
   // Mostrar las sugerencias de la busqueda
@@ -169,10 +154,10 @@ class SearchDelegateUis extends SearchDelegate {
                   color: AppColors.subtitles,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 'No se ha realizado ninguna búsqueda',
                 style: TextStyle(
                   fontSize: 20,
@@ -223,11 +208,11 @@ class _BottomSheet extends StatelessWidget {
           InputCustom(
               labelText: 'Por Fecha de Publicacion', input: dropdownFecha),
           InputCustom(labelText: 'Por Categoria', input: dropdownCategoria),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           _ButtonFilter(),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
         ],

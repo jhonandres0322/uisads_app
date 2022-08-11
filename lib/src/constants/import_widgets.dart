@@ -17,4 +17,3 @@ export 'package:uisads_app/src/widgets/loading_progress.dart';
 export 'package:uisads_app/src/widgets/logo_app.dart';
 export 'package:uisads_app/src/widgets/profile_avatar.dart';
 export 'package:uisads_app/src/widgets/search_widget.dart';
-export 'package:uisads_app/src/widgets/select_custom.dart';

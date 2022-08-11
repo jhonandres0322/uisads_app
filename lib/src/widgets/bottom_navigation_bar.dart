@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 /// Widget bottomNavigation Bar para el control de las rutas de navegacion y ejecucion del drawer
@@ -57,7 +58,10 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
             break;
           case 1:
             if ( nameRoute != 'search' ) {
-              Navigator.pushNamed(context, 'search');
+              showSearch(
+                context: context, 
+                delegate: SearchDelegateUis()
+              );
             }
             break;  
           case 2:

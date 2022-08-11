@@ -25,10 +25,7 @@ class SearchPage extends StatelessWidget {
             icon: Icon(CustomUisIcons.search_right),
             color: AppColors.subtitles,
             onPressed: () {
-              showSearch(
-                context: context, 
-                delegate: SearchDelegateUis()
-              );
+              
             },
           ),
         ],

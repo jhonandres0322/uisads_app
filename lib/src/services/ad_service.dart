@@ -10,11 +10,9 @@ class AdService with HttpHandler {
   }
 
   // Servicio de busqueda de anuncios en base a un query.
-  Future<List<Ad>> searchAds(String search) async {
-    final resp = await getGet('/ad/search/$search');
-    print(resp);
+  Future<List<Ad>> searchAds(SearchRequest searchRequest) async {
+    final resp = await getPost('/ad/search/',searchRequest.toJson());
     SearchResponse _searchResponse = SearchResponse.fromMap(resp);
-    //TODO: Tomar los ids de las imagenes y hacer una peticion para obtener la imagen, introduciendo el id en el mapa de imagenes.
     return _searchResponse.ads;
   }
 

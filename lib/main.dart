@@ -3,19 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 
 import 'package:uisads_app/src/constants/routes.dart';
 import 'package:uisads_app/src/constants/themes.dart';
-import 'package:uisads_app/src/providers/ad_page_provider.dart';
-import 'package:uisads_app/src/providers/bottom_navigation_provider.dart';
-import 'package:uisads_app/src/providers/category_provider.dart';
-import 'package:uisads_app/src/providers/change_password_provider.dart';
-import 'package:uisads_app/src/providers/create_ad_provider.dart';
-import 'package:uisads_app/src/providers/edit_profile_provider.dart';
-import 'package:uisads_app/src/providers/login_form_provider.dart';
-import 'package:uisads_app/src/providers/main_page_provider.dart';
-import 'package:uisads_app/src/providers/profile_provider.dart';
-import 'package:uisads_app/src/providers/register_form_provider.dart';
+
 import 'package:uisads_app/src/utils/screen_size.dart';
 
 void main() => runApp(const AppState());
@@ -38,6 +30,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MainPageProvider()),
         ChangeNotifierProvider(create: (_) => AdPageProvider()),
         ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
+        ChangeNotifierProvider(create: (_) => SearchAdsProvider()),
       ],
       child: const App(),
     );
