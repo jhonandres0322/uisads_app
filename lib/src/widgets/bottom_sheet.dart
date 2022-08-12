@@ -13,6 +13,7 @@ class BottomSheetFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     // Creacion de los DropdownCustoms, quedaria pendiente revisar si se optimiza de una mejor forma
     final Widget dropdownRelevancia = DropdownCustom(
+      value: '',
       options: optionsRelevance,
       inputDecoration: decorationDropdownCustom('Seleccione Relevancia'),
       onChanged: (value) {
@@ -20,19 +21,22 @@ class BottomSheetFilter extends StatelessWidget {
       },
     );
     final Widget dropdownFecha = DropdownCustom(
+      value: '',
       options: optionsDate,
       inputDecoration: decorationDropdownCustom('Seleccione una fecha'),
       onChanged: (value) {
         print(value);
       },
     );
-    final Widget dropdownCategoria = DropdownCustom(
-      options: optionsCategory,
-      inputDecoration: decorationDropdownCustom('Seleccione una categoria'),
+    final Widget dropdownCategoria = DropdownButtonFormField(
+      value: '',
+      items: optionsCategory,
+      decoration: decorationDropdownCustom('Seleccione una categoria'),
       onChanged: (value) {
         print(value);
       },
     );
+    
     // Puedo cambiar el SingleChildScrollView por un ListView y eliminar la columna
     return SingleChildScrollView(
       child: Column(

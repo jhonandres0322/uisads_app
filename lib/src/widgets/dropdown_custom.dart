@@ -10,7 +10,8 @@ class DropdownCustom<T> extends StatelessWidget {
     this.inputDecoration = const InputDecoration(), 
     required this.onChanged, 
     this.iconData = Icons.keyboard_arrow_down_outlined, 
-    this.color = AppColors.subtitles,
+    this.color = AppColors.subtitles, 
+    required this.value,
   }):super(key: key);
 
   final List<DropdownMenuItem<T>> options;
@@ -18,10 +19,12 @@ class DropdownCustom<T> extends StatelessWidget {
   final ValueChanged<T?> onChanged;
   final IconData iconData;
   final Color color;
+  final T value;
   
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
+      value: value,
       items: options,
       icon: Icon(iconData, color: color),
       decoration: inputDecoration,
