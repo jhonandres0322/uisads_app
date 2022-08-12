@@ -247,16 +247,17 @@ class _ButtonFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchProvider = Provider.of<SearchAdsProvider>(context);
     final Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.height * 0.065,
       width: size.width * 0.80,
       child: ElevatedButton(
           onPressed: () {
-            //TODO:Aplicar los filtros
+            
             Navigator.of(context).pop();
           },
-          child: const Text('Buscar',
+          child: const Text('Añadir Filtros',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 17,
@@ -293,7 +294,7 @@ class _ButtonClean extends StatelessWidget {
             _searchProvider.time = '';
             Navigator.of(context).pop();
           },
-          child: const Text('Limpiar',
+          child: const Text('Limpiar Filtros',
               style: TextStyle(
                   color: AppColors.third,
                   fontSize: 17,
