@@ -17,9 +17,8 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Llamado al provider
-    final BottomNavigationBarProvider navegacionProvider = Provider.of<BottomNavigationBarProvider>(context);
-    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
-    final ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
+    final BottomNavigationBarProvider navegacionProvider = Provider.of<BottomNavigationBarProvider>(context, listen: false );
+    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context );
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       unselectedItemColor: AppColors.titles.withOpacity(0.35),
@@ -50,6 +49,7 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
       onTap: (int index) {
         navegacionProvider.currentPage = index;
         final String? nameRoute = ModalRoute.of(context)?.settings.name;
+        categoryProvider.categorySelect = '';
         switch (index) {
           case 0:
             if ( nameRoute != 'main' ) {
@@ -66,13 +66,12 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
             break;  
           case 2:
             if ( nameRoute != 'create-ad' ) {
-              categoryProvider.categorySelect = '';
               Navigator.pushNamed(context, 'create-ad');
             }
             break;
           case 3:
             if ( nameRoute != 'profile' ) {
-              profileProvider.uid = Preferences.uid;
+              UtilsNavigator.navigatorProfile(context, Preferences.uid );
               Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false ,arguments: {
                 'type': 'user'
               });

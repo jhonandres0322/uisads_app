@@ -41,4 +41,8 @@ class AdService with HttpHandler {
     return _response;
   }
 
+  Future<Map<String,dynamic>> getAdsByPublisher( String publisher, String orden, int page ) async {
+    final resp = await getGet('/ad/publisher/$publisher/$orden/$page');
+    return resp;
+  }
 }

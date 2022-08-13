@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
@@ -43,10 +44,9 @@ class CardInfoProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context);
     return GestureDetector(
       onTap: () {
-        _profileProvider.uid = Preferences.uid;
+        UtilsNavigator.navigatorProfile(context, Preferences.uid );
         Navigator.pushNamed(context, 'profile', arguments: {
           'type': 'user'
         });
@@ -151,13 +151,10 @@ class ItemDrawer extends StatelessWidget {
       currentRoute == route ? AppColors.primary : AppColors.logoSchoolPrimary;
 
   void getNavigationRoute(BuildContext context, String routeName) {
-    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     if( routeName.isEmpty ) {
       showAboutApp(context);
     } else {
       if( routeName == 'login' ) {
-        // Preferences.clearInfo();
-        // _profileProvider.clearInfo();
         Preferences.clearInfoLogout();
       }
       Navigator.pushNamedAndRemoveUntil( context, routeName, (Route<dynamic> route) => false);

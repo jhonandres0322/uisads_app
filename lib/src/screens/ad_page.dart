@@ -307,17 +307,16 @@ class _SectionInfoProfileCity extends StatelessWidget {
     final Size _size = MediaQuery.of(context).size;
     final AuthService _authService = AuthService();
     final CityService _cityService = CityService();
-    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context);
     return FutureBuilder(
       future: _authService.getProfile( publisher ),
       builder: (context, AsyncSnapshot<Profile> snapshot) {
         if( snapshot.hasData ) {
           return InkWell(
             onTap: () {
-              _profileProvider.uid = publisher;
+              UtilsNavigator.navigatorProfile(context, publisher);
               String type = '';
               Preferences.uid == publisher ? type = 'user' : type = 'seller'; 
-              Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false , arguments: {
+              Navigator.pushNamed(context, 'profile', arguments: {
                 'type': type
               });
             },

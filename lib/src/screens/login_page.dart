@@ -179,7 +179,7 @@ class _ButtonLogin extends StatelessWidget {
     LoginResponse loginResponse = await _authService.loginUser(loginRequest);
     ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( loginResponse.message, loginResponse.error ) );
     if( !loginResponse.error ) {
-      navigatorAuth( context, loginResponse.token, loginResponse.profile, loginResponse.user );
+      UtilsNavigator.navigatorAuth( context, loginResponse.token, loginResponse.profile, loginResponse.user );
     } 
   }
 }

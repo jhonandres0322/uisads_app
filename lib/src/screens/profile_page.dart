@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +17,7 @@ class ProfilePage extends StatelessWidget {
     Map arguments = ModalRoute.of(context)?.settings.arguments as Map;
     String type = arguments['type'];
     final Size size = MediaQuery.of(context).size;
-    final ProfileProvider _profileProvider = Provider.of<ProfileProvider>(context);
+    final _profileProvider = Provider.of<ProfileProvider>(context );
     final AuthService _authService = AuthService();
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -49,31 +51,24 @@ class ProfilePage extends StatelessWidget {
           ),
         ),     
       ),
-      body: SingleChildScrollView(
-        child: Builder(
-          builder: (context) {
-            return FutureBuilder(
-              future: _authService.getProfile( _profileProvider.uid ),
-              builder: (context,  AsyncSnapshot<Profile> snapshot) {
-                if( snapshot.hasData ) {
-                  _profileProvider.saveInfoProfile( snapshot.data! );
-                  return Column(
-                    children: [
-                      _InfoProfile( arguments: type, profile: snapshot.data! ), 
-                      const _BarTabProfile(), 
-                      const _ListAdsProfile()
-                    ],
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                
-              }
+      body: FutureBuilder(
+        future: _authService.getProfile( _profileProvider.uid ),
+        builder: (context,  AsyncSnapshot<Profile> snapshot) {
+          if( snapshot.hasData ) {
+            _profileProvider.saveInfoProfile( snapshot.data! );
+            return Column(
+                  children: [
+                _InfoProfile( arguments: type, profile: snapshot.data! ), 
+                const _BarTabProfile(), 
+                const Expanded(child: _ListAdsProfile())
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
-        ),
+        }
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
     );
@@ -276,8 +271,7 @@ class _BarTabProfile extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: size.height * 0.1,
-      decoration:
-          BoxDecoration(border: Border.all(color: AppColors.logoSchoolPrimary)),
+      decoration: BoxDecoration(border: Border.all(color: AppColors.logoSchoolPrimary)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: const [
@@ -320,7 +314,14 @@ class _BartItemProfile extends StatelessWidget {
     final profileProvider = Provider.of<ProfileProvider>(context);
     return Expanded(
       child: InkWell(
-        onTap: () {
+        onTap: () {          
+          if( index == 0 ) {
+            log('entrando al if');
+            profileProvider.sort = 'date';
+          } else {
+            log('entrando al else');
+            profileProvider.sort = 'score';
+          }
           profileProvider.currentPage = index;
         },
         child: Container(
@@ -361,90 +362,8 @@ class _ListAdsProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Seleccion de la pagina actual
     final profileProvider = Provider.of<ProfileProvider>(context);
-    if (profileProvider.currentPage == 0) {
-      return const _MyAdsProfile();
-    } else {
-      return _AdsMostValuedProfile();
-    }
+    return ListAd(ads: profileProvider.ads, onNextPage: () => profileProvider.getAdsByPublisher(), provider: profileProvider );
   }
 }
 
-/// Widget que mostrarla los anuncios del perfil del usuario, implementar como un ListView.builder()
-class _MyAdsProfile extends StatelessWidget {
-  const _MyAdsProfile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final List<Map<String,String>> books = [
-      {
-        'name': 'Libro de Calculo',
-        'source': 'assets/quemados/book.jpg' ,
-      },
-      {
-        'name': 'Libro de Algebra',
-        'source': 'assets/quemados/book2.jpg'
-      },
-    ];
-    final List<Map<String,String>> vars = [
-        {
-          "name": "Zapatos",
-          "source": 'assets/quemados/shoes.jpg'
-        },
-        {
-          "name": "Juguete",
-          "source": 'assets/quemados/toy.jpg'
-        }
-    ];
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-      child: Column(
-        children: [
-          CardTable( images: books), 
-          CardTable( images: vars ),
-        ],
-      ),
-    );
-  }
-}
-/// Widget que mostrarla los anuncios mas valorados del perfil del usuario, implementar como un ListView.builder()
-class _AdsMostValuedProfile extends StatelessWidget {
-  const _AdsMostValuedProfile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    // print(size.width * 0.02);
-    final List<Map<String,String>> books = [
-      {
-        'name': 'Libro de Calculo',
-        'source': 'assets/quemados/book.jpg' ,
-      },
-      {
-        'name': 'Libro de Algebra',
-        'source': 'assets/quemados/book2.jpg'
-      },
-    ];
-    final List<Map<String,String>> vars = [
-        {
-          "name": "Zapatos Dama",
-          "source": 'assets/quemados/shoes.jpg'
-        },
-        {
-          "name": "Juguete Halo",
-          "source": 'assets/quemados/toy.jpg'
-        }
-    ];
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-      child: Column(
-        children: [
-          CardTable( images: books), 
-          CardTable( images: vars ),
-        ],
-      ),
-    );
-  }
-}
