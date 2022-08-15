@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -316,10 +314,8 @@ class _BartItemProfile extends StatelessWidget {
       child: InkWell(
         onTap: () {          
           if( index == 0 ) {
-            log('entrando al if');
             profileProvider.sort = 'date';
           } else {
-            log('entrando al else');
             profileProvider.sort = 'score';
           }
           profileProvider.currentPage = index;

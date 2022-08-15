@@ -45,4 +45,14 @@ class AdService with HttpHandler {
     final resp = await getGet('/ad/publisher/$publisher/$orden/$page');
     return resp;
   }
+
+  Future<Map<String,dynamic>> getAdsByCategory( String category ) async {
+    final resp = await getGet('/ad/category/$category');
+    return resp;
+  }
+
+  Future<Response> deleteAd( String idAd ) async {
+    final resp = await getDelete('/ad/$idAd');
+    return Response.fromMap( resp );
+  }
 }

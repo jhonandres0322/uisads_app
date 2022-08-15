@@ -1,7 +1,12 @@
 
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class ListAdProvider with ChangeNotifier {
   
@@ -26,5 +31,18 @@ class ListAdProvider with ChangeNotifier {
   set page( int value ) {
     _page = value;
     notifyListeners();
+  }
+
+  bool validateManage( BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+    if( currentRoute == 'profile') {
+      if( profileProvider.uid == Preferences.uid ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
   }
 }

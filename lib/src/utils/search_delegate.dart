@@ -123,6 +123,7 @@ class SearchDelegateUis extends SearchDelegate {
                           title: ads[index].title,
                           mainPage: ads[index].mainPage,
                           id: ads[index].id,
+                          isManage: false,
                         );
                       }),
                 );

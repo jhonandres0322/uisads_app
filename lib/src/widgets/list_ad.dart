@@ -66,7 +66,8 @@ class _ListAdState extends State<ListAd> {
               return AdCard(
                 title: widget.ads[index].title,
                 mainPage: widget.ads[index].mainPage,
-                id: widget.ads[index].id
+                id: widget.ads[index].id,
+                isManage: widget.provider.validateManage(context),
               );
             }
           ),
