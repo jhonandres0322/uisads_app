@@ -1,9 +1,11 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_models.dart';
-import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class ListAd extends StatefulWidget {
@@ -31,7 +33,9 @@ class _ListAdState extends State<ListAd> {
   void initState() {
     super.initState();
     _scrollController.addListener(() { 
+      log('entrando al controlador');
       if( _scrollController.position.pixels >= _scrollController.position.maxScrollExtent ) {
+        log('entrando al scroll');
         widget.provider.isLoading = true;
         widget.onNextPage();
       }
@@ -40,7 +44,6 @@ class _ListAdState extends State<ListAd> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -52,6 +55,7 @@ class _ListAdState extends State<ListAd> {
       color: AppColors.primary,
       backgroundColor: AppColors.mainThirdContrast,
       onRefresh: () async {
+        log('onRefresh method');
         widget.provider.isLoading = true;
         widget.provider.isRefresh = true;
         widget.onNextPage();
@@ -73,7 +77,7 @@ class _ListAdState extends State<ListAd> {
           ),
           if( widget.provider.isLoading ) 
             Positioned(
-              bottom: 40,
+              bottom: 15,
               left: size.width * 0.5 - 30,
               child: const _LoadingIcon()
             )

@@ -2,6 +2,7 @@ export 'package:uisads_app/src/screens/ad_page.dart';
 export 'package:uisads_app/src/screens/change_password_page.dart';
 export 'package:uisads_app/src/screens/create_ad_page.dart';
 export 'package:uisads_app/src/screens/edit_profile_page.dart';
+export 'package:uisads_app/src/screens/edit_ad_page.dart';
 export 'package:uisads_app/src/screens/home_page.dart';
 export 'package:uisads_app/src/screens/login_page.dart';
 export 'package:uisads_app/src/screens/main_page.dart';

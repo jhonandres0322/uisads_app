@@ -217,10 +217,10 @@ class _BottomSheet extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          InputCustom(labelText: 'Por Relevancia', input: dropdownRelevancia),
-          InputCustom(
-              labelText: 'Por Fecha de Publicacion', input: dropdownFecha),
-          InputCustom(labelText: 'Por Categoria', input: dropdownCategoria),
+          // InputCustom(labelText: 'Por Relevancia', input: dropdownRelevancia),
+          // InputCustom(
+          //     labelText: 'Por Fecha de Publicacion', input: dropdownFecha),
+          // InputCustom(labelText: 'Por Categoria', input: dropdownCategoria),
           const SizedBox(
             height: 25,
           ),

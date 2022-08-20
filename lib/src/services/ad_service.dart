@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 
@@ -54,5 +56,11 @@ class AdService with HttpHandler {
   Future<Response> deleteAd( String idAd ) async {
     final resp = await getDelete('/ad/$idAd');
     return Response.fromMap( resp );
+  }
+
+  Future<Response> editAd( String idAd, Ad adEdit ) async {
+    final resp = await getPut('/ad/$idAd', adEdit.toMap() );
+    final Response response = Response.fromMap( resp ); 
+    return response;
   }
 }

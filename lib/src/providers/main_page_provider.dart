@@ -1,16 +1,28 @@
+import 'dart:developer';
+
 import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
-import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
   
 
 class MainPageProvider extends ListAdProvider {
 
 
   MainPageProvider(){
+    log('Inicializando provider');
     getAds();
   }
 
+  @override
+  set isLoading( bool value ) {
+    log('cambiando isLoading');
+    isLoading = value;
+    getAds();
+    notifyListeners();
+  }
+
   getAds() async {
+    log('getAd');
     if( isLoading ) {
       final adService = AdService();
       if( isRefresh ) {

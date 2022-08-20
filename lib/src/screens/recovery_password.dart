@@ -114,15 +114,16 @@ class _InputEmail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget inputEmail = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      keyboardType: TextInputType.text,
-      //onChanged: (value) => loginForm.password = value,
-      //validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.email, 'example@example.com'),
-    );
-    return InputCustom(labelText: 'Correo Electronico',input: inputEmail);
+    return Center();
+    // final Widget inputEmail = TextFormField(
+    //   autofocus: false,
+    //   obscureText: true,
+    //   keyboardType: TextInputType.text,
+    //   //onChanged: (value) => loginForm.password = value,
+    //   //validator: loginForm.validatePassword,
+    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   decoration: decorationInputCustom(Icons.email, 'example@example.com'),
+    // );
+    // return InputCustom(labelText: 'Correo Electronico',input: inputEmail);
   }
 }

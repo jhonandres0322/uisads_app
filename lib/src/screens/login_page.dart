@@ -95,16 +95,22 @@ class _InputEmailLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     // Llamada al provider
     final loginForm = Provider.of<LoginFormProvider>(context);
-    final Widget inputEmail = TextFormField(
-      autofocus: false,
-      obscureText: false,
+    // final Widget inputEmail = TextFormField(
+    //   autofocus: false,
+    //   obscureText: false,
+    //   keyboardType: TextInputType.emailAddress,
+    //   onSaved: (value) => loginForm.email = value ?? '',
+    //   // validator: loginForm.validateEmail,
+    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   decoration: decorationInputCustom(Icons.email, 'example@example.com'),
+    // );
+    return InputCustom(
+      labelText: 'Correo Electronico',
+      onSaved: ( value ) { loginForm.email = value ?? '';},
+      hintText: 'example@example.com',
+      iconData: Icons.abc,
       keyboardType: TextInputType.emailAddress,
-      onSaved: (value) => loginForm.email = value ?? '',
-      // validator: loginForm.validateEmail,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.email, 'example@example.com'),
     );
-    return InputCustom( labelText: 'Correo Electronico', input: inputEmail );
   }
 }
 
@@ -117,16 +123,22 @@ class _InputPasswordLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
-    final Widget inputPassword = TextFormField(
-      autofocus: false,
+    // final Widget inputPassword = TextFormField(
+    //   autofocus: false,
+    //   obscureText: true,
+    //   keyboardType: TextInputType.text,
+    //   onSaved: (value) => loginForm.password = value ?? '',
+    //   // validator: loginForm.validatePassword,
+    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   decoration: decorationInputCustom(Icons.lock, '*******'),
+    // );
+    return InputCustom(
+      labelText: 'Contraseña',
+      onSaved: ( value ) => loginForm.password = value ?? '',
       obscureText: true,
-      keyboardType: TextInputType.text,
-      onSaved: (value) => loginForm.password = value ?? '',
-      // validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, '*******'),
+      hintText: '********',
+      iconData: Icons.lock,
     );
-    return InputCustom(labelText: 'Contraseña', input: inputPassword);
   }
 }
 
@@ -143,30 +155,17 @@ class _ButtonLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     // Declaracion del provider del formulario
     final loginForm = Provider.of<LoginFormProvider>(context);
-    return SizedBox(
+    return ButtonCustom(
       height: size.height * 0.065,
-      width: size.width * 0.70,
-      child: ElevatedButton(
-        onPressed: () {
-          loginForm.formKey.currentState?.save();
-          _loginUser( context, loginForm.email, loginForm.password );
-        },
-        child: const Text(
-          'Iniciar sesión',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Roboto'
-          )
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: AppColors.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          )
-        )
-      ),
+      width: size.width * 0.7,
+      onPressed: () {
+        loginForm.formKey.currentState?.save();
+        _loginUser( context, loginForm.email, loginForm.password );
+      },
+      text: 'Iniciar Sesión',
+      colorText: Colors.white,
+      colorButton: AppColors.primary,
+      colorBorder: AppColors.primary
     );
   }
 

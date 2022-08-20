@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -84,15 +86,14 @@ class _InputEmailRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    final Widget inputEmail = TextFormField(
-      autofocus: false,
-      obscureText: false,
+    return InputCustom(
+      labelText: 'Correo Electronico', 
+      onSaved: (value) => registerForm.email = value ?? '', 
+      iconData: Icons.email, 
+      hintText: 'example@example.com', 
       keyboardType: TextInputType.emailAddress,
-      onSaved: (value) => registerForm.email = value ?? '',
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.email, 'example@example.com'),
+      autofocus: true,
     );
-    return InputCustom(labelText: 'Correo Electronico', input: inputEmail);
   }
 }
 
@@ -105,16 +106,12 @@ class _InputUsuarioRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    final Widget inputName = TextFormField(
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.name,
-      onSaved: (value) => registerForm.name = value ?? '',
-      // validator: registerForm.email,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.person, 'Ingrese su nombre'),
+    return InputCustom(
+      labelText: 'Nombre', 
+      onSaved: (value) => registerForm.name = value ?? '', 
+      iconData: Icons.person, 
+      hintText: 'Ingrese un nombre', 
     );
-    return InputCustom(labelText: 'Nombre', input: inputName);
   }
 }
 
@@ -126,17 +123,15 @@ class _InputCelularRegister extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return Center();
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    final Widget inputPhone = TextFormField(
-      autofocus: false,
-      obscureText: false,
+    return InputCustom(
+      labelText: 'Celular', 
+      onSaved: (value) => registerForm.cellphone = value ?? '', 
+      iconData: Icons.mobile_friendly, 
+      hintText: 'Ingrese un numero de celular', 
       keyboardType: TextInputType.phone,
-      onSaved: (value) => registerForm.cellphone = value ?? '',
-      // validator: registerForm.email,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.mobile_friendly, 'Ingrese su celular'),
     );
-    return InputCustom(labelText: 'Celular', input: inputPhone);
   }
 }
 
@@ -148,34 +143,24 @@ class _InputCiudadRegister extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _registerForm = Provider.of<RegisterFormProvider>(context);
-    final _cityService = CityService();
-    return FutureBuilder<List<City>> (
-      future: _cityService.getCities(),
-      initialData: const [],
-      builder: (context, AsyncSnapshot<List<City>> snapshot) {
-        if ( snapshot.hasData ) {
-          List<City> cities = snapshot.data!;
-          final Widget dropdownCity = DropdownButtonFormField<dynamic>(
-            decoration: decorationInputCustom(
-              Icons.location_city_rounded,
-              'Ingrese la ciudad'
-            ),
-            items: cities.map((City city) {
-              return DropdownMenuItem<dynamic>(
-                value: city.id,
-                child: Text( city.name ),
-              );
-            }).toList(),
-            onChanged: ( dynamic value ) => _registerForm.city = value,
-            onSaved: ( dynamic value ) => _registerForm.city = value
-          );
-          return InputCustom(labelText: 'Ciudad', input: dropdownCity);
-        } else {
-          return const CircularProgressIndicator();
-        }
-      },
+    final registerForm = Provider.of<RegisterFormProvider>(context);
+    List<DropdownMenuItem<String>> cities = registerForm.cities.map((City city) 
+    {
+        return DropdownMenuItem<String>(
+          value: city.id,
+          child: Text( city.name ),
+        );
+      }).toList();
+    final Widget dropdownCity = DropdownButtonFormField<dynamic>(
+      decoration: decorationInputCustom(
+        Icons.location_city_rounded,
+        'Ingrese la ciudad'
+      ),
+      items: cities,
+      onChanged: ( dynamic value ) => registerForm.city = value,
+      onSaved: ( dynamic value ) => registerForm.city = value
     );
+    return InputCustomDropdown(labelText: 'Ciudad', input: dropdownCity);
   }
 }
 
@@ -189,16 +174,13 @@ class _InputPasswordLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
-    final Widget inputPassword = TextFormField(
-      autofocus: false,
+    return InputCustom(
+      labelText: 'Contraseña', 
+      onSaved: (value) => registerForm.password = value ?? '', 
+      iconData: Icons.lock, 
+      hintText: 'Ingrese una contraseña', 
       obscureText: true,
-      keyboardType: TextInputType.text,
-      onSaved: (value) => registerForm.password = value ?? '',
-      // validator: registerForm.email,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, 'Ingrese su contraseña'),
     );
-    return InputCustom(labelText: 'Contraseña', input: inputPassword);
   }
 }
 
@@ -216,26 +198,17 @@ class _ButtonRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerProvider = Provider.of<RegisterFormProvider>(context);
-    return SizedBox(
+    return ButtonCustom(
       height: size.height * 0.065,
-      width: size.width * 0.70,
-      child: ElevatedButton(
-          onPressed: () async {
-            formKey.currentState?.save();
-            _registerUser( context, registerProvider.organizeData() );
-          },
-          child: const Text('Crear Cuenta',
-            style: TextStyle(
-              color: Colors.white, 
-              fontSize: 17, 
-              fontWeight: FontWeight.w600, 
-              fontFamily: 'Roboto'
-            )
-          ),
-          style: ElevatedButton.styleFrom(
-              primary: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0)))),
+      width: size.width * 0.7,
+      onPressed: () {
+        formKey.currentState?.save();
+        _registerUser( context, registerProvider.organizeData() );
+      },
+      text: 'Crear Cuenta',
+      colorText: Colors.white,
+      colorButton: AppColors.primary, 
+      colorBorder: AppColors.primary
     );
   }
 

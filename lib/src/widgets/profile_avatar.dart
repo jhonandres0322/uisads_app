@@ -24,7 +24,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return FutureBuilder(
-      future: getImageBase64( widget.image ),
+      future: HandlerImage.getImageBase64( widget.image ),
       builder: (context, AsyncSnapshot<String> snapshot) {
         if( snapshot.hasData ) {
           return Container(

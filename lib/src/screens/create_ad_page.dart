@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +8,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_screens.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
@@ -22,8 +24,6 @@ class _CreateAdPageState extends State<CreateAdPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
     final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
     return WillPopScope(
       onWillPop: () async {
@@ -31,58 +31,43 @@ class _CreateAdPageState extends State<CreateAdPage> {
         return true;
       },
       child: Scaffold(
-          appBar: AppBar(
-              backgroundColor: AppColors.mainThirdContrast,
-              elevation: 10.0,
-              title: const Text(
-                'Crear Anuncio',
-                style: TextStyle(color: AppColors.subtitles),
-              ),
-              actions: [
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: ElevatedButton(
-                    child: const Text('Publicar'),
-                    onPressed: () {
-                      if (categoryProvider.categorySelect == '') {
-                        ScaffoldMessenger.of(context).showSnackBar(showAlertCustom("Por favor seleccione una categoria, si no encuentra la suya seleccione Variados", true));
-                      } else {
-                        createAdProvider.formKey.currentState?.save();
-                        createAdProvider.category = categoryProvider.categorySelect;
-                        Ad adRequest = createAdProvider.handlerData();
-                        _createAd(context, adRequest);
-                        createAdProvider.limpiarObjetos();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      onPrimary: AppColors.mainThirdContrast,
-                      primary: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                    ),
-                  ),
-                )
-              ]),
-          bottomNavigationBar: const BottomNavigatonBarUisAds(),
-          body: const SingleChildScrollView(
-            child: FormCreateAd(),
-          )),
+        appBar: AppBarAd(
+          onPressed: () => _createAd(context),
+          title: 'Crear Anuncio',
+          text: 'Publicar',
+        ),
+        bottomNavigationBar: const BottomNavigatonBarUisAds(),
+        body: const SingleChildScrollView(
+          child: _FormCreateAd(),
+        )),
     );
   }
 
-  void _createAd(BuildContext context, Ad adRequest) async {
-    final adService = AdService();
-    final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
-    final response = await adService.createAd(adRequest);
-    ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
-    _categoryProvider.categorySelect = '';
-    Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+  void _createAd(BuildContext context) async {
+    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false );
+    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false );
+    final MainPageProvider mainPageProvider = Provider.of<MainPageProvider>(context, listen: false );
+    if (categoryProvider.categorySelect == '') {
+      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom("Por favor seleccione una categoria, si no encuentra la suya seleccione Variados", true));
+    } else {
+      createAdProvider.formKey.currentState?.save();
+      createAdProvider.category = categoryProvider.categorySelect;
+      Ad adRequest = createAdProvider.handlerData();
+      final adService = AdService();
+      final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+      final response = await adService.createAd(adRequest);
+      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
+      _categoryProvider.categorySelect = '';
+      createAdProvider.limpiarObjetos();
+      Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+      mainPageProvider.isLoading = true;
+    }
   }
+
 }
 
-class FormCreateAd extends StatelessWidget {
-  const FormCreateAd({
+class _FormCreateAd extends StatelessWidget {
+  const _FormCreateAd({
     Key? key,
   }) : super(key: key);
 
@@ -124,14 +109,13 @@ class _InputTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _createAdProvider = Provider.of<CreateAdProvider>(context);
-    final Widget inputTitle = TextFormField(
-        autofocus: false,
-        obscureText: false,
-        keyboardType: TextInputType.text,
-        onSaved: (value) => _createAdProvider.title = value ?? '',
-        decoration: decorationInputCustom(Icons.abc, 'Pon aqui el titulo'));
-    return InputCustom(labelText: '', input: inputTitle);
+    final createAdProvider = Provider.of<CreateAdProvider>(context);
+    return InputCustom(
+      labelText: '', 
+      onSaved: (value) => createAdProvider.title = value ?? '', 
+      iconData: Icons.abc, 
+      hintText: 'Pon aqui el titulo',
+    );
   }
 }
 
@@ -141,30 +125,11 @@ class _InputDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _createAdProvider = Provider.of<CreateAdProvider>(context);
-    final Widget inputDescription = TextFormField(
-        autofocus: false,
-        obscureText: false,
-        keyboardType: TextInputType.multiline,
-        onSaved: (value) => _createAdProvider.description = value ?? '',
-        maxLines: 6,
-        decoration: InputDecoration(
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-            hintText: 'Describe tu anuncio!',
-            hintStyle: const TextStyle(
-              fontSize: 13.0,
-              color: AppColors.subtitles,
-            ),
-            prefixIconColor: AppColors.primary,
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    const BorderSide(color: AppColors.primary, width: 1.5)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    const BorderSide(color: AppColors.primary, width: 1.5))));
-    return InputCustom(labelText: 'Descripción', input: inputDescription);
+    return TextAreaInputCustom(
+      hintText: 'Describe tu anuncio',
+      labelText: '',
+      onSaved: (value) => _createAdProvider.description = value ?? '',
+    );
   }
 }
 
@@ -206,7 +171,6 @@ class _CarreteImageElement extends StatefulWidget {
 
 class _CarreteImageElementState extends State<_CarreteImageElement> {
   XFile? _image;
-  final _picker = ImagePicker();
   final _pathImagePlaceholder = 'assets/images/jar-loading.gif';
   final _pathNoImage = 'assets/images/no-image.png';
 
@@ -214,13 +178,41 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     final double _sizeCard = _size.width * 0.17;
+    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false );
     return InkWell(
-      onTap: () {
-        if (_image != null) {
-          _showImage(context);
-        } else {
-          _openImagePicker(context);
+      onTap: () async {
+        if (_image == null) {
+          _image = await HandlerImage.openImagePicker(
+            context: context, 
+            index:widget.index, 
+            images: createAdProvider.images 
+          );
+          setState(() {});
+          return;
         }
+        HandlerImage.showImage(
+          context: context,
+          path: _image!,
+          image: Upload(),
+          images: createAdProvider.images,
+          index: widget.index.toString(),
+          onPressedDelete: () {
+            final indexList = createAdProvider.images.indexWhere((element) => element.index == widget.index.toString());
+            createAdProvider.images.remove(createAdProvider.images[indexList]);
+            _image = null;
+            Navigator.pop(context);
+            setState(() {});
+          },
+          onPressedModify: () async {
+            _image = await HandlerImage.openImagePicker(
+              context: context,
+              images: createAdProvider.images,
+              index: widget.index
+            );
+            Navigator.pop(context);
+            setState(() {});
+          }
+        );
       },
       child: Container(
         width: _sizeCard,
@@ -233,135 +225,21 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
           ),
         ),
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: _image != null
-                ? Image.file(File(_image!.path), fit: BoxFit.cover)
-                : FadeInImage(
-                    placeholder: AssetImage(_pathImagePlaceholder),
-                    image: AssetImage(_pathNoImage),
-                    fit: BoxFit.cover,
-                  )),
+          borderRadius: BorderRadius.circular(10),
+          child: _image != null
+            ? Image.file( File( _image!.path ), fit: BoxFit.cover )
+            : FadeInImage(
+              placeholder: AssetImage(_pathImagePlaceholder),
+              image: AssetImage(_pathNoImage),
+              fit: BoxFit.cover,
+            )
+        ),
       ),
     );
   }
 
-  /// Abre el dialogo para seleccionar una imagen de la galeria .
-  Future<void> _openImagePicker(BuildContext context) async {
-    final XFile? pickedImage = await _picker.pickImage(
-        source: ImageSource.gallery, maxHeight: 350, maxWidth: 350);
-
-    int index = widget.index;
-    final CreateAdProvider createAdProvider =
-        Provider.of<CreateAdProvider>(context, listen: false);
-    if (pickedImage != null) {
-      String content = '';
-      content = convertFileToBase64(pickedImage.path);
-      final Upload upload = Upload.fromMap({
-        "content": content,
-        "name": pickedImage.name,
-        "type": pickedImage.name.split('.')[1],
-        "index": index.toString()
-      });
-      final indexList = createAdProvider.images
-          .indexWhere((element) => element.index == index);
-      if (indexList >= 0) {
-        createAdProvider.images.remove(createAdProvider.images[indexList]);
-        createAdProvider.images.add(upload);
-      } else {
-        createAdProvider.images.add(upload);
-      }
-      setState(() {
-        _image = XFile(pickedImage.path);
-      });
-    }
-  }
-
-  Future<void> _showImage(BuildContext context) async {
-    final Size _size = MediaQuery.of(context).size;
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            scrollable: false,
-            title: Row(
-              children: [
-                const Expanded(child: SizedBox()),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            contentPadding: EdgeInsets.all(_size.height * 0.01),
-            content: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(9),
-                border: Border.all(
-                  color: AppColors.logoSchoolPrimary,
-                  width: 2,
-                ),
-              ),
-              child: ClipRRect(
-                child: Image.file(File(_image!.path), fit: BoxFit.cover),
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      onPrimary: AppColors.reject,
-                      primary: AppColors.mainThirdContrast,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: const BorderSide(color: AppColors.reject)),
-                    ),
-                    onPressed: () {
-                      // Eliminar la imagen del carrete y del provider.
-                      final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false);
-                      final indexList = createAdProvider.images.indexWhere((element) => element.index == widget.index.toString());
-                      createAdProvider.images.remove(createAdProvider.images[indexList]);
-
-                      setState(() {
-                        _image = null;
-                        Navigator.pop(context);
-                      });
-                    },
-                    child: const Text('Eliminar'),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _openImagePicker(context);
-                          Navigator.pop(context);
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        onPrimary: AppColors.mainThirdContrast,
-                        primary: AppColors.primary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            side: const BorderSide(color: AppColors.primary)),
-                      ),
-                      child: const Text('Modificar')),
-                  const SizedBox()
-                ],
-              )
-            ],
-          );
-        });
-  }
-
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

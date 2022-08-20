@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 
@@ -5,11 +7,8 @@ class CityService with HttpHandler {
 
   Future<List<City>> getCities() async {
     final resp = await getGet('/city');
-    final List<City> cities = [];
-    final List<dynamic> respCities = resp['cities'] ;
-    for (var element in respCities) { 
-      cities.add( City.fromMap( element ));
-    }
+    final List<dynamic> respCities = resp['cities'];
+    final List<City> cities = respCities.map((e) => City.fromMap( e ) ).toList();
     return cities;
   }
 

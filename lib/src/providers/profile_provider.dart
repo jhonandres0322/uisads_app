@@ -1,6 +1,6 @@
 import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
-import 'package:uisads_app/src/constants/import_utils.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 
 class ProfileProvider extends ListAdProvider {
   String   _uid             = '';

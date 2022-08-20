@@ -55,7 +55,7 @@ class ProfilePage extends StatelessWidget {
           if( snapshot.hasData ) {
             _profileProvider.saveInfoProfile( snapshot.data! );
             return Column(
-                  children: [
+              children: [
                 _InfoProfile( arguments: type, profile: snapshot.data! ), 
                 const _BarTabProfile(), 
                 const Expanded(child: _ListAdsProfile())
@@ -359,7 +359,11 @@ class _ListAdsProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    return ListAd(ads: profileProvider.ads, onNextPage: () => profileProvider.getAdsByPublisher(), provider: profileProvider );
+    return ListAd(
+      ads: profileProvider.ads, 
+      onNextPage: () => profileProvider.getAdsByPublisher(), 
+      provider: profileProvider 
+    );
   }
 }
 

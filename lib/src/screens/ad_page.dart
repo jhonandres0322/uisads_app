@@ -450,7 +450,7 @@ class _SectionImagesState extends State<_SectionImages> {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       child: FutureBuilder(
-                        future: getImageBase64( widget.images[index]),
+                        future: HandlerImage.getImageBase64( widget.images[index]),
                         builder: (context, AsyncSnapshot<String> snapshot) {
                           if ( snapshot.hasData ) {
                             return ClipRRect(
@@ -502,7 +502,7 @@ class _SectionImagesState extends State<_SectionImages> {
                     });
                   },
                   child: FutureBuilder(
-                    future: getImageBase64( widget.images[index] ),
+                    future: HandlerImage.getImageBase64( widget.images[index] ),
                     builder: (context, AsyncSnapshot<String> snapshot) {
                       if( snapshot.hasData ) {
                         return Padding(

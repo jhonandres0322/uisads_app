@@ -122,16 +122,13 @@ class _InputPasswordOld extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final changePasswordProvider = Provider.of<ChangePasswordProvider>(context); 
-    final Widget inputPassword = TextFormField(
-      autofocus: false,
+    return InputCustom(
+      labelText: '' , 
+      onSaved: (value) => changePasswordProvider.oldPassword = value ?? '', 
+      iconData: Icons.lock, 
+      hintText: 'Anterior Contraseña',
       obscureText: true,
-      keyboardType: TextInputType.text,
-      onSaved: (value) => changePasswordProvider.oldPassword = value ?? '',
-      //validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, 'Antigua Contraseña'),
     );
-    return InputCustom(labelText: '', input: inputPassword);
   }
 }
 
@@ -141,16 +138,13 @@ class _InputPasswordNew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final changePasswordProvider = Provider.of<ChangePasswordProvider>(context); 
-    final Widget inputPassword = TextFormField(
-      autofocus: false,
+    return InputCustom(
+      labelText: '' , 
+      onSaved: (value) => changePasswordProvider.newPassword = value ?? '', 
+      iconData: Icons.lock, 
+      hintText: 'Nueva Contraseña',
       obscureText: true,
-      keyboardType: TextInputType.text,
-      onSaved: (value) => changePasswordProvider.newPassword = value ?? '',
-      //validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, 'Nueva Contraseña'),
     );
-    return InputCustom(labelText: '', input: inputPassword);
   }
 }
 
@@ -159,16 +153,13 @@ class _InputPasswordNewConfirm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final changePasswordProvider = Provider.of<ChangePasswordProvider>(context); 
-    final Widget inputPassword = TextFormField(
-      autofocus: false,
+    return InputCustom(
+      labelText: '' , 
+      onSaved: (value) => changePasswordProvider.confirmNewPassword = value ?? '', 
+      iconData: Icons.lock, 
+      hintText: 'Confirme Nueva Contraseña',
       obscureText: true,
-      keyboardType: TextInputType.text,
-      onSaved: (value) => changePasswordProvider.confirmNewPassword = value ?? '',
-      //validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, 'Confirme Nueva contraseña'),
     );
-    return InputCustom(labelText: '', input: inputPassword);
   }
 }
 
@@ -184,21 +175,19 @@ class _ButtonChangeNewPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return SizedBox(
+    return ButtonCustom(
       height: size.height * 0.065,
       width: size.width * 0.75,
-      child: ElevatedButton(
-          onPressed: () async {
-            bool isNavigator = await changePassword(context, formKey);
-            if ( isNavigator ) {
-              Navigator.popAndPushNamed( context, 'edit-profile');
-            }
-          },
-          child: const Text('Cambiar Contraseña'),
-          style: ElevatedButton.styleFrom(
-              primary: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0)))),
+      onPressed: () async {
+        bool isNavigator = await changePassword(context, formKey);
+        if ( isNavigator ) {
+          Navigator.popAndPushNamed( context, 'edit-profile');
+        }
+      },
+      text: 'Cambiar Contraseña',
+      colorText: Colors.white,
+      colorButton: AppColors.primary,
+      colorBorder: AppColors.primary
     );
   }
 

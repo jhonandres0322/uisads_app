@@ -18,7 +18,6 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context);
-    final mainPageProvider = Provider.of<MainPageProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -45,24 +44,22 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       drawer: const DrawerCustom(),
-      body: Column(
-        children: [
-          // Widget Horizontal con la lista de categorias
-          SizedBox(
-              width: double.infinity,
-              // color: Colors.yellow,
-              height: size.height * 0.1,
-              child: const _ListaCategorias()
-          ),
-          // CardTable para los anuncios mostrados
-          Expanded(
-            child: ListAd(
-              provider: mainPageProvider,
-              ads: mainPageProvider.ads,
-              onNextPage: () => mainPageProvider.getAds()
-            ),
-          )
-        ],
+      body: Builder(
+        builder: (context) {
+          return Column(
+            children: [
+              // Widget Horizontal con la lista de categorias
+              SizedBox(
+                  width: double.infinity,
+                  // color: Colors.yellow,
+                  height: size.height * 0.1,
+                  child: const _ListaCategorias()
+              ),
+              // CardTable para los anuncios mostrados
+              const Expanded( child: _ListAds() )
+            ],
+          );
+        }
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
@@ -76,6 +73,20 @@ class _MainPageState extends State<MainPage> {
           color: AppColors.logoSchoolPrimary,
         ),
       )
+    );
+  }
+}
+
+class _ListAds extends StatelessWidget {
+  const _ListAds({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final mainPageProvider = Provider.of<MainPageProvider>(context);
+    return ListAd(
+      provider: mainPageProvider,
+      ads: mainPageProvider.ads,
+      onNextPage: () => mainPageProvider.getAds()
     );
   }
 }

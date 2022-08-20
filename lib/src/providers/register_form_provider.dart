@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
 class RegisterFormProvider with ChangeNotifier {
 
   String _email                   = '';
@@ -9,6 +12,17 @@ class RegisterFormProvider with ChangeNotifier {
   String _city                    = '';
   String _password                = '';
   bool   _isLoading               = false;
+  List<City> cities               = [];
+
+  RegisterFormProvider() {
+    getCities();
+  }
+
+  getCities() async {
+    final cityService = CityService();
+    cities = await cityService.getCities();
+    notifyListeners();
+  }
 
   String get email => _email;
   set email(String value) {

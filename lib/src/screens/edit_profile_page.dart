@@ -152,7 +152,7 @@ class _PhotoProfileState extends State<_PhotoProfile> {
     final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery, maxHeight: 350,maxWidth: 350);
     if( pickedImage != null && pickedImage.path.isNotEmpty ) {
       _editProfileProvider.image = Upload.fromMap({
-        "content": convertFileToBase64( pickedImage.path ),
+        "content": HandlerImage.convertFileToBase64( pickedImage.path ),
         "name": pickedImage.name,
         "type": pickedImage.name.split('.')[1]
       });
@@ -172,7 +172,6 @@ class _FormEditProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final editProfileProvider = Provider.of<EditProfileProvider>(context);
     final ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen : false);
     final Size size = MediaQuery.of(context).size;
     return Form(
@@ -199,18 +198,14 @@ class _InputName extends StatelessWidget {
   final String name;
   @override
   Widget build(BuildContext context) {
-    final _editProfileProvider = Provider.of<EditProfileProvider>(context);
-    final Widget inputName = TextFormField(
-      initialValue: name ,
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.text,
-      onSaved: (value) =>_editProfileProvider.name = value ?? '',
-      // validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom( CustomUisIcons.card_user , 'Nombres y Apellidos' ),
+    final editProfileProvider = Provider.of<EditProfileProvider>(context);
+    return InputCustom(
+      labelText: 'Nombre y Apellidos', 
+      onSaved: (value) => editProfileProvider.name = value ?? '', 
+      iconData: CustomUisIcons.card_user, 
+      hintText: 'Ingrese su nombre', 
+      initialValue: name,
     );
-    return InputCustom(labelText: 'Nombres y Apellidos', input: inputName);
   }
 }
 
@@ -220,18 +215,15 @@ class _InputPhone extends StatelessWidget {
   final String cellphone;
   @override
   Widget build(BuildContext context) {
-    final _editProfileProvider = Provider.of<EditProfileProvider>(context);
-    final Widget inputName = TextFormField(
-      initialValue: cellphone,
-      autofocus: false,
-      obscureText: false,
+    final editProfileProvider = Provider.of<EditProfileProvider>(context);
+    return InputCustom(
+      labelText: 'Telefono', 
+      onSaved: (value) => editProfileProvider.cellphone = value ?? '', 
+      iconData: CustomUisIcons.call_strong, 
       keyboardType: TextInputType.phone,
-      onSaved: (value) => _editProfileProvider.cellphone = value ?? '',
-      // validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(CustomUisIcons.call_strong, 'Telefono'),
+      hintText: 'Ingrese su nombre', 
+      initialValue: cellphone,
     );
-    return InputCustom(labelText: 'Telefono', input: inputName);
   }
 }
 
@@ -240,18 +232,15 @@ class _InputEmail extends StatelessWidget {
   final String email;
   @override
   Widget build(BuildContext context) {
-    final _editProfileProvider = Provider.of<EditProfileProvider>(context);
-    final Widget inputEmail = TextFormField(
+    final editProfileProvider = Provider.of<EditProfileProvider>(context);
+    return InputCustom(
+      labelText: 'Correo Electronico', 
+      onSaved: (value) => editProfileProvider.email = value ?? '', 
+      iconData: CustomUisIcons.email_outline, 
+      keyboardType: TextInputType.phone,
+      hintText: 'Ingrese su correo electronico', 
       initialValue: email,
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.emailAddress,
-      onSaved: (value) => _editProfileProvider.email = value ?? '',
-      // validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom( CustomUisIcons.call_strong, 'Correo Electronico'),
     );
-    return InputCustom(labelText: 'Correo Electronico', input: inputEmail);
   }
 }
 
@@ -260,35 +249,26 @@ class _InputCity extends StatelessWidget {
   final String city;
   @override
   Widget build(BuildContext context) {
-    final _editProfileProvider = Provider.of<EditProfileProvider>(context);
-    final _cityService = CityService();
-    return FutureBuilder<List<City>> (
-      future: _cityService.getCities(),
-      initialData: const [],
-      builder: (context, AsyncSnapshot<List<City>> snapshot) {
-        if ( snapshot.hasData ) {
-          List<City> cities = snapshot.data!;
-          final Widget dropdownCity = DropdownButtonFormField<dynamic>(
-            value: city,
-            decoration: decorationInputCustom(
-              Icons.location_city_rounded,
-              'Ingrese la ciudad'
-            ),
-            items: cities.map((City city) {
-              return DropdownMenuItem<dynamic>(
-                value: city.id,
-                child: Text( city.name ),
-              );
-            }).toList(),
-            onChanged: ( dynamic value ) => _editProfileProvider.city = value,
-            onSaved: ( dynamic value ) => _editProfileProvider.city = value
-          );
-          return InputCustom(labelText: 'Ciudad', input: dropdownCity);
-        } else {
-          return const CircularProgressIndicator();
-        }
-      },
+    final editProfileProvider = Provider.of<EditProfileProvider>(context);
+    final registerProvider = Provider.of<RegisterFormProvider>(context);
+    List<DropdownMenuItem<String>> cities = registerProvider.cities.map((City city) 
+    {
+        return DropdownMenuItem<String>(
+          value: city.id,
+          child: Text( city.name ),
+        );
+      }).toList();
+    final Widget dropdownCity = DropdownButtonFormField<dynamic>(
+      decoration: decorationInputCustom(
+        Icons.location_city_rounded,
+        'Ingrese la ciudad'
+      ),
+      items: cities,
+      value: city,
+      onChanged: ( dynamic value ) => editProfileProvider.city = value,
+      onSaved: ( dynamic value ) => editProfileProvider.city = value
     );
+    return InputCustomDropdown(labelText: 'Ciudad', input: dropdownCity);
   }
 }
 
@@ -298,18 +278,12 @@ class _InputDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _editProfileProvider = Provider.of<EditProfileProvider>(context);
-    final Widget inputEmail = TextFormField(
+    return TextAreaInputCustom(
+      labelText: 'Descripción', 
+      onSaved: (value) => _editProfileProvider.description = value ?? '', 
+      hintText: 'Ingrese una descripción',
       initialValue: description,
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.multiline,
-      maxLines: 5,
-      onSaved: (value) => _editProfileProvider.description = value ?? '',
-      // validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(CustomUisIcons.global_local, 'Descripción'),
     );
-    return InputCustom(labelText: 'Descripción', input: inputEmail);
   }
 }
 

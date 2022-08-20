@@ -46,7 +46,7 @@ class AdCard extends StatelessWidget {
             height: widthCard * 0.8,
             width: widthCard,
             child: FutureBuilder(
-              future: getImageBase64( mainPage ),
+              future: HandlerImage.getImageBase64( mainPage ),
               builder: (context, AsyncSnapshot<String> snapshot) {
                 if( snapshot.hasData ) {
                   return Image.file(
@@ -117,10 +117,12 @@ class _BottomCard extends StatelessWidget {
                   'Editar',
                   style: TextStyle( fontSize: 8 ),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, 'ad', arguments: {
-                    'id' : idAd
-                  });
+                onPressed: () async {
+                  final adProvider = Provider.of<AdPageProvider>( context, listen: false );
+                  final categoryProvider = Provider.of<CategoryProvider>( context, listen: false );
+                  await adProvider.getAd(idAd);
+                  categoryProvider.categorySelect = adProvider.ad.category;
+                  Navigator.pushNamed(context, 'edit-ad');
                 },
               ),
             ],

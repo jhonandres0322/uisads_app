@@ -7,3 +7,4 @@ export 'package:uisads_app/src/constants/items_drawer.dart';
 export 'package:uisads_app/src/constants/routes.dart';
 export 'package:uisads_app/src/constants/style_text.dart';
 export 'package:uisads_app/src/constants/themes.dart';
+export 'package:uisads_app/src/constants/size_image.dart';

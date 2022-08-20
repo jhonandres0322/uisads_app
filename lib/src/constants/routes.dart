@@ -18,6 +18,7 @@ class RoutesApp {
     'edit-profile': (BuildContext context ) => const EditProfilePage(),
     'new-password' :(BuildContext context) => const NewPasswordPage(), 
     'search' : (BuildContext context) => const SearchPage(),
+    'edit-ad': (BuildContext context ) => const EditAdPage()
   };
 
 }

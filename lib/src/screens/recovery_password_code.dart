@@ -113,15 +113,16 @@ class _InputCode extends StatelessWidget {
   const _InputCode({ Key? key }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final Widget inputCode = TextFormField(
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.text,
-      //onChanged: (value) => loginForm.password = value,
-      //validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, 'Ingrese el codigo'),
-    );
-    return InputCustom(labelText: 'Codigo',input: inputCode);
+    return Center();
+    // final Widget inputCode = TextFormField(
+    //   autofocus: false,
+    //   obscureText: false,
+    //   keyboardType: TextInputType.text,
+    //   //onChanged: (value) => loginForm.password = value,
+    //   //validator: loginForm.validatePassword,
+    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   decoration: decorationInputCustom(Icons.lock, 'Ingrese el codigo'),
+    // );
+    // return InputCustom(labelText: 'Codigo',input: inputCode);
   }
 }

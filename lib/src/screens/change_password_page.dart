@@ -109,16 +109,17 @@ class _InputNewPassword extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final Widget inputCode = TextFormField(
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.text,
-      //onChanged: (value) => loginForm.password = value,
-      //validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, 'Ingrese la nueva contraseña'),
-    );
-    return InputCustom(labelText: 'Nueva contraseña', input: inputCode);
+    return Center();
+    // final Widget inputCode = TextFormField(
+    //   autofocus: false,
+    //   obscureText: false,
+    //   keyboardType: TextInputType.text,
+    //   //onChanged: (value) => loginForm.password = value,
+    //   //validator: loginForm.validatePassword,
+    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   decoration: decorationInputCustom(Icons.lock, 'Ingrese la nueva contraseña'),
+    // );
+    // return InputCustom(labelText: 'Nueva contraseña', input: inputCode);
   }
 }
 
@@ -127,15 +128,16 @@ class _InputNewConfirmPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget inputCode = TextFormField(
-      autofocus: false,
-      obscureText: false,
-      keyboardType: TextInputType.text,
-      //onChanged: (value) => loginForm.password = value,
-      //validator: loginForm.validatePassword,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: decorationInputCustom(Icons.lock, 'Confirme la contraseña'),
-    );
-    return InputCustom(labelText: 'Confirma la nueva contraseña',input: inputCode);
+    return Center();
+    // final Widget inputCode = TextFormField(
+    //   autofocus: false,
+    //   obscureText: false,
+    //   keyboardType: TextInputType.text,
+    //   //onChanged: (value) => loginForm.password = value,
+    //   //validator: loginForm.validatePassword,
+    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   decoration: decorationInputCustom(Icons.lock, 'Confirme la contraseña'),
+    // );
+    // return InputCustom(labelText: 'Confirma la nueva contraseña',input: inputCode);
   }
 }

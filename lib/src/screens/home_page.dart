@@ -42,25 +42,14 @@ class _ButtonRegisterHome extends StatelessWidget {
   final Size size;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: size.height * 0.065,
-      width: size.width * 0.75,
-      child: ElevatedButton(
-          onPressed: () => Navigator.pushNamed(context, 'register'),
-          child: const Text(
-            'Registrarse',
-            style: TextStyle(
-              color: AppColors.primary,
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              fontFamily: 'Roboto',
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-              primary: AppColors.mainThirdContrast,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0)),
-              side: const BorderSide(width: 1.0, color: AppColors.titles))),
+    return ButtonCustom(
+      height: size.height * 0.065, 
+      width: size.width * 0.75, 
+      onPressed: () => Navigator.pushNamed(context, 'register'), 
+      text: 'Registrarse', 
+      colorText: AppColors.primary, 
+      colorButton: AppColors.mainThirdContrast, 
+      colorBorder: AppColors.subtitles
     );
   }
 }
@@ -76,25 +65,14 @@ class _ButtonLoginHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return ButtonCustom(
       height: size.height * 0.065,
       width: size.width * 0.75,
-      child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, 'login');
-          },
-          child: const Text('Iniciar Sesión',
-              style: TextStyle(
-                color: Colors.white, 
-                fontSize: 15, 
-                fontWeight: FontWeight.w600, 
-                fontFamily: 'Roboto'
-              )
-          ),
-          style: ElevatedButton.styleFrom(
-              primary: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0)))),
+      onPressed: () =>  Navigator.pushNamed(context, 'login'),
+      text: 'Iniciar Sesión',
+      colorText: Colors.white,
+      colorButton: AppColors.primary,
+      colorBorder: AppColors.primary
     );
   }
 }
