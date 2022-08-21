@@ -11,14 +11,17 @@ import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
+import 'package:uisads_app/src/utils/utils_contact.dart';
 
 class AdPage extends StatelessWidget {
   const AdPage({Key? key}) : super(key: key);
-  
+  static String telefonoContacto = '';
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context)?.settings.arguments as Map;
+
     final AdService _adService = AdService();
+    final AdPageProvider _adPageProvider = Provider.of<AdPageProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -27,7 +30,8 @@ class AdPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(CustomUisIcons.search_right, color: AppColors.subtitles),
+            icon: const Icon(CustomUisIcons.search_right,
+                color: AppColors.subtitles),
             onPressed: () {},
           ),
         ],
@@ -35,52 +39,71 @@ class AdPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          future: _adService.getAdById( arguments['id'] ),
-          builder: (context, AsyncSnapshot<dynamic> snapshot) {
-            if( snapshot.hasData ) {
-              return Column(
-              children: [
-                _SectionCategoryDate(
-                  category: snapshot.data!.category,
-                  date: snapshot.data!.createdAt,
-                ),
-                _TitleAdPage( title: snapshot.data!.title),
-                _SectionInfoProfileCity(
-                  publisher: snapshot.data!.publisher,
-                ),
-                _SectionImages(
-                  images: snapshot.data!.images,
-                ),
-                _DescripcionAnuncio(
-                  description: snapshot.data!.description,
-                ),
-                _SectionCalification(
-                  pointsPositive: snapshot.data!.positvePoints,
-                  pointsNegative: snapshot.data!.negativePoints,
-                  ad: snapshot.data!.id
-                ),
-              ],
-            );
-            } else {
-              return  const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }
-        ),
+            future: _adService.getAdById(arguments['id']),
+            builder: (context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    _SectionCategoryDate(
+                      category: snapshot.data!.category,
+                      date: snapshot.data!.createdAt,
+                    ),
+                    _TitleAdPage(title: snapshot.data!.title),
+                    _SectionInfoProfileCity(
+                      publisher: snapshot.data!.publisher,
+                    ),
+                    // Montaje Widget para contacto al usuario
+                    Stack(
+                      children: [
+                        _SectionImages(
+                          images: snapshot.data!.images,
+                        ),
+                        Positioned(
+                          bottom: 75,
+                          right: 10,
+                          child: FloatingActionButton(
+                            elevation: 6,
+                            backgroundColor: AppColors.primary,
+                            onPressed: () async {
+                              // print(_adPageProvider.phone);
+                              UtilsContact.contactarUsuario(
+                                  _adPageProvider.phone,
+                                  'Hola, estoy muy interesado en tu anuncio de ${snapshot.data!.title}');
+                            },
+                            child: const Icon(CustomUisIcons.whatsapp),
+                          ),
+                        ),
+                      ],
+                    ),
+                    _DescripcionAnuncio(
+                      description: snapshot.data!.description,
+                    ),
+                    _SectionCalification(
+                        pointsPositive: snapshot.data!.positvePoints,
+                        pointsNegative: snapshot.data!.negativePoints,
+                        ad: snapshot.data!.id),
+                  ],
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
     );
   }
 }
 
+/// Widget que contiene la seccion para la calificacion de un anuncio
 class _SectionCalification extends StatelessWidget {
-  const _SectionCalification({
-    Key? key,
-    required this.pointsPositive,
-    required this.pointsNegative,
-    required this.ad
-  }) : super(key: key);
+  const _SectionCalification(
+      {Key? key,
+      required this.pointsPositive,
+      required this.pointsNegative,
+      required this.ad})
+      : super(key: key);
 
   final int pointsPositive;
   final int pointsNegative;
@@ -96,7 +119,7 @@ class _SectionCalification extends StatelessWidget {
         children: [
           // Widget del like
           GestureDetector(
-            onTap: () => manageRating( context, Choices.like ),
+            onTap: () => manageRating(context, Choices.like),
             child: _IconButtonLike(
               icon: CustomUisIcons.like,
               color: AppColors.primary,
@@ -108,7 +131,7 @@ class _SectionCalification extends StatelessWidget {
           ),
           // Widget del dislike
           GestureDetector(
-            onTap: () => manageRating( context, Choices.dislike ),
+            onTap: () => manageRating(context, Choices.dislike),
             child: _IconButtonLike(
               icon: CustomUisIcons.dislike,
               color: AppColors.subtitles.withOpacity(0.5),
@@ -123,31 +146,24 @@ class _SectionCalification extends StatelessWidget {
     );
   }
 
-  void manageRating( BuildContext context, String choice ) async {
+  void manageRating(BuildContext context, String choice) async {
     final AdService _adService = AdService();
-    Response _response = await _adService.manageRating({
-      "ad": ad,
-      "choice": choice
-    });
+    Response _response =
+        await _adService.manageRating({"ad": ad, "choice": choice});
 
-    if( !_response.error ) {
-      Navigator.pushReplacementNamed(
-        context, 
-        'ad', 
-        arguments: {
-          'id': ad
-        }
-      );
+    if (!_response.error) {
+      Navigator.pushReplacementNamed(context, 'ad', arguments: {'id': ad});
     }
-    ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( _response.message , _response.error ));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(showAlertCustom(_response.message, _response.error));
   }
-
 }
 
+/// Widget que contiene la seccion del boton de like
 class _IconButtonLike extends StatelessWidget {
   const _IconButtonLike({
-    Key? key, 
-    required this.icon, 
+    Key? key,
+    required this.icon,
     required this.color,
     required this.valoracion,
   }) : super(key: key);
@@ -191,15 +207,14 @@ class _IconButtonLike extends StatelessWidget {
   }
 }
 
+/// Widget que contiene la seccion de fecha del anuncio
 class _SectionCategoryDate extends StatelessWidget {
   final String date;
-  final String category; 
-  
-  const _SectionCategoryDate({
-    Key? key,
-    required this.date,
-    required this.category
-  }) : super(key: key);
+  final String category;
+
+  const _SectionCategoryDate(
+      {Key? key, required this.date, required this.category})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -222,25 +237,24 @@ class _SectionCategoryDate extends StatelessWidget {
               color: AppColors.foods,
             ),
             child: FutureBuilder(
-              future: _categoryService.getCategoryId(category),
-              builder: (context, AsyncSnapshot<Category> snapshot) {
-                if( snapshot.hasData ) {
-                  return Text(
-                    snapshot.data!.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }
-            ),
+                future: _categoryService.getCategoryId(category),
+                builder: (context, AsyncSnapshot<Category> snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      snapshot.data!.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
           ),
           const Spacer(),
           Text(
@@ -260,7 +274,7 @@ class _SectionCategoryDate extends StatelessWidget {
     );
   }
 
-  String convertDate( String date, BuildContext context ) {
+  String convertDate(String date, BuildContext context) {
     String locale = Localizations.localeOf(context).languageCode;
     DateTime dateTime = DateTime.parse(date);
     String dayMonth = DateFormat.MMMMd(locale).format(dateTime);
@@ -269,13 +283,11 @@ class _SectionCategoryDate extends StatelessWidget {
   }
 }
 
+/// Widget que contiene la seccion de titulo del anuncio
 class _TitleAdPage extends StatelessWidget {
   final String title;
-  
-  const _TitleAdPage({
-    Key? key,
-    required this.title
-  }) : super(key: key);
+
+  const _TitleAdPage({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -297,133 +309,123 @@ class _TitleAdPage extends StatelessWidget {
 
 class _SectionInfoProfileCity extends StatelessWidget {
   final String publisher;
-  const _SectionInfoProfileCity({
-    Key? key,
-    required this.publisher
-  }) : super(key: key);
+  const _SectionInfoProfileCity({Key? key, required this.publisher})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     final AuthService _authService = AuthService();
     final CityService _cityService = CityService();
+    final AdPageProvider _adPageProvider = Provider.of<AdPageProvider>(context);
     return FutureBuilder(
-      future: _authService.getProfile( publisher ),
-      builder: (context, AsyncSnapshot<Profile> snapshot) {
-        if( snapshot.hasData ) {
-          return InkWell(
-            onTap: () {
-              UtilsNavigator.navigatorProfile(context, publisher);
-              String type = '';
-              Preferences.uid == publisher ? type = 'user' : type = 'seller'; 
-              Navigator.pushNamed(context, 'profile', arguments: {
-                'type': type
-              });
-            },
-            child: Container(
-              margin: EdgeInsets.only(
-                left: _size.width * 0.05, 
-                top: _size.height * 0.02
-              ),
-              child: Row(
-                children: [
-                  ProfileAvatar(
-                    radius: 0.025,
-                    image: snapshot.data!.image,
-                  ),
-                  SizedBox(
-                    width: _size.width * 0.02,
-                  ),
-                  // Widget del nombre del vendedor
-                  SizedBox(
-                    width: _size.width * 0.5,
-                    // color: Colors.redAccent ,
-                    child: Text(
-                      snapshot.data!.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.subtitles,
-                        fontSize: 12,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w400,
+        future: _authService.getProfile(publisher),
+        builder: (context, AsyncSnapshot<Profile> snapshot) {
+          if (snapshot.hasData) {
+            _adPageProvider.phone = snapshot.data!.cellphone;
+            return InkWell(
+              onTap: () {
+                UtilsNavigator.navigatorProfile(context, publisher);
+                String type = '';
+                Preferences.uid == publisher ? type = 'user' : type = 'seller';
+                Navigator.pushNamed(context, 'profile',
+                    arguments: {'type': type});
+              },
+              child: Container(
+                margin: EdgeInsets.only(
+                    left: _size.width * 0.05, top: _size.height * 0.02),
+                child: Row(
+                  children: [
+                    ProfileAvatar(
+                      radius: 0.025,
+                      image: snapshot.data!.image,
+                    ),
+                    SizedBox(
+                      width: _size.width * 0.02,
+                    ),
+                    // Widget del nombre del vendedor
+                    SizedBox(
+                      width: _size.width * 0.5,
+                      // color: Colors.redAccent ,
+                      child: Text(
+                        snapshot.data!.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: AppColors.subtitles,
+                          fontSize: 12,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  // Widget de la ubicacion del vendedor,
-                  Container(
-                    height: _size.height * 0.03,
-                    // width: 100,
-                    padding: EdgeInsets.all( _size.height * 0.005 ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: AppColors.logoSchoolPrimary,
+                    const Spacer(),
+                    // Widget de la ubicacion del vendedor,
+                    Container(
+                      height: _size.height * 0.03,
+                      // width: 100,
+                      padding: EdgeInsets.all(_size.height * 0.005),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColors.logoSchoolPrimary,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.white,
+                            size: _size.width * 0.035,
+                          ),
+                          SizedBox(
+                            width: _size.width * 0.01,
+                          ),
+                          FutureBuilder(
+                              future:
+                                  _cityService.getCityId(snapshot.data!.city),
+                              builder: (context, AsyncSnapshot<City> snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    snapshot.data!.name,
+                                    style: const TextStyle(
+                                      color: AppColors.mainThirdContrast,
+                                      fontSize: 9,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  );
+                                } else {
+                                  return const Text(
+                                    'Sin Ciudad',
+                                    style: TextStyle(
+                                      color: AppColors.mainThirdContrast,
+                                      fontSize: 9,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  );
+                                }
+                              }),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                          size: _size.width * 0.035,
-                        ),
-                        SizedBox(
-                          width: _size.width * 0.01,
-                        ),
-                        FutureBuilder(
-                          future: _cityService.getCityId(snapshot.data!.city),
-                          builder: (context, AsyncSnapshot<City> snapshot) {
-                            if( snapshot.hasData ) {
-                              return Text(
-                                snapshot.data!.name,
-                                style: const TextStyle(
-                                  color: AppColors.mainThirdContrast,
-                                  fontSize: 9,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            } else {
-                              return const Text(
-                                'Sin Ciudad',
-                                style: TextStyle(
-                                  color: AppColors.mainThirdContrast,
-                                  fontSize: 9,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            }
-
-                          }
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: _size.width * 0.03,
-                  )
-                ],
+                    SizedBox(
+                      width: _size.width * 0.03,
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        
-      }
-    );
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }
 
-
 class _SectionImages extends StatefulWidget {
-  const _SectionImages({
-    Key? key,
-    required this.images
-  }) : super(key: key);
+  const _SectionImages({Key? key, required this.images}) : super(key: key);
 
   final List<Upload> images;
 
@@ -435,78 +437,100 @@ class _SectionImagesState extends State<_SectionImages> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    final AdPageProvider _adPageProvider  = Provider.of<AdPageProvider>(context);
-    return Column(
-      children: [
+    final AdPageProvider _adPageProvider = Provider.of<AdPageProvider>(context);
+    return Column(children: [
+      Stack(children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: SizedBox(
-            height: 300,
-            child: Builder(
-              builder: (context) {
-                return Swiper(
-                  controller: _adPageProvider.swiperController,
-                  itemCount: widget.images.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      child: FutureBuilder(
-                        future: HandlerImage.getImageBase64( widget.images[index]),
-                        builder: (context, AsyncSnapshot<String> snapshot) {
-                          if ( snapshot.hasData ) {
-                            return ClipRRect(
-                              child : Image.file(
-                                File( snapshot.data! ),
-                                fit: BoxFit.cover,
-                              )
-                            );
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        }
+            // height: 300,
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
+              children: [
+                Container(
+                  height: 300,
+                  child: Builder(builder: (context) {
+                    return Swiper(
+                      controller: _adPageProvider.swiperController,
+                      itemCount: widget.images.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          child: FutureBuilder(
+                              future: HandlerImage.getImageBase64(
+                                  widget.images[index]),
+                              builder:
+                                  (context, AsyncSnapshot<String> snapshot) {
+                                if (snapshot.hasData) {
+                                  return ClipRRect(
+                                      child: Image.file(
+                                    File(snapshot.data!),
+                                    fit: BoxFit.cover,
+                                  ));
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              }),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: AppColors.logoSchoolPrimary,
+                              width: 2,
+                            ),
+                          ),
+                        );
+                      },
+                      pagination: const SwiperPagination(
+                        builder: SwiperPagination.dots,
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColors.logoSchoolPrimary,
-                          width: 2,
-                        ),
-                      ),
+                      control: const SwiperControl(
+                          color: AppColors.logoSchoolPrimary),
                     );
-                  },
-                  pagination: const SwiperPagination(
-                    builder: SwiperPagination.dots,
-                  ),
-                  control: const SwiperControl(color: AppColors.logoSchoolPrimary),
-                );
-              }
-            ),
-          ),
-        ),
-        // Widget para el carrete de fotografias
-        Container(
-          margin: EdgeInsets.symmetric( horizontal: _size.width * 0.02 ),
-          height: _size.height * 0.08,
-          width: double.infinity,
-          child: Center(
-            child: ListView.builder(
-              itemCount: widget.images.length,
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      _adPageProvider.swiperController.move(index);
-                    });
-                  },
-                  child: FutureBuilder(
-                    future: HandlerImage.getImageBase64( widget.images[index] ),
+                  }),
+                ),
+              ],
+            )),
+        // Positioned para el FloatingActionButton para contacto
+        // Positioned(
+        //   bottom: 20,
+        //   right: 10,
+        //   child: FloatingActionButton(
+        //     elevation: 6,
+        //     backgroundColor: AppColors.primary,
+        //     onPressed: () async{
+        //       print(_adPageProvider.ad.title);
+        //       UtilsContact.contactarUsuario('3026685578', 'Hola, estoy muy interesado en tu anuncio de');
+        //     },
+        //     child: const Icon(CustomUisIcons.whatsapp),
+        //   ),
+        // ),
+      ]),
+      SizedBox(
+        height: 20,
+      ),
+      // Widget para el carrete de fotografias
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: _size.width * 0.02),
+        height: _size.height * 0.08,
+        width: double.infinity,
+        child: Center(
+          child: ListView.builder(
+            itemCount: widget.images.length,
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    _adPageProvider.swiperController.move(index);
+                  });
+                },
+                child: FutureBuilder(
+                    future: HandlerImage.getImageBase64(widget.images[index]),
                     builder: (context, AsyncSnapshot<String> snapshot) {
-                      if( snapshot.hasData ) {
+                      if (snapshot.hasData) {
                         return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: _size.width * 0.02),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: _size.width * 0.02),
                           child: _CarreteImageElement(
                             image: snapshot.data!,
                           ),
@@ -516,15 +540,13 @@ class _SectionImagesState extends State<_SectionImages> {
                           child: CircularProgressIndicator(),
                         );
                       }
-                    }
-                  ),
-                );
-              },
-            ),
+                    }),
+              );
+            },
           ),
-        )
-      ]
-    );
+        ),
+      )
+    ]);
   }
 }
 
@@ -556,10 +578,7 @@ class _DescripcionAnuncio extends StatelessWidget {
 
 /// Widget para el elemento cuadrado del carrete de fotografias
 class _CarreteImageElement extends StatelessWidget {
-  const _CarreteImageElement({
-    Key? key,
-    required this.image
-  }) : super(key: key);
+  const _CarreteImageElement({Key? key, required this.image}) : super(key: key);
   final String image;
   @override
   Widget build(BuildContext context) {
@@ -575,12 +594,11 @@ class _CarreteImageElement extends StatelessWidget {
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(9),
-        child: Image.file(
-          File(image),
-          fit: BoxFit.cover,
-        )
-      ),
+          borderRadius: BorderRadius.circular(9),
+          child: Image.file(
+            File(image),
+            fit: BoxFit.cover,
+          )),
     );
   }
 }
