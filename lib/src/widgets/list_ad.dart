@@ -11,6 +11,7 @@ import 'package:uisads_app/src/constants/import_widgets.dart';
 class ListAd extends StatefulWidget {
   final List<Ad> ads;
   final Function onNextPage;
+  // Revisar si pasarle el provider es un problema
   final ListAdProvider provider;
 
   const ListAd({
@@ -27,16 +28,15 @@ class ListAd extends StatefulWidget {
 class _ListAdState extends State<ListAd> {
   final ScrollController _scrollController = ScrollController();
 
-
-  
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() { 
       log('entrando al controlador');
+      log('Actual posicion: ${_scrollController.position.pixels}');
+      log('Max posicion: ${_scrollController.position.maxScrollExtent}');
       if( _scrollController.position.pixels >= _scrollController.position.maxScrollExtent ) {
         log('entrando al scroll');
-        widget.provider.isLoading = true;
         widget.onNextPage();
       }
     });
@@ -45,6 +45,8 @@ class _ListAdState extends State<ListAd> {
   @override
   void dispose() {
     super.dispose();
+    _scrollController.dispose();
+    widget.provider.isLoading = false;
   }
 
 
@@ -56,7 +58,7 @@ class _ListAdState extends State<ListAd> {
       backgroundColor: AppColors.mainThirdContrast,
       onRefresh: () async {
         log('onRefresh method');
-        widget.provider.isLoading = true;
+        // widget.provider.isLoading = true;
         widget.provider.isRefresh = true;
         widget.onNextPage();
       },

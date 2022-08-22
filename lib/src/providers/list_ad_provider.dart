@@ -8,7 +8,7 @@ import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
-class ListAdProvider with ChangeNotifier {
+abstract class ListAdProvider extends ChangeNotifier {
   
   List<Ad> ads    = [];
   int _page       = 0;

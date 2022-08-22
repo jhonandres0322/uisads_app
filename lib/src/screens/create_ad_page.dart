@@ -13,14 +13,8 @@ import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
-class CreateAdPage extends StatefulWidget {
+class CreateAdPage extends StatelessWidget {
   const CreateAdPage({Key? key}) : super(key: key);
-
-  @override
-  State<CreateAdPage> createState() => _CreateAdPageState();
-}
-
-class _CreateAdPageState extends State<CreateAdPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +48,23 @@ class _CreateAdPageState extends State<CreateAdPage> {
       createAdProvider.category = categoryProvider.categorySelect;
       Ad adRequest = createAdProvider.handlerData();
       final adService = AdService();
-      final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
       final response = await adService.createAd(adRequest);
-      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
-      _categoryProvider.categorySelect = '';
-      createAdProvider.limpiarObjetos();
-      Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
-      mainPageProvider.isLoading = true;
+      // Validar el response
+      if (response.error) {
+        ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
+      } else {
+        // Limpiar el formulario
+        createAdProvider.formKey.currentState?.reset();
+        // Actualizar la lista de anuncios
+        categoryProvider.categorySelect = '';
+        createAdProvider.limpiarObjetos();
+        Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+        mainPageProvider.isRefresh = true;
+        mainPageProvider.getAdsNews();
+        // Mostrar el snackbar
+        ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
+      }
+      
     }
   }
 
