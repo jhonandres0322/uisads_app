@@ -5,13 +5,13 @@ import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
 
 class CategoriaButton extends StatefulWidget {
-  const CategoriaButton({
-    Key? key, 
-    required this.icon, 
-    required this.name,
-    required this.id,
-    required this.enabled
-  }) : super(key: key);
+  const CategoriaButton(
+      {Key? key,
+      required this.icon,
+      required this.name,
+      required this.id,
+      required this.enabled})
+      : super(key: key);
 
   final IconData icon;
   final String name;
@@ -28,7 +28,10 @@ class _CategoriaButtonState extends State<CategoriaButton> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+    final _categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    final _mainPageProvider =
+        Provider.of<MainPageProvider>(context, listen: false);
     return FocusableActionDetector(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -40,11 +43,13 @@ class _CategoriaButtonState extends State<CategoriaButton> {
               width: 50,
               height: size.height * 0.05,
               child: IconButton(
-                icon: Icon( widget.icon, size: size.height * 0.03),
+                icon: Icon(widget.icon, size: size.height * 0.03),
                 color: widget.enabled ? AppColors.titles : AppColors.subtitles,
                 onPressed: () {
                   setState(() {
                     _categoryProvider.categorySelect = widget.id;
+                    _mainPageProvider.cleanAds();
+                    _categoryProvider.categorySelect != '' ? _mainPageProvider.getAdsByCategory(widget.id) : _mainPageProvider.getAds();
                   });
                 },
               ),
@@ -52,7 +57,8 @@ class _CategoriaButtonState extends State<CategoriaButton> {
                 // color: Colors.green,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: widget.enabled ? AppColors.titles : AppColors.subtitles,
+                  color:
+                      widget.enabled ? AppColors.titles : AppColors.subtitles,
                   width: 2,
                 ),
               ),

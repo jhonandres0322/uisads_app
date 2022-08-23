@@ -49,7 +49,7 @@ class MainPage extends StatelessWidget {
               SizedBox(
                   width: double.infinity,
                   // color: Colors.yellow,
-                  height: size.height * 0.1,
+                  height: size.height * 0.15,
                   child: const _ListaCategorias()
               ),
               // CardTable para los anuncios mostrados
@@ -81,10 +81,12 @@ class _ListAds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mainPageProvider = Provider.of<MainPageProvider>(context);
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+    String category = categoryProvider.categorySelect;
     return ListAd(
       provider: mainPageProvider,
       ads: mainPageProvider.ads,
-      onNextPage: () => mainPageProvider.getAdsNews()
+      onNextPage: () =>   categoryProvider.categorySelect != '' ? mainPageProvider.getAdsByCategoryNews(category) :  mainPageProvider.getAdsNews()
     );
     // return Container();
   }

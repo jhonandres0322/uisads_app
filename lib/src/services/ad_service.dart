@@ -53,6 +53,12 @@ class AdService with HttpHandler {
     return resp;
   }
 
+  /// Metodo para obtener los anuncios de una categoria y con la pagina
+  Future<Map<String,dynamic>> getAdsByCategoryAndPage( String category, String page ) async {
+    final resp = await getPost('/ad/category/$category', {'pageValue': page});
+    return resp;
+  }
+
   Future<Response> deleteAd( String idAd ) async {
     final resp = await getDelete('/ad/$idAd');
     return Response.fromMap( resp );

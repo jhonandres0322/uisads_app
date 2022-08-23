@@ -5,6 +5,7 @@ import 'package:uisads_app/src/constants/import_utils.dart';
 
 // Lista de categorias 
 final List<Categoria> categoriasData = [
+      Categoria(icono: Icons.apps, nombre: 'Todos'),
       Categoria(icono: CustomUisIcons.geometry_icon, nombre: 'Variados'),
       Categoria(icono: CustomUisIcons.food, nombre: 'Alimentos'),
       Categoria(icono: CustomUisIcons.key_hand, nombre: 'Alquiler'),

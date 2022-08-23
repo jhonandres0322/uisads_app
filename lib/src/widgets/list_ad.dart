@@ -32,11 +32,11 @@ class _ListAdState extends State<ListAd> {
   void initState() {
     super.initState();
     _scrollController.addListener(() { 
-      log('entrando al controlador');
-      log('Actual posicion: ${_scrollController.position.pixels}');
-      log('Max posicion: ${_scrollController.position.maxScrollExtent}');
+      // log('entrando al controlador');
+      // log('Actual posicion: ${_scrollController.position.pixels}');
+      // log('Max posicion: ${_scrollController.position.maxScrollExtent}');
       if( _scrollController.position.pixels >= _scrollController.position.maxScrollExtent ) {
-        log('entrando al scroll');
+        // log('entrando al scroll');
         widget.onNextPage();
       }
     });
@@ -58,13 +58,13 @@ class _ListAdState extends State<ListAd> {
       backgroundColor: AppColors.mainThirdContrast,
       onRefresh: () async {
         log('onRefresh method');
-        // widget.provider.isLoading = true;
         widget.provider.isRefresh = true;
         widget.onNextPage();
       },
       child: Stack(
         children: [
           GridView.builder(
+            physics: const BouncingScrollPhysics(),
             controller: _scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             itemCount: widget.ads.length,

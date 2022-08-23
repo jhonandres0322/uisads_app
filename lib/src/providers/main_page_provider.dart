@@ -53,7 +53,7 @@ class MainPageProvider extends ListAdProvider {
     isLoading = false;
     notifyListeners();
   }
-
+  ///Metodo para obtener los anuncios inicialmente
   getAds() async {
     // Si esta cargando no entre aca
     if (isLoading) {return;}
@@ -67,6 +67,46 @@ class MainPageProvider extends ListAdProvider {
     ads = [...ads, ...responseAds.ads];
     // Terminamos de cargar
     isLoading = false;
+    notifyListeners();
+  }
+  ///Metodo para obtener los anuncios por categoria
+  getAdsByCategory(String categoria) async{
+    if (isLoading) {return;}
+    isLoading = true;
+    log('getAdsByCategory + $_currentPage');
+    final adService = AdService();
+    final resp = await adService.getAdsByCategory(categoria);
+    final ResponseAds responseAds = ResponseAds.fromMap(resp);
+    log('ads: ${ads.length}');
+    ads = [...ads, ...responseAds.ads];
+    isLoading = false;
+    notifyListeners();
+  }
+  ///Metodo para obtener los anuncios por categoria
+  getAdsByCategoryNews(String categoria) async{
+    if (isLoading) {return;}
+    if (isRefresh) {
+      currentPage = 1;
+      ads = [];
+      isRefresh = false;
+    } else {
+      currentPage++;
+    }
+    isLoading = true;
+    final adService = AdService();
+    final resp = await adService.getAdsByCategoryAndPage(categoria,currentPage.toString());
+    final ResponseAds responseAds = ResponseAds.fromMap(resp);
+    if (responseAds.ads.isEmpty) {
+      _currentPage--;
+    }
+    log('getAds categories of page $currentPage');
+    ads = [...ads, ...responseAds.ads];
+    isLoading = false;
+    notifyListeners();
+  }
+  ///Para limpiar los anuncios
+  cleanAds() {
+    ads = [];
     notifyListeners();
   }
 }
