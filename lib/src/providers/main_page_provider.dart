@@ -55,6 +55,7 @@ class MainPageProvider extends ListAdProvider {
   }
   ///Metodo para obtener los anuncios inicialmente
   getAds() async {
+    currentPage = 1;
     // Si esta cargando no entre aca
     if (isLoading) {return;}
     // Cargo los anuncios
