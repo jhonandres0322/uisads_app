@@ -6,7 +6,7 @@ import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class HttpHandler {
-  final String _baseUrl = Env.getEndpoint('dev');
+  final String _baseUrl = Env.getEndpoint('prod');
   final String _token = Preferences.token.isNotEmpty ? Preferences.token : '' ;
 
 
