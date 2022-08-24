@@ -217,10 +217,10 @@ class _BottomSheet extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // InputCustom(labelText: 'Por Relevancia', input: dropdownRelevancia),
-          // InputCustom(
-          //     labelText: 'Por Fecha de Publicacion', input: dropdownFecha),
-          // InputCustom(labelText: 'Por Categoria', input: dropdownCategoria),
+          InputCustomDropdown(labelText: 'Por Relevancia', input: dropdownRelevancia),
+          InputCustomDropdown(
+              labelText: 'Por Fecha de Publicacion', input: dropdownFecha),
+          InputCustomDropdown(labelText: 'Por Categoria', input: dropdownCategoria),
           const SizedBox(
             height: 25,
           ),
@@ -255,7 +255,6 @@ class _ButtonFilter extends StatelessWidget {
       width: size.width * 0.80,
       child: ElevatedButton(
           onPressed: () {
-            
             Navigator.of(context).pop();
           },
           child: const Text('Añadir Filtros',

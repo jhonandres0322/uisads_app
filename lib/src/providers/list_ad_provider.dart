@@ -24,7 +24,7 @@ abstract class ListAdProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   set isLoading( bool value ) {
     _isLoading = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   int get page => _page;
