@@ -44,43 +44,32 @@ class HistoryAdPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Widget de favoritos
-              _HistoryBar(text: 'Hoy',),
-              _AnuncioCardHistory(),
-              Divider(
-                color: AppColors.mainThirdContrast,
-                thickness: 1,
-                height: 1,
-              ),
-              _AnuncioCardHistory(),
-              Divider(
-                color: AppColors.mainThirdContrast,
-                thickness: 1,
-                height: 1,
-              ),
-              _AnuncioCardHistory(),
-              Divider(
-                color: AppColors.mainThirdContrast,
-                thickness: 1,
-                height: 1,
-              ),
-              _AnuncioCardHistory(),
-              // _HistoryBar(text: 'Agosto',),
-              // _HistoryBar(text: 'Septiembre',),
-              // _HistoryBar(text: 'Noviembre',),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
+        child: ListView.separated(
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _HistoryBar(text: 'Hoy',),
+                  _AnuncioCardHistory()
+                ],
+              );
+            }
+            return _AnuncioCardHistory();
+            
+          }, 
+          separatorBuilder: (context, index) => const Divider(
+            color: AppColors.mainThirdContrast,
+            thickness: 1,
+            height: 1,
           ),
-      )),
+          itemCount: 10
+        )
+      ),
     );
   }
 }
+
 
 //Widget que contiene el Texto de la barra del Historial
 class _HistoryBar extends StatelessWidget {
