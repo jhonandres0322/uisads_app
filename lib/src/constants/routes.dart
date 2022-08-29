@@ -22,6 +22,7 @@ class RoutesApp {
     'edit-ad': (BuildContext context ) => const EditAdPage(),
     'favorites-ad': (BuildContext context ) => const FavoritesAdPage(),
     'history-ad': (BuildContext context ) =>  const HistoryAdPage(),
+    'interest': (BuildContext context ) => const InterestPage(),
   };
 
 }

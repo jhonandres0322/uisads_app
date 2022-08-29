@@ -14,6 +14,7 @@ class InputCustom extends StatelessWidget {
   final String hintText;
   final TextInputType keyboardType;
   final String initialValue;
+  final double paddingPorcentage;
 
   const InputCustom({
     Key? key,
@@ -24,7 +25,8 @@ class InputCustom extends StatelessWidget {
     required this.iconData,
     required this.hintText,
     this.keyboardType = TextInputType.text,
-    this.initialValue = ''
+    this.initialValue = '', 
+    this.paddingPorcentage = 0.1
   }) : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class InputCustom extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.1,
+        horizontal: size.width * paddingPorcentage,
       ),
       child: Column(
         children: [
