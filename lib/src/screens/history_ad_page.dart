@@ -51,11 +51,23 @@ class HistoryAdPage extends StatelessWidget {
               // Widget de favoritos
               _HistoryBar(text: 'Hoy',),
               _AnuncioCardHistory(),
-              Divider(),
+              Divider(
+                color: AppColors.mainThirdContrast,
+                thickness: 1,
+                height: 1,
+              ),
               _AnuncioCardHistory(),
-              Divider(),
+              Divider(
+                color: AppColors.mainThirdContrast,
+                thickness: 1,
+                height: 1,
+              ),
               _AnuncioCardHistory(),
-              Divider(),
+              Divider(
+                color: AppColors.mainThirdContrast,
+                thickness: 1,
+                height: 1,
+              ),
               _AnuncioCardHistory(),
               // _HistoryBar(text: 'Agosto',),
               // _HistoryBar(text: 'Septiembre',),
