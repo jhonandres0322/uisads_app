@@ -17,14 +17,17 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Llamado al provider
-    final BottomNavigationBarProvider navegacionProvider = Provider.of<BottomNavigationBarProvider>(context, listen: false );
-    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context );
+    final BottomNavigationBarProvider navegacionProvider =
+        Provider.of<BottomNavigationBarProvider>(context, listen: false);
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context);
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      unselectedItemColor: AppColors.titles.withOpacity(0.35),
+      unselectedItemColor: AppColors.mainThirdContrast.withOpacity(0.65),
       backgroundColor: AppColors.primary,
       showUnselectedLabels: true,
       showSelectedLabels: true,
+      selectedItemColor: AppColors.mainThirdContrast,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -32,56 +35,98 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
           backgroundColor: AppColors.primary,
         ),
         BottomNavigationBarItem(
-          icon: Icon(CustomUisIcons.search_left),
+          icon: Icon(
+            CustomUisIcons.search_left,
+          ),
           label: 'Buscar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(CustomUisIcons.add_circle),
-          label: 'Publicar',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Perfil',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite_border),
+          label: 'Favoritos',
+        ),
       ],
       currentIndex: navegacionProvider.currentPage,
-      selectedItemColor: AppColors.titles,
       onTap: (int index) {
         navegacionProvider.currentPage = index;
         final String? nameRoute = ModalRoute.of(context)?.settings.name;
         categoryProvider.categorySelect = '';
-        switch (index) {
-          case 0:
-            if ( nameRoute != 'main' ) {
-              Navigator.pushNamed(context, 'main');
-            }
-            break;
-          case 1:
-            if ( nameRoute != 'search' ) {
-              showSearch(
-                context: context, 
-                delegate: SearchDelegateUis()
-              );
-            }
-            break;  
-          case 2:
-            if ( nameRoute != 'create-ad' ) {
-              Navigator.pushNamed(context, 'create-ad');
-            }
-            break;
-          case 3:
-            if ( nameRoute != 'profile' ) {
-              UtilsNavigator.navigatorProfile(context, Preferences.uid );
-              Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false ,arguments: {
-                'type': 'user'
-              });
-            }
-          break;  
-          default:
-        }
+        //TODO: Descomentar para usarlo en la navegacion actual de la aplicacion
+        // switch (index) {
+        //   case 0:
+        //     if ( nameRoute != 'main' ) {
+        //       Navigator.pushNamed(context, 'main');
+        //     }
+        //     break;
+        //   case 1:
+        //     if ( nameRoute != 'search' ) {
+        //       showSearch(
+        //         context: context,
+        //         delegate: SearchDelegateUis()
+        //       );
+        //     }
+        //     break;
+        //   case 2:
+        //     if ( nameRoute != 'create-ad' ) {
+        //       Navigator.pushNamed(context, 'create-ad');
+        //     }
+        //     break;
+        //   case 3:
+        //     if ( nameRoute != 'profile' ) {
+        //       UtilsNavigator.navigatorProfile(context, Preferences.uid );
+        //       Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false ,arguments: {
+        //         'type': 'user'
+        //       });
+        //     }
+        //   break;
+        //   default:
+        // }
       },
     );
+    // return BottomAppBar(
+    //   //bottom navigation bar on scaffold
+    //   color: AppColors.primary,
+    //   shape: CircularNotchedRectangle(), //shape of notch
+    //   notchMargin: 5, //notche margin between floating button and bottom appbar
+    //   child: Row(
+    //     //children inside bottom appbar
+    //     mainAxisSize: MainAxisSize.max,
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: <Widget>[
+    //       IconButton(
+    //         icon: Icon(
+    //           Icons.home,
+    //           color: Colors.white,
+    //         ),
+    //         tooltip: 'Inicio',
+    //         onPressed: () {},
+    //       ),
+    //       IconButton(
+    //         icon: Icon(
+    //           CustomUisIcons.search_left,
+    //           color: Colors.white,
+    //         ),
+    //         onPressed: () {},
+    //       ),
+    //       IconButton(
+    //         icon: Icon(
+    //           Icons.person,
+    //           color: Colors.white,
+    //         ),
+    //         onPressed: () {},
+    //       ),
+    //       IconButton(
+    //         icon: Icon(
+    //           Icons.favorite_border,
+    //           color: Colors.white,
+    //         ),
+    //         onPressed: () {},
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }
-
-

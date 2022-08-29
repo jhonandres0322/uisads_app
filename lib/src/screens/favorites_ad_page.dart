@@ -77,6 +77,15 @@ class FavoritesAdPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        onPressed: () {},
+        child: const Icon(
+          CustomUisIcons.megaphone,
+          color: AppColors.mainThirdContrast,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked ,
     );
   }
 }

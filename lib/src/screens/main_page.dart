@@ -69,7 +69,8 @@ class MainPage extends StatelessWidget {
           CustomUisIcons.megaphone,
           color: AppColors.logoSchoolPrimary,
         ),
-      )
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked ,
     );
   }
 }
