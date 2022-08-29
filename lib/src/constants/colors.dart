@@ -25,4 +25,6 @@ class AppColors {
   static const Color logoSchoolOpaque = Color(0xFF171738);
   static const Color accept = Color(0xFF4EC910);
   static const Color reject = Color(0xFFDD3A35);
+  static const Color selectedFavorite = Color(0xFFEB5757);
+  static const Color backgroundBar = Color(0xFFD9D9D9);
 }

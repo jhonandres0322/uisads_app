@@ -12,3 +12,4 @@ export 'package:uisads_app/src/screens/recovery_password_code.dart';
 export 'package:uisads_app/src/screens/recovery_password.dart';
 export 'package:uisads_app/src/screens/register_page.dart';
 export 'package:uisads_app/src/screens/search_page.dart';
+export 'package:uisads_app/src/screens/favorites_ad_page.dart';

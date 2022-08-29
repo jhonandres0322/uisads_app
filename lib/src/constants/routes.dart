@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:uisads_app/src/constants/import_screens.dart';
 
+
 class RoutesApp {
 
   static Map< String, WidgetBuilder> routes = {
@@ -18,7 +19,8 @@ class RoutesApp {
     'edit-profile': (BuildContext context ) => const EditProfilePage(),
     'new-password' :(BuildContext context) => const NewPasswordPage(), 
     'search' : (BuildContext context) => const SearchPage(),
-    'edit-ad': (BuildContext context ) => const EditAdPage()
+    'edit-ad': (BuildContext context ) => const EditAdPage(),
+    'favorites-ad': (BuildContext context ) => const FavoritesAdPage(),
   };
 
 }
