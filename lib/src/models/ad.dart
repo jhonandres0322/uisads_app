@@ -1,63 +1,96 @@
 // To parse this JSON data, do
 //
-//     final ad = adFromJson(jsonString);
+//     final ad = adFromMap(jsonString);
 
 import 'dart:convert';
 
-import 'package:uisads_app/src/models/category.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
 
-Ad adFromJson(String str) => Ad.fromJson(json.decode(str));
+Ad adFromMap(String str) => Ad.fromMap(json.decode(str));
 
-String adToJson(Ad data) => json.encode(data.toJson());
+String adToMap(Ad data) => json.encode(data.toMap());
 
 class Ad {
-  Ad({
-    required this.title,
-    required this.description,
-    required this.publisher,
-    required this.images,
-    required this.postDate,
-    required this.category,
-    required this.state,
-    required this.rating,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    Ad({
+        required this.id,
+        required this.title,
+        required this.description,
+        required this.publisher,
+        required this.images,
+        required this.mainPage,
+        required this.category,
+        required this.state,
+        required this.visible,
+        required this.positvePoints,
+        required this.negativePoints,
+        required this.rating,
+        required this.createdAt,
+        required this.updatedAt,
+    });
 
-  String title;
-  String description;
-  dynamic publisher;
-  List<dynamic> images;
-  DateTime postDate;
-  dynamic category;
-  bool state;
-  dynamic rating;
-  DateTime createdAt;
-  DateTime updatedAt;
+    String id;
+    String title;
+    String description;
+    String publisher;
+    List<Upload> images;
+    Upload mainPage;
+    String category;
+    bool state;
+    bool visible;
+    int positvePoints;
+    int negativePoints;
+    int rating;
+    String createdAt;
+    String updatedAt;
 
-  factory Ad.fromJson(Map<String, dynamic> json) => Ad(
-        title: json["title"],
-        description: json["description"],
-        publisher: json["publisher"],
-        images: List<String>.from(json["images"].map((x) => x)),
-        postDate: DateTime.parse(json["post_date"]),
-        category: json["category"],
-        state: json["state"],
-        rating: json["rating"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
+    factory Ad.fromMap(Map<String, dynamic> json) => Ad(
+        id: json["_id"] ?? '',
+        title: json["title"] ?? '',
+        description: json["description"] ?? '',
+        publisher: json["publisher"] ?? '',
+        images: json['images'] ?? [],
+        mainPage: Upload.fromMap( json['main_page'] ?? {} ) ,
+        category: json["category"] ?? '',
+        state: json["state"] ?? true,
+        visible: json["visible"] ?? true,
+        positvePoints: json["positive_points"] ?? 0,
+        negativePoints: json["negative_points"] ?? 0,
+        rating: json["rating"] ?? 0,
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
+    );
 
-  Map<String, dynamic> toJson() => {
+    factory Ad.fromMapper(Map<String, dynamic> json) => Ad(
+        id: json["_id"] ?? '',
+        title: json["title"] ?? '',
+        description: json["description"] ?? '',
+        publisher: json["publisher"] ?? '',
+        images: uploadsFromMap(json['images']) ,
+        mainPage: Upload.fromMap( json['main_page'] ?? {} ) ,
+        category: json["category"] ?? '',
+        state: json["state"] ?? true,
+        visible: json["visible"] ?? true,
+        positvePoints: json["positvePoints"] ?? 0,
+        negativePoints: json["negativePoints"] ?? 0,
+        rating: json["rating"] ?? 0,
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
+    );
+
+    Map<String, dynamic> toMap() => {
+        "_id": id,
         "title": title,
         "description": description,
         "publisher": publisher,
-        "images": List<dynamic>.from(images.map((x) => x)),
-        "post_date": postDate.toIso8601String(),
+        "images":   json.encode( images.map((e) => e.toMap() ).toList() ) ,
+        "main_page": json.encode( mainPage.toMap() ),
         "category": category,
-        "state": state,
-        "rating": rating,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+        "state": state.toString(),
+        "visible": visible.toString(),
+        "positvePoints": positvePoints.toString(),
+        "negativePoints": negativePoints.toString(),
+        "rating": rating.toString(),
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
+    };
 }

@@ -1,38 +1,78 @@
 import 'package:flutter/material.dart';
 
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_widgets.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      // ignore: avoid_unnecessary_containers
-      body: Container(
-        margin: EdgeInsets.only(top: size.height * 0.1),
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            createLogo(size), 
-            createButtonLogin(size), 
-            createButtonRegister(size)
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(top: size.height * 0.05),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              LogoApp(height: size.height * 0.45,),
+              SizedBox(
+                height: size.height * 0.07,
+              ),
+              _ButtonLoginHome(size:size),
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              _ButtonRegisterHome(size: size ,)
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget createLogo(Size size) {
-    return Image(
-      image: const AssetImage('assets/images/logo_app.png'),
-      height: size.height * 0.5,
+}
+
+/// Widget con boton secundario a la pagina de registrro
+class _ButtonRegisterHome extends StatelessWidget {
+  const _ButtonRegisterHome({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+  final Size size;
+  @override
+  Widget build(BuildContext context) {
+    return ButtonCustom(
+      height: size.height * 0.065, 
+      width: size.width * 0.75, 
+      onPressed: () => Navigator.pushNamed(context, 'register'), 
+      text: 'Registrarse', 
+      colorText: AppColors.primary, 
+      colorButton: AppColors.mainThirdContrast, 
+      colorBorder: AppColors.subtitles
     );
   }
+}
 
-  Widget createButtonLogin(Size size) {
-    return ElevatedButton(onPressed: () {}, child: const Text('Iniciar Sesión'));
-  }
+/// Widget que contiene el boton de login en el home
+class _ButtonLoginHome extends StatelessWidget {
+  const _ButtonLoginHome({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+  
+  final Size size;
 
-  Widget createButtonRegister(Size size) {
-    return ElevatedButton(onPressed: () {}, child: const Text('Registrarse'));
+  @override
+  Widget build(BuildContext context) {
+    return ButtonCustom(
+      height: size.height * 0.065,
+      width: size.width * 0.75,
+      onPressed: () =>  Navigator.pushNamed(context, 'login'),
+      text: 'Iniciar Sesión',
+      colorText: Colors.white,
+      colorButton: AppColors.primary,
+      colorBorder: AppColors.primary
+    );
   }
 }

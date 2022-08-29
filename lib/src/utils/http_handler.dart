@@ -1,68 +1,112 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:uisads_app/src/constants/env.dart';
 
-// ignore: todo
-// TODO: Cambiar por el token de preferences shared
-String token = 'este es el token';
+import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class HttpHandler {
-  // ignore: non_constant_identifier_names
-  String BASE_URL = Env().getEndpoint();
-  Map<String, String> headers = {'Content-type': 'application/json'};
+  final String _baseUrl = Env.getEndpoint('prod');
+  final String _token = Preferences.token.isNotEmpty ? Preferences.token : '' ;
 
-  Map<String, String> addTokenHeader(
-      String token, Map<String, String> headers) {
-    if (token.isNotEmpty) {
-      Map<String, String> accessToken = {'access-token': token};
-      headers.addAll(accessToken);
-      return headers;
+
+  final Map<String, String> _headers = {
+    'Content-type': 'application/x-www-form-urlencoded',
+    'Accept': 'application/json',
+    'charset': 'utf-8'
+  };
+
+  String _getEndpoint(String endpoint) => _baseUrl + endpoint;
+
+  Map<String, String> _getHeaders() {
+    if (_token.isNotEmpty) {
+      Map<String, String> accessToken = {'access-token': _token};
+      _headers.addAll(accessToken);
+      return _headers;
     }
-    return headers;
+    return _headers;
   }
 
-  Future<dynamic> getGet(String endpoint) async {
-    Map<String, String> getHeaders = addTokenHeader(token, headers);
-    final resp =
-        await http.get(Uri.parse('$BASE_URL$endpoint'), headers: getHeaders);
+  // ignore: unused_element
+  Future<Map<String, dynamic>> getGet(String endpoint) async {
+    Map<String, String> getHeaders = _getHeaders();
+    String url = _getEndpoint(endpoint);
+    final resp = await http.get(Uri.parse(url), headers: getHeaders);
+    
+    Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
-    if ( statusCode < 200 || statusCode > 399 ) {
-      throw Exception(statusCode);
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
   }
 
-  Future<dynamic> getPost(String endpoint, Map<String, dynamic> request) async {
-    Map<String, String> postHeaders = addTokenHeader(token, headers);
-    final resp = await http.post(Uri.parse('$BASE_URL$endpoint'),
-        headers: postHeaders, body: request);
+
+  // ignore: unused_element
+  Future<Map<String, dynamic>> getPost( String endpoint, Map<String, dynamic> request) async {
+    Map<String, String> getHeaders = _getHeaders();
+    String url = _getEndpoint(endpoint);
+    final resp = await http.post(Uri.parse(url), headers: getHeaders, body: request);
+    Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
-    if (statusCode < 200 || statusCode > 399) {
-      throw Exception(statusCode);
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
   }
 
-  Future<dynamic> getPut(String endpoint, Map<String, dynamic> request) async {
-    Map<String, String> putHeaders = addTokenHeader(token, headers);
-    final resp = await http.put(Uri.parse('$BASE_URL$endpoint'),
-        headers: putHeaders, body: request);
+  // ignore: unused_element
+  Future<Map<String, dynamic>> getPut( String endpoint, Map<String, dynamic> request) async {
+    Map<String, String> getHeaders = _getHeaders();
+    String url = _getEndpoint(endpoint);
+    final resp = await http.put(Uri.parse(url), headers: getHeaders, body: request);
+    Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
-    if (statusCode < 200 || statusCode > 399) {
-      throw Exception(statusCode);
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
   }
 
-  Future<dynamic> getDelete(String endpoint) async {
-    Map<String, String> deleteHeaders = addTokenHeader(token, headers);
-    final resp = await http.delete(Uri.parse('$BASE_URL$endpoint'),
-        headers: deleteHeaders);
+  // ignore: unused_element
+  Future<Map<String, dynamic>> getDelete(String endpoint) async {
+    Map<String, String> getHeaders = _getHeaders();
+    String url = _getEndpoint(endpoint);
+    final resp = await http.delete(Uri.parse(url), headers: getHeaders);
+    Map<String, dynamic> jsonDecode = json.decode(resp.body);
     int statusCode = resp.statusCode;
-    if (statusCode < 200 || statusCode > 399) {
-      throw Exception(statusCode);
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
     }
-    return json.decode(resp.body);
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
+  }
+
+  Map<String, dynamic> errorHandler(
+    Map<String, dynamic> response, int statusCode) {
+    if (statusCode > 399) {
+      Map<String, dynamic> msgMap = {};
+      if( response['errors'] is List ) {
+        List errors = response['errors'];
+        String msg = '';
+        for (var i = 0; i < errors.length; i++) {
+          msg += errors[i]['msg'] + "\n";
+        }
+        msgMap.addAll({"msg": msg, "error": true});
+        return msgMap;
+      } else {
+        msgMap.addAll({"msg" : response['msg'], "error": true } );
+        return msgMap;
+      }
+
+    }
+    return {};
   }
 }

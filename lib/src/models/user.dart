@@ -1,65 +1,61 @@
 // To parse this JSON data, do
 //
-//     final user = userFromJson(jsonString);
+//     final user = userFromMap(jsonString);
 
 import 'dart:convert';
 
-User userFromJson(String str) => User.fromJson(json.decode(str));
+User userFromMap(String str) => User.fromMap(json.decode(str));
 
-String userToJson(User data) => json.encode(data.toJson());
+String userToMap(User data) => json.encode(data.toMap());
 
 class User {
-  User({
-    required this.email,
-    required this.password,
-    required this.state,
-    required this.retry,
-    required this.blocked,
-    required this.firstEntry,
-    required this.lastEntry,
-    required this.available,
-    required this.otp,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    User({
+        required this.state,
+        required this.retry,
+        required this.blocked,
+        required this.firstEntry,
+        required this.email,
+        required this.createdAt,
+        required this.updatedAt,
+        required this.available,
+        required this.lastEntry,
+        required this.uid,
+    });
 
-  String email;
-  String password;
-  bool state;
-  int retry;
-  bool blocked;
-  DateTime firstEntry;
-  DateTime lastEntry;
-  bool available;
-  String otp;
-  DateTime createdAt;
-  DateTime updatedAt;
+    bool state;
+    int retry;
+    bool blocked;
+    String firstEntry;
+    String email;
+    String createdAt;
+    String updatedAt;
+    bool available;
+    String lastEntry;
+    String uid;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        email: json["email"],
-        password: json["password"],
-        state: json["state"],
-        retry: json["retry"],
-        blocked: json["blocked"],
-        firstEntry: DateTime.parse(json["firstEntry"]),
-        lastEntry: DateTime.parse(json["lastEntry"]),
-        available: json["available"],
-        otp: json["otp"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
+    factory User.fromMap(Map<String, dynamic> json) => User(
+        state: json["state"] ?? true,
+        retry: json["retry"] ?? 0,
+        blocked: json["blocked"] ?? false,
+        firstEntry: json["firstEntry"] ?? '',
+        email: json["email"] ?? '',
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
+        available: json["available"] ?? true,
+        lastEntry: json["lastEntry"] ?? '',
+        uid: json["uid"] ?? '',
+    );
 
-  Map<String, dynamic> toJson() => {
-        "email": email,
-        "password": password,
+    Map<String, dynamic> toMap() => {
         "state": state,
         "retry": retry,
         "blocked": blocked,
-        "firstEntry": firstEntry.toIso8601String(),
-        "lastEntry": lastEntry.toIso8601String(),
+        "firstEntry": firstEntry,
+        "email": email,
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
         "available": available,
-        "otp": otp,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+        "lastEntry": lastEntry,
+        "uid": uid,
+    };
 }

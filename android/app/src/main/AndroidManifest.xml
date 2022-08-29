@@ -1,8 +1,39 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.uisads_app">
+    <uses-permission android:name="android.permission.INTERNET"/>
+<!-- Provide required visibility configuration for API level 30 and above -->
+<queries>
+<!-- If your app checks for SMS support -->
+<intent>
+    <action android:name="android.intent.action.SENDTO" />
+    <data android:scheme="smsto" />
+</intent>
+<!-- If your app checks for call support -->
+<intent>
+    <action android:name="android.intent.action.DIAL" />
+    <data android:scheme="tel" />
+</intent>
+<!-- Si se ejecuta una direccion http -->
+<intent>
+    <action android:name="android.intent.action.VIEW" />
+    <data android:scheme="http" />
+</intent>
+<!-- Si se ejecuta una accion de envio por defecto -->
+<intent>
+    <action android:name="android.intent.action.SEND" />
+    <data android:scheme="*/*" />
+</intent>
+<!--  Si la aplicacion abre algun navegador predeterminado-->
+<intent>
+  <action android:name="android.intent.action.VIEW" />
+  <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+  <data android:scheme="https" />
+</intent>
+</queries>
    <application
         android:label="uisads_app"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

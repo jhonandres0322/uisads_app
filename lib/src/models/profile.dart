@@ -1,61 +1,67 @@
 // To parse this JSON data, do
 //
-//     final profile = profileFromJson(jsonString);
+//     final profile = profileFromMap(jsonString);
 
 import 'dart:convert';
 
-Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
+import 'package:uisads_app/src/constants/import_models.dart';
 
-String profileToJson(Profile data) => json.encode(data.toJson());
+Profile profileFromMap(String str) => Profile.fromMap(json.decode(str));
+
+String profileToMap(Profile data) => json.encode(data.toMap());
 
 class Profile {
-  Profile({
-    required this.name,
-    required this.cellphone,
-    required this.city,
-    required this.image,
-    required this.state,
-    required this.description,
-    required this.user,
-    required this.rating,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    Profile({
+        required this.name,
+        required this.cellphone,
+        required this.email,
+        required this.state,
+        required this.score,
+        required this.city,
+        required this.image,
+        required this.createdAt,
+        required this.updatedAt,
+        required this.description,
+        required this.uid,
+    });
 
-  String name;
-  String cellphone;
-  String city;
-  dynamic image;
-  bool state;
-  String description;
-  dynamic user;
-  dynamic rating;
-  DateTime createdAt;
-  DateTime updatedAt;
+    String name;
+    String cellphone;
+    String email;
+    bool state;
+    int score;
+    String city;
+    Upload image;
+    String createdAt;
+    String updatedAt;
+    String description;
+    String uid;
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        name: json["name"],
-        cellphone: json["cellphone"],
-        city: json["city"],
-        image: json["image"],
-        state: json["state"],
-        description: json["description"],
-        user: json["user"],
-        rating: json["rating"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
+    factory Profile.fromMap(Map<String, dynamic> json) => Profile(
+        name: json["name"] ?? '',
+        cellphone: json["cellphone"] ?? '',
+        email: json["email"] ?? '',
+        state: json["state"] ?? true,
+        score: json["score"] ?? 0,
+        city: json["city"] ?? '',
+        image: Upload.fromMap( json["image"] ?? {}),
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
+        description: json["description"] ?? '',
+        uid: json["uid"] ?? '',
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "name": name,
         "cellphone": cellphone,
+        "email": email,
+        "state": state.toString(),
+        "score": score.toString(),
         "city": city,
-        "image": image,
-        "state": state,
+        "image":  json.encode( image.toMap() ),
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
         "description": description,
-        "user": user,
-        "rating": rating,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+        "uid": uid,
+    };
 }

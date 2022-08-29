@@ -1,13 +1,13 @@
 class Env {
-  String type = 'development';
-  String endpointDev = 'http://localhost:5000/api';
-  String endpointPrd = '';
 
-  String getEndpoint() {
-    if (type.contains('development')) {
-      return endpointDev;
+  static const String _endpointDev = 'http://192.168.1.11:5000/api';  
+  static const String _endpointPrd = 'https://uisads.herokuapp.com/api';
+
+  static String getEndpoint(String type) {
+    if (type == 'dev') {
+      return _endpointDev;
     } else {
-      return endpointPrd;
+      return _endpointPrd;
     }
   }
 }

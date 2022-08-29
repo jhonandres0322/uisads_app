@@ -1,54 +1,72 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/route_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:uisads_app/src/constants/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+
 import 'package:uisads_app/src/constants/routes.dart';
+import 'package:uisads_app/src/constants/themes.dart';
+
 import 'package:uisads_app/src/utils/screen_size.dart';
 
-void main() => runApp(const App());
+void main() => runApp(const AppState());
+
+class AppState extends StatelessWidget {
+  const AppState({Key? key}) : super(key: key);
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => BottomNavigationBarProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => RegisterFormProvider()),
+        ChangeNotifierProvider(create: (_) => EditProfileProvider()),
+        ChangeNotifierProvider(create: (_) => CreateAdProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => LoginFormProvider()),
+        ChangeNotifierProvider(create: (_) => MainPageProvider()),
+        ChangeNotifierProvider(create: (_) => AdPageProvider()),
+        ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
+        ChangeNotifierProvider(create: (_) => SearchAdsProvider()),
+        ChangeNotifierProvider(create: (_) => DeleteAdProvider()),
+        ChangeNotifierProvider(create: (_) => EditAdProvider()),
+      ],
+      child: const App(),
+    );
+  }
+}
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    log("Generando la aplicación");
     return LayoutBuilder(builder: ((context, constraints) {
       return OrientationBuilder(builder: (context, orientation) {
         ScreenSize().init(constraints, orientation);
         return ScreenUtilInit(
           designSize: const Size(360, 780),
           builder: () {
-            return GetMaterialApp(
+            return MaterialApp(
               debugShowCheckedModeBanner: false,
-              routes: appRoutes,
-              initialRoute: 'home',
-              theme: ThemeData(
-                scaffoldBackgroundColor: AppColors.mainThirdContrast,
-                textTheme: GoogleFonts.robotoTextTheme(),
-                // ignore: prefer_const_constructors
-                appBarTheme: AppBarTheme(
-                  color: AppColors.primary,
-                  elevation: 1,
-                  // ignore: prefer_const_constructors
-                  iconTheme: IconThemeData(
-                    color: AppColors.logoSchoolOpaque,
-                    
-                  )
-                )
-              ),
+              routes: RoutesApp.routes,
+              initialRoute: 'home', //home por defecto
+              theme: AppTheme.themePrimary,
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate
               ],
-              navigatorKey: Get.key,
               supportedLocales: const [Locale('es', 'ES'), Locale('en', 'EN')],
               builder: (context, widget) {
-                ErrorWidget.builder = (FlutterErrorDetails errorDetails){
-                  Widget error = Text("... Renderizando error....: ${errorDetails.summary}" );
-                  if (widget is Scaffold || widget is Navigator){
+                ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+                  Widget error = Text(
+                      "... Renderizando error....: ${errorDetails.summary}");
+                  if (widget is Scaffold || widget is Navigator) {
                     error = Scaffold(body: Center(child: error));
                   }
                   return error;
