@@ -1,75 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:uisads_app/src/constants/colors.dart';
 
+/// Widget Personalizado para el AlertDialog usado en la aplicacion de UISADS
 class CustomAlertDialog extends StatelessWidget {
   final Color bgColor;
   final String title;
-  final String message;
+  final Color? titleColor;
   final String? positiveBtnText;
+  final Color? positiveBtnColor;
   final String? negativeBtnText;
+  final Color? negativeBtnColor;
   final Function? onPostivePressed;
   final Function? onNegativePressed;
   final double circularBorderRadius;
+  final IconData? icon;
+  final Color? iconColor;
 
   CustomAlertDialog({
     required this.title,
-    required this.message,
-    this.circularBorderRadius = 15.0,
+    this.titleColor = Colors.black,
+    this.circularBorderRadius = 5.0,
     this.bgColor = Colors.white,
-    this.positiveBtnText,
-    this.negativeBtnText,
+    this.positiveBtnText = 'Aceptar',
+    this.negativeBtnText = 'Cancelar',
     this.onPostivePressed,
-    this.onNegativePressed,
+    this.onNegativePressed, 
+    this.icon, 
+    this.iconColor, 
+    this.positiveBtnColor = Colors.blue, 
+    this.negativeBtnColor = Colors.white
   })  : assert(bgColor != null),
         assert(circularBorderRadius != null);
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return AlertDialog(
-      title: title != null ? Text(title) : null,
-      content: message != null ? Text(message) : null,
-      backgroundColor: bgColor,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(circularBorderRadius)),
+        borderRadius: BorderRadius.circular(circularBorderRadius)
+      ),
+      backgroundColor: bgColor,
+      title: Center(
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontFamily: GoogleFonts.robotoSlab().fontFamily,
+              fontWeight: FontWeight.w600,
+              color: titleColor),
+        ),
+      ),
+      actionsAlignment: MainAxisAlignment.spaceAround,
       actions: [
         negativeBtnText != null
-            ? TextButton(
+            ? ElevatedButton(
                 child: Text(negativeBtnText!),
-                // textColor: Theme.of(context).colorScheme.secondary,
                 onPressed: () {
-                  Navigator.of(context).pop();
                   if (onNegativePressed != null) {
                     onNegativePressed!();
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                    primary: AppColors.mainThirdContrast,
+                    side: BorderSide(color: AppColors.subtitles),
+                    onPrimary: AppColors.subtitles,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    textStyle: TextStyle(fontWeight: FontWeight.w400)),
               )
             : Container(),
         positiveBtnText != null
-            ? TextButton(
+            ? ElevatedButton(
                 child: Text(positiveBtnText!),
-                // style: ButtonStyle(
-                //   textStyle: MaterialStatePropertyTextStyle>(
-                //     color: Theme.of(context).colorScheme.secondary,
-                //   ),
-                // ),
                 onPressed: () {
                   if (onPostivePressed != null) {
                     onPostivePressed!();
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                    primary: AppColors.reject,
+                    // padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    textStyle: TextStyle(
+                        // fontSize: 30,
+                        fontWeight: FontWeight.bold)),
               )
             : Container(),
       ],
+      content: 
+      icon != null
+        ? Icon(
+            icon,
+            color: iconColor,
+            size: size.height * 0.08,
+          )
+        : Container(),
     );
   }
 }
-
-// Uso del AlertDialog
-// var dialog = CustomAlertDialog(
-//   title: "Logout",
-//   message: "Are you sure, do you want to logout?",
-//   onPostivePressed: () {},
-//   positiveBtnText: 'Yes',
-//   negativeBtnText: 'No');
-// showDialog(
-//   context: context,
-//   builder: (BuildContext context) => dialog);

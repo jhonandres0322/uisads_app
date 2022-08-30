@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
@@ -44,10 +46,8 @@ class CardInfoProfile extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        UtilsNavigator.navigatorProfile(context, Preferences.uid );
-        Navigator.pushNamed(context, 'profile', arguments: {
-          'type': 'user'
-        });
+        UtilsNavigator.navigatorProfile(context, Preferences.uid);
+        Navigator.pushNamed(context, 'profile', arguments: {'type': 'user'});
       },
       child: Container(
         child: Row(
@@ -129,12 +129,10 @@ class ItemDrawer extends StatelessWidget {
             SizedBox(width: size.width * 0.04),
             Text(
               data['label'],
-              style:
-                  TextStyle(
-                    color: getColorItem(currentRoute, data['route']),
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w500
-                  ),
+              style: TextStyle(
+                  color: getColorItem(currentRoute, data['route']),
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500),
             )
           ],
         ),
@@ -149,75 +147,38 @@ class ItemDrawer extends StatelessWidget {
       currentRoute == route ? AppColors.primary : AppColors.logoSchoolPrimary;
 
   void getNavigationRoute(BuildContext context, String routeName) {
-    if( routeName.isEmpty || routeName == '' ) {
+    if (routeName.isEmpty || routeName == '') {
       showAboutApp(context);
     } else {
-      if( routeName == 'login' ) {
+      if (routeName == 'login') {
         Preferences.clearInfoLogout();
       }
-      Navigator.pushNamedAndRemoveUntil( context, routeName, (Route<dynamic> route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, routeName, (Route<dynamic> route) => false);
     }
   }
 
-  void showAboutApp(BuildContext context ) {
-    final Size size = MediaQuery.of(context).size;
-    showDialog(
-      context: context, 
-      builder: ( context ) {
-        return AlertDialog(
-          // insetPadding: EdgeInsets.symmetric(
-          //   horizontal: size.height * 0.1
-          // ),
-          title: Center(
-            child: Text(
-              '¿Desea Eliminar este anuncio de su lista de anuncios?',
-              textAlign: TextAlign.center ,
-              style: TextStyle(
-                // fontSize: size.height * 0.03,
-                fontWeight: FontWeight.w500,
-                color: AppColors.titles
-              ),
-            ),
-          ),
-          actionsAlignment: MainAxisAlignment.spaceAround,
-          actions: [
-            ElevatedButton(
-              child: Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true)
-                .pop(false);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: AppColors.mainThirdContrast,
-                side: BorderSide(
-                  color: AppColors.subtitles
-                ),
-                onPrimary: AppColors.subtitles,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0)
-                ),
-                textStyle: TextStyle(
-                fontWeight: FontWeight.w400)
-              ),
-            ),
-            ElevatedButton(
-              child: Text('Eliminar'),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true)
-                .pop(true);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: AppColors.reject,
-                // padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                textStyle: TextStyle(
-                // fontSize: 30,
-                fontWeight: FontWeight.bold)
-              ),
-            ),
-          ],
-          content: Icon(CustomUisIcons.bold_problem_alert, color: Color(0xFFF2C94C), size: size.height * 0.08,),
-        );
-      }
+  void showAboutApp(BuildContext context) {
+    // Uso del AlertDialog
+    var dialog = CustomAlertDialog(
+        title: '¿Desea Eliminar este anuncio de su lista de anuncios?',
+        icon: CustomUisIcons.bold_problem_alert,
+        iconColor: Color(0xffF2C94C),
+        onPostivePressed: () {
+          Navigator.of(context, rootNavigator: true).pop(true);
+        },
+        onNegativePressed: () {
+          Navigator.of(context, rootNavigator: true).pop(false);
+        },
+        circularBorderRadius: 10,
+        positiveBtnText: 'Eliminar',
+        positiveBtnColor: AppColors.reject,
+        negativeBtnText: 'Cancelar',
+        negativeBtnColor: AppColors.mainThirdContrast,
+
     );
+    showDialog(
+        context: context,
+        builder: (context) => dialog);
   }
 }
