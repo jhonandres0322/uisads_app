@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
@@ -17,20 +18,30 @@ class MainPage extends StatelessWidget {
     final mainPageProvider = Provider.of<MainPageProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+        builder: (BuildContext context) {
+          return IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () { Scaffold.of(context).openDrawer(); },
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          );
+        },
+        ),
+        iconTheme: const IconThemeData(color: AppColors.third),
         automaticallyImplyLeading: false,
         toolbarHeight: size.height * 0.08,
         backgroundColor: Colors.white,
         actions: [
           SizedBox(
-            width: size.width * 0.05,
+            width: size.width * 0.15,
           ),
           CirclePerfilAvatar(
             width: size.width * 0.06,
             height: size.height * 0.06,
           ),
-          const Spacer(),
+          Spacer(),
           IconButton(
-            icon: const Icon(CustomUisIcons.search_right),
+            icon: Icon(CustomUisIcons.search_right), 
             onPressed: () {
               showSearch(
                 context: context, 
@@ -38,9 +49,13 @@ class MainPage extends StatelessWidget {
               );
             },
           ),
+          SizedBox(
+            width: size.width * 0.03,
+          )
         ],
       ),
       drawer: const DrawerCustom(),
+      drawerEnableOpenDragGesture: false,
       body: Builder(
         builder: (context) {
           return Column(
@@ -49,7 +64,7 @@ class MainPage extends StatelessWidget {
               SizedBox(
                   width: double.infinity,
                   // color: Colors.yellow,
-                  height: size.height * 0.15,
+                  height: size.height * 0.10,
                   child: const _ListaCategorias()
               ),
               // CardTable para los anuncios mostrados
@@ -121,7 +136,7 @@ class CirclePerfilAvatar extends StatelessWidget {
     // Obtenemos los valores de la pantalla
     return InkWell(
       onTap: () {
-        Scaffold.of(context).openDrawer();
+        // Scaffold.of(context).openDrawer();
       },
       child: SizedBox(
         height: height,
@@ -172,12 +187,22 @@ class _BarraPerfilNombre extends StatelessWidget {
             width: height + 5,
           ),
           // Texto de nombre del usuario conectado
+          Text(
+            'Hola,',
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontFamily: GoogleFonts.robotoSlab().fontFamily,
+              fontWeight: FontWeight.w600,
+              fontSize: 10,
+              color: AppColors.titles,
+            ),
+          ),
           Text(nombreUser,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.right,
-              style: const TextStyle(
+              style: TextStyle(
                   color: AppColors.titles,
-                  fontFamily: 'Roboto',
+                  fontFamily: GoogleFonts.roboto().fontFamily,
                   fontWeight: FontWeight.w400,
                   fontSize: 10)),
           const SizedBox(
