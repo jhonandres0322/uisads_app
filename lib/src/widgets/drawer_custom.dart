@@ -175,7 +175,6 @@ class ItemDrawer extends StatelessWidget {
         positiveBtnColor: AppColors.reject,
         negativeBtnText: 'Cancelar',
         negativeBtnColor: AppColors.mainThirdContrast,
-
     );
     showDialog(
         context: context,

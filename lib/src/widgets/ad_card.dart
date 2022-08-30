@@ -15,14 +15,14 @@ class AdCard extends StatelessWidget {
   final String title;
   final String id;
   final bool isManage;
-  
-  const AdCard({
-    Key? key,
-    required this.mainPage,
-    required this.title,
-    required this.id,
-    required this.isManage
-  }) : super(key: key);
+
+  const AdCard(
+      {Key? key,
+      required this.mainPage,
+      required this.title,
+      required this.id,
+      required this.isManage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,26 +31,22 @@ class AdCard extends StatelessWidget {
     return Container(
       height: widthCard,
       width: widthCard,
-      margin: EdgeInsets.all( _size.height * 0.005 ),
+      margin: EdgeInsets.all(_size.height * 0.005),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular( 5 ),
-        // color: Colors.red,
-        border: Border.all(
-          color: Colors.black54,
-          width: 2
-        )
-      ),
+          borderRadius: BorderRadius.circular(5),
+          // color: Colors.red,
+          border: Border.all(color: Colors.black54, width: 2)),
       child: Column(
         children: [
           SizedBox(
             height: widthCard * 0.8,
             width: widthCard,
             child: FutureBuilder(
-              future: HandlerImage.getImageBase64( mainPage ),
+              future: HandlerImage.getImageBase64(mainPage),
               builder: (context, AsyncSnapshot<String> snapshot) {
-                if( snapshot.hasData ) {
+                if (snapshot.hasData) {
                   return Image.file(
-                    File( snapshot.data! ),
+                    File(snapshot.data!),
                     fit: BoxFit.cover,
                   );
                 } else {
@@ -62,7 +58,8 @@ class AdCard extends StatelessWidget {
               },
             ),
           ),
-          _BottomCard(widthCard: widthCard, title: title, idAd: id, isManage: isManage)
+          _BottomCard(
+              widthCard: widthCard, title: title, idAd: id, isManage: isManage)
         ],
       ),
     );
@@ -70,13 +67,13 @@ class AdCard extends StatelessWidget {
 }
 
 class _BottomCard extends StatelessWidget {
-  const _BottomCard({
-    Key? key, 
-    required this.widthCard,
-    required this.title,
-    required this.idAd,
-    required this.isManage
-  }) : super(key: key);
+  const _BottomCard(
+      {Key? key,
+      required this.widthCard,
+      required this.title,
+      required this.idAd,
+      required this.isManage})
+      : super(key: key);
 
   final double widthCard;
   final String title;
@@ -86,71 +83,97 @@ class _BottomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    if( isManage ) {
+    if (isManage) {
+      // Widget para el AlertDialog de confirmacion
+      var dialog = CustomAlertDialog(
+        title: '¿Desea Eliminar este anuncio de su lista de anuncios?',
+        icon: CustomUisIcons.bold_problem_alert,
+        iconColor: const Color(0xffF2C94C),
+        onPostivePressed: () {
+          Navigator.of(context, rootNavigator: true).pop(true);
+        },
+        onNegativePressed: () {
+          Navigator.of(context, rootNavigator: true).pop(false);
+        },
+        circularBorderRadius: 10,
+        positiveBtnText: 'Eliminar',
+        positiveBtnColor: AppColors.reject,
+        negativeBtnText: 'Cancelar',
+        negativeBtnColor: AppColors.mainThirdContrast,
+      );
       return Flexible(
-        child: Container(
-          margin: EdgeInsets.all( _size.width * 0.02),
-          width: widthCard,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton.icon(
-                icon:  Icon( CustomUisIcons.delete, size: _size.height * 0.015 ),
+          child: Container(
+        margin: EdgeInsets.all(_size.width * 0.02),
+        width: widthCard,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton.icon(
+                icon: Icon(CustomUisIcons.delete, size: _size.height * 0.015),
                 style: ElevatedButton.styleFrom(
                   primary: AppColors.mainThirdContrast,
                   onPrimary: AppColors.reject,
                 ),
                 label: const Text(
                   'Eliminar',
-                  style: TextStyle( fontSize: 8 ),
+                  style: TextStyle(fontSize: 8),
                 ),
-                onPressed: () => confirmDeleteAd(context, idAd )
+                onPressed: () async{
+                  bool confirmacion = await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => dialog
+                  );
+                  if (confirmacion) {
+                    confirmDeleteAd(context, idAd);
+                  }
+                }),
+            SizedBox(width: _size.width * 0.05),
+            ElevatedButton.icon(
+              icon: Icon(CustomUisIcons.pencil_simple,
+                  size: _size.height * 0.015),
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.primary,
+                onPrimary: AppColors.mainThirdContrast,
               ),
-              SizedBox( width: _size.width * 0.05),
-              ElevatedButton.icon(
-                icon:  Icon( CustomUisIcons.pencil_simple, size: _size.height * 0.015 ),
-                style: ElevatedButton.styleFrom(
-                  primary: AppColors.primary,
-                  onPrimary: AppColors.mainThirdContrast,
-                ),
-                label: const Text(
-                  'Editar',
-                  style: TextStyle( fontSize: 8 ),
-                ),
-                onPressed: () async {
-                  final adProvider = Provider.of<AdPageProvider>( context, listen: false );
-                  final categoryProvider = Provider.of<CategoryProvider>( context, listen: false );
-                  await adProvider.getAd(idAd);
-                  categoryProvider.categorySelect = adProvider.ad.category;
-                  Navigator.pushNamed(context, 'edit-ad');
-                },
+              label: const Text(
+                'Editar',
+                style: TextStyle(fontSize: 8),
               ),
-            ],
-          ),
-        )
-      );
+              onPressed: () async {
+                final adProvider =
+                    Provider.of<AdPageProvider>(context, listen: false);
+                final categoryProvider =
+                    Provider.of<CategoryProvider>(context, listen: false);
+                await adProvider.getAd(idAd);
+                categoryProvider.categorySelect = adProvider.ad.category;
+                Navigator.pushNamed(context, 'edit-ad');
+              },
+            ),
+          ],
+        ),
+      ));
     } else {
       return Flexible(
-        child: SizedBox(
-          height: widthCard * 0.2,
-          width: widthCard,
-          child: Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only( left: widthCard * 0.04),
-                width: widthCard * 0.55,
-                child: Text(
-                  title,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+          child: SizedBox(
+        height: widthCard * 0.2,
+        width: widthCard,
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: widthCard * 0.04),
+              width: widthCard * 0.55,
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
                     fontSize: 10,
-                    fontWeight:  FontWeight.w500,
-                    fontFamily: 'Roboto'
-                  ),
-                ),
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Roboto'),
               ),
-              Container(
-              margin: EdgeInsets.only(top: _size.height * 0.004 ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: _size.height * 0.004),
               width: widthCard * 0.35,
               height: widthCard * 0.12,
               child: ElevatedButton(
@@ -165,46 +188,45 @@ class _BottomCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, 'ad', arguments: {
-                    'id' : idAd
-                  });
+                  Navigator.pushNamed(context, 'ad', arguments: {'id': idAd});
                 },
               ),
             ),
-            ],
-          ),
-        )
-      );
+          ],
+        ),
+      ));
     }
-
   }
-  
+
   Future<void> confirmDeleteAd(BuildContext context, String idAd) async {
     final Size _size = MediaQuery.of(context).size;
-    final deleteAdProvider = Provider.of<DeleteAdProvider>(context, listen: false);
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final deleteAdProvider =
+        Provider.of<DeleteAdProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     return showDialog(
-      context: context, 
-      builder: ( context ) {
-        return AlertDialog(
-          scrollable: true,
-          elevation: 1.0,
-          title: const Text('Eliminar anuncio'),
-          content: const Text('¿Esta seguro de eliminar este anuncio?'),
-          contentPadding: EdgeInsets.all(_size.height * 0.04),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          actions: [
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            scrollable: true,
+            elevation: 1.0,
+            title: const Text('Eliminar anuncio'),
+            content: const Text('¿Esta seguro de eliminar este anuncio?'),
+            contentPadding: EdgeInsets.all(_size.height * 0.04),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            actions: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   ElevatedButton(
                     onPressed: () async {
-                      final Response resp = await deleteAdProvider.deleteAd(idAd);
+                      final Response resp =
+                          await deleteAdProvider.deleteAd(idAd);
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        showAlertCustom(resp.message, resp.error)
-                      );
+                          showAlertCustom(resp.message, resp.error));
                       profileProvider.currentPage = 0;
                     },
                     style: ElevatedButton.styleFrom(
@@ -232,8 +254,7 @@ class _BottomCard extends StatelessWidget {
                 ],
               )
             ],
-        );
-      }
-    );
+          );
+        });
   }
 }

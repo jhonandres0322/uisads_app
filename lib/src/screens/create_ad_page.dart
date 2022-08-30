@@ -15,34 +15,65 @@ import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class CreateAdPage extends StatelessWidget {
   const CreateAdPage({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
-    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
+    // Widget para el AlertDialog de confirmacion
+    var dialog = CustomAlertDialog(
+        title: '¿Desea publicar la informacion suministrada al anuncio?',
+        icon: Icons.check_circle,
+        iconColor: AppColors.accept,
+        onPostivePressed: () {
+          Navigator.of(context, rootNavigator: true).pop(true);
+        },
+        onNegativePressed: () {
+          Navigator.of(context, rootNavigator: true).pop(false);
+        },
+        circularBorderRadius: 10,
+        positiveBtnText: 'Aceptar',
+        positiveBtnColor: AppColors.primary,
+        negativeBtnText: 'Cancelar',
+        negativeBtnColor: AppColors.mainThirdContrast,
+    );
+
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         categoryProvider.categorySelect = '';
         return true;
       },
       child: Scaffold(
-        appBar: AppBarAd(
-          onPressed: () => _createAd(context),
-          title: 'Crear Anuncio',
-          text: 'Publicar',
-        ),
-        bottomNavigationBar: const BottomNavigatonBarUisAds(),
-        body: const SingleChildScrollView(
-          child: _FormCreateAd(),
-        )),
+          appBar: AppBarAd(
+            onPressed: () async {
+              // Uso del AlertDialog
+              bool confirmacion = await showDialog(context: context, barrierDismissible: false, builder: (context) => dialog);
+              if (confirmacion) {
+                _createAd(context);
+              }
+            },
+            title: 'Crear Anuncio',
+            text: 'Publicar',
+          ),
+          bottomNavigationBar: const BottomNavigatonBarUisAds(),
+          body: const SingleChildScrollView(
+            child: _FormCreateAd(),
+          )),
     );
   }
 
+  // Para crear un anuncio
   void _createAd(BuildContext context) async {
-    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false );
-    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false );
-    final MainPageProvider mainPageProvider = Provider.of<MainPageProvider>(context, listen: false );
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    final CreateAdProvider createAdProvider =
+        Provider.of<CreateAdProvider>(context, listen: false);
+    final MainPageProvider mainPageProvider =
+        Provider.of<MainPageProvider>(context, listen: false);
     if (categoryProvider.categorySelect == '') {
-      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom("Por favor seleccione una categoria, si no encuentra la suya seleccione Variados", true));
+      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(
+          "Por favor seleccione una categoria, si no encuentra la suya seleccione Variados",
+          true));
     } else {
       createAdProvider.formKey.currentState?.save();
       createAdProvider.category = categoryProvider.categorySelect;
@@ -51,7 +82,8 @@ class CreateAdPage extends StatelessWidget {
       final response = await adService.createAd(adRequest);
       // Validar el response
       if (response.error) {
-        ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showAlertCustom(response.message, response.error));
       } else {
         // Limpiar el formulario
         createAdProvider.formKey.currentState?.reset();
@@ -62,12 +94,11 @@ class CreateAdPage extends StatelessWidget {
         mainPageProvider.isRefresh = true;
         mainPageProvider.getAdsNews();
         // Mostrar el snackbar
-        ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(response.message, response.error));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showAlertCustom(response.message, response.error));
       }
-      
     }
   }
-
 }
 
 class _FormCreateAd extends StatelessWidget {
@@ -80,30 +111,28 @@ class _FormCreateAd extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final createAdProvider = Provider.of<CreateAdProvider>(context);
     return Center(
-      child: Builder(
-        builder: (context) {
-          return Form(
-              key: createAdProvider.formKey,
-              child: Column(
-                children: [
-                  const _InputTitle(),
-                  const _InputDescription(),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  const _InputPhotos(),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  const _InputCategories(),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  const _InputVisible()
-                ],
-              ));
-        }
-      ),
+      child: Builder(builder: (context) {
+        return Form(
+            key: createAdProvider.formKey,
+            child: Column(
+              children: [
+                const _InputTitle(),
+                const _InputDescription(),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                const _InputPhotos(),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                const _InputCategories(),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                const _InputVisible()
+              ],
+            ));
+      }),
     );
   }
 }
@@ -115,9 +144,9 @@ class _InputTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final createAdProvider = Provider.of<CreateAdProvider>(context);
     return InputCustom(
-      labelText: '', 
-      onSaved: (value) => createAdProvider.title = value ?? '', 
-      iconData: Icons.abc, 
+      labelText: '',
+      onSaved: (value) => createAdProvider.title = value ?? '',
+      iconData: Icons.abc,
       hintText: 'Pon aqui el titulo',
     );
   }
@@ -182,41 +211,41 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     final double _sizeCard = _size.width * 0.17;
-    final CreateAdProvider createAdProvider = Provider.of<CreateAdProvider>(context, listen: false );
+    final CreateAdProvider createAdProvider =
+        Provider.of<CreateAdProvider>(context, listen: false);
     return InkWell(
       onTap: () async {
         if (_image == null) {
           _image = await HandlerImage.openImagePicker(
-            context: context, 
-            index:widget.index, 
-            images: createAdProvider.images 
-          );
+              context: context,
+              index: widget.index,
+              images: createAdProvider.images);
           setState(() {});
           return;
         }
         HandlerImage.showImage(
-          context: context,
-          path: _image!,
-          image: Upload(),
-          images: createAdProvider.images,
-          index: widget.index.toString(),
-          onPressedDelete: () {
-            final indexList = createAdProvider.images.indexWhere((element) => element.index == widget.index.toString());
-            createAdProvider.images.remove(createAdProvider.images[indexList]);
-            _image = null;
-            Navigator.pop(context);
-            setState(() {});
-          },
-          onPressedModify: () async {
-            _image = await HandlerImage.openImagePicker(
-              context: context,
-              images: createAdProvider.images,
-              index: widget.index
-            );
-            Navigator.pop(context);
-            setState(() {});
-          }
-        );
+            context: context,
+            path: _image!,
+            image: Upload(),
+            images: createAdProvider.images,
+            index: widget.index.toString(),
+            onPressedDelete: () {
+              final indexList = createAdProvider.images.indexWhere(
+                  (element) => element.index == widget.index.toString());
+              createAdProvider.images
+                  .remove(createAdProvider.images[indexList]);
+              _image = null;
+              Navigator.pop(context);
+              setState(() {});
+            },
+            onPressedModify: () async {
+              _image = await HandlerImage.openImagePicker(
+                  context: context,
+                  images: createAdProvider.images,
+                  index: widget.index);
+              Navigator.pop(context);
+              setState(() {});
+            });
       },
       child: Container(
         width: _sizeCard,
@@ -229,15 +258,14 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
           ),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: _image != null
-            ? Image.file( File( _image!.path ), fit: BoxFit.cover )
-            : FadeInImage(
-              placeholder: AssetImage(_pathImagePlaceholder),
-              image: AssetImage(_pathNoImage),
-              fit: BoxFit.cover,
-            )
-        ),
+            borderRadius: BorderRadius.circular(10),
+            child: _image != null
+                ? Image.file(File(_image!.path), fit: BoxFit.cover)
+                : FadeInImage(
+                    placeholder: AssetImage(_pathImagePlaceholder),
+                    image: AssetImage(_pathNoImage),
+                    fit: BoxFit.cover,
+                  )),
       ),
     );
   }

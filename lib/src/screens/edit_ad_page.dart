@@ -11,46 +11,69 @@ import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
-
-class EditAdPage extends StatefulWidget {
+class EditAdPage extends StatelessWidget {
   const EditAdPage({Key? key}) : super(key: key);
 
   @override
-  State<EditAdPage> createState() => _EditAdPageState();
-}
-
-class _EditAdPageState extends State<EditAdPage> {
-  @override
   Widget build(BuildContext context) {
+    // Widget para el AlertDialog de confirmacion
+    var dialog = CustomAlertDialog(
+      title: '¿Desea guardar los cambios realizados al anuncio?',
+      icon: CustomUisIcons.info_bold,
+      iconColor: const Color(0xff2F80ED),
+      onPostivePressed: () {
+        Navigator.of(context, rootNavigator: true).pop(true);
+      },
+      onNegativePressed: () {
+        Navigator.of(context, rootNavigator: true).pop(false);
+      },
+      circularBorderRadius: 10,
+      positiveBtnText: 'Aceptar',
+      positiveBtnColor: AppColors.primary,
+      negativeBtnText: 'Cancelar',
+      negativeBtnColor: AppColors.mainThirdContrast,
+    );
+
     return Scaffold(
       appBar: AppBarAd(
-          onPressed: () => _editAd(context),
-          title: 'Editar Anuncio',
-          text: 'Editar',
-        ),
-      body: const SingleChildScrollView( child: _FormEditAd() ),
+        onPressed: () async {
+          bool confirmacion = await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => dialog);
+          if (confirmacion) {
+            _editAd(context);
+          }
+        },
+        title: 'Editar Anuncio',
+        text: 'Editar',
+      ),
+      body: const SingleChildScrollView(child: _FormEditAd()),
     );
   }
 
-  _editAd( BuildContext context ) async {
+  _editAd(BuildContext context) async {
     final adService = AdService();
-    final categoryProvider = Provider.of<CategoryProvider>( context, listen: false );
-    final adPageProvider = Provider.of<AdPageProvider>( context, listen: false );
-    final editAdProvider = Provider.of<EditAdProvider>( context, listen: false );
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    final adPageProvider = Provider.of<AdPageProvider>(context, listen: false);
+    final editAdProvider = Provider.of<EditAdProvider>(context, listen: false);
     editAdProvider.formKey.currentState?.save();
     editAdProvider.category = categoryProvider.categorySelect;
     editAdProvider.images = adPageProvider.ad.images;
-    final Response resp = await adService.editAd( adPageProvider.ad.id, editAdProvider.handlerData() );
-    ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( resp.message, resp.error ) );
-    if( !resp.error ) {
+    final Response resp = await adService.editAd(
+        adPageProvider.ad.id, editAdProvider.handlerData());
+    ScaffoldMessenger.of(context)
+        .showSnackBar(showAlertCustom(resp.message, resp.error));
+    if (!resp.error) {
+      editAdProvider.limpiarObjetos();
       Navigator.pop(context);
     }
   }
 }
 
-
 class _FormEditAd extends StatelessWidget {
-  const _FormEditAd({ Key? key }) : super(key: key);
+  const _FormEditAd({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final adPageProvider = Provider.of<AdPageProvider>(context);
@@ -58,44 +81,43 @@ class _FormEditAd extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final editAdProvider = Provider.of<EditAdProvider>(context);
     return Form(
-      key: editAdProvider.formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox( height: size.height * 0.04 ),
-          _InputTitle( title: adEdited.title ),
-          _InputDescription( description: adEdited.description ),
-          SizedBox( height: size.height * 0.02 ),
-          _InputPhotos( images: adEdited.images),
-          SizedBox( height: size.height * 0.02 ),
-          const _InputCategories(),
-          SizedBox( height: size.height * 0.03 ),
-          _InputVisible( visible: adEdited.visible )
-        ],
-      )
-    );
+        key: editAdProvider.formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: size.height * 0.04),
+            _InputTitle(title: adEdited.title),
+            _InputDescription(description: adEdited.description),
+            SizedBox(height: size.height * 0.02),
+            _InputPhotos(images: adEdited.images),
+            SizedBox(height: size.height * 0.02),
+            const _InputCategories(),
+            SizedBox(height: size.height * 0.03),
+            _InputVisible(visible: adEdited.visible)
+          ],
+        ));
   }
 }
 
-
 class _InputTitle extends StatelessWidget {
-  const _InputTitle({Key? key, required this.title }) : super(key: key);
+  const _InputTitle({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
   Widget build(BuildContext context) {
     final editAdProvider = Provider.of<EditAdProvider>(context);
     return InputCustom(
-      labelText: 'Titulo del Anuncio', 
-      onSaved: (value) => editAdProvider.title = value ?? '', 
-      iconData: Icons.abc, 
-      hintText: 'Ingrese su nombre', 
+      labelText: 'Titulo del Anuncio',
+      onSaved: (value) => editAdProvider.title = value ?? '',
+      iconData: Icons.abc,
+      hintText: 'Ingrese su nombre',
       initialValue: title,
     );
   }
 }
 
 class _InputDescription extends StatelessWidget {
-  const _InputDescription({Key? key, required this.description }) : super(key: key);
+  const _InputDescription({Key? key, required this.description})
+      : super(key: key);
   final String description;
   @override
   Widget build(BuildContext context) {
@@ -110,10 +132,7 @@ class _InputDescription extends StatelessWidget {
 }
 
 class _InputPhotos extends StatelessWidget {
-  const _InputPhotos({
-    Key? key,
-    required this.images
-  }) : super(key: key);
+  const _InputPhotos({Key? key, required this.images}) : super(key: key);
 
   final List<Upload> images;
   @override
@@ -126,12 +145,14 @@ class _InputPhotos extends StatelessWidget {
         itemCount: 5,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          Upload image = images.firstWhere((element) => int.parse(element.index) == index, orElse: () => Upload() );
+          Upload image = images.firstWhere(
+              (element) => int.parse(element.index) == index,
+              orElse: () => Upload());
           return Row(
             children: [
               _CarreteImageElement(
                 index: index,
-                image: image.id.isNotEmpty ? image : Upload( content: ''),
+                image: image.id.isNotEmpty ? image : Upload(content: ''),
               ),
               SizedBox(
                 width: _size.width * 0.01,
@@ -146,11 +167,8 @@ class _InputPhotos extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _CarreteImageElement<T> extends StatefulWidget {
-  _CarreteImageElement({
-    Key? key, 
-    required this.index, 
-    required this.image
-  }) : super(key: key);
+  _CarreteImageElement({Key? key, required this.index, required this.image})
+      : super(key: key);
 
   final int index;
   Upload image;
@@ -169,56 +187,52 @@ class _CarreteImageElementState extends State<_CarreteImageElement> {
     final AdPageProvider adPageProvider = Provider.of<AdPageProvider>(context);
     return InkWell(
       onTap: () async {
-        if (_image != null || widget.image.id.isNotEmpty ) {
+        if (_image != null || widget.image.id.isNotEmpty) {
           HandlerImage.showImage(
-            context: context,
-            image: widget.image,
-            images: adPageProvider.ad.images,
-            index: widget.index.toString(),
-            path: _image,
-            onPressedDelete: () {
-              final indexList = adPageProvider.ad.images.indexWhere((element) => element.index == widget.index.toString());
-              adPageProvider.ad.images.remove(adPageProvider.ad.images[indexList]);
-              _image = null;
-              widget.image = Upload();
-              Navigator.pop(context);
-              setState(() {});
-            },
-            onPressedModify: () async {
-              _image = await HandlerImage.openImagePicker(
-                context: context,
-                images: adPageProvider.ad.images,
-                index: widget.index
-              );
-              widget.image = Upload();
-              Navigator.pop(context);
-              setState(() {});
-            }
-          );
+              context: context,
+              image: widget.image,
+              images: adPageProvider.ad.images,
+              index: widget.index.toString(),
+              path: _image,
+              onPressedDelete: () {
+                final indexList = adPageProvider.ad.images.indexWhere(
+                    (element) => element.index == widget.index.toString());
+                adPageProvider.ad.images
+                    .remove(adPageProvider.ad.images[indexList]);
+                _image = null;
+                widget.image = Upload();
+                Navigator.pop(context);
+                setState(() {});
+              },
+              onPressedModify: () async {
+                _image = await HandlerImage.openImagePicker(
+                    context: context,
+                    images: adPageProvider.ad.images,
+                    index: widget.index);
+                widget.image = Upload();
+                Navigator.pop(context);
+                setState(() {});
+              });
         } else {
           _image = await HandlerImage.openImagePicker(
-            context: context, 
-            index: widget.index, 
-            images: adPageProvider.ad.images 
-          );
-          setState(() { });
+              context: context,
+              index: widget.index,
+              images: adPageProvider.ad.images);
+          setState(() {});
         }
       },
       child: Container(
-        width: _sizeCard,
-        height: _sizeCard,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(9),
-          border: Border.all(
-            color: AppColors.logoSchoolPrimary,
-            width: 2,
+          width: _sizeCard,
+          height: _sizeCard,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(9),
+            border: Border.all(
+              color: AppColors.logoSchoolPrimary,
+              width: 2,
+            ),
           ),
-        ),
-        child: HandlerImage.getImage(
-          imageExist: widget.image,
-          imagePicked: _image
-        )
-      ),
+          child: HandlerImage.getImage(
+              imageExist: widget.image, imagePicked: _image)),
     );
   }
 
@@ -265,7 +279,7 @@ class _ListaCategorias extends StatelessWidget {
 }
 
 class _InputVisible extends StatefulWidget {
-  const _InputVisible({Key? key, required this.visible }) : super(key: key);
+  const _InputVisible({Key? key, required this.visible}) : super(key: key);
 
   final bool visible;
   @override

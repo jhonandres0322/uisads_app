@@ -62,7 +62,7 @@ class CustomAlertDialog extends StatelessWidget {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: AppColors.mainThirdContrast,
+                    primary: negativeBtnColor,
                     side: BorderSide(color: AppColors.subtitles),
                     onPrimary: AppColors.subtitles,
                     shape: RoundedRectangleBorder(
@@ -79,7 +79,7 @@ class CustomAlertDialog extends StatelessWidget {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: AppColors.reject,
+                    primary: positiveBtnColor,
                     // padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                     textStyle: TextStyle(
                         // fontSize: 30,

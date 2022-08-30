@@ -82,7 +82,7 @@ class MainPage extends StatelessWidget {
         },
         child: const Icon(
           CustomUisIcons.megaphone,
-          color: AppColors.logoSchoolPrimary,
+          color: AppColors.mainThirdContrast,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked ,

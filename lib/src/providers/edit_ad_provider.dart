@@ -12,7 +12,14 @@ class EditAdProvider extends ChangeNotifier {
   String category              = '';
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-
+  void limpiarObjetos() {
+    title                 = '';
+    description           = '';
+    images                = [];
+    isVisible             = true;
+    category              = '';
+    formKey               = GlobalKey<FormState>();
+  }
   Ad handlerData() {
     return Ad.fromMap({
       "title": title,

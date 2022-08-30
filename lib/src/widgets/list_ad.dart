@@ -66,7 +66,8 @@ class _ListAdState extends State<ListAd> {
           GridView.builder(
             physics: const BouncingScrollPhysics(),
             controller: _scrollController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 10),
             itemCount: widget.ads.length,
             itemBuilder: (context, index) {
               return AdCard(
