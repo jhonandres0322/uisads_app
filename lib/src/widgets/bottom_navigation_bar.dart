@@ -55,35 +55,36 @@ class BottomNavigatonBarUisAds extends StatelessWidget {
         final String? nameRoute = ModalRoute.of(context)?.settings.name;
         categoryProvider.categorySelect = '';
         //TODO: Descomentar para usarlo en la navegacion actual de la aplicacion
-        // switch (index) {
-        //   case 0:
-        //     if ( nameRoute != 'main' ) {
-        //       Navigator.pushNamed(context, 'main');
-        //     }
-        //     break;
-        //   case 1:
-        //     if ( nameRoute != 'search' ) {
-        //       showSearch(
-        //         context: context,
-        //         delegate: SearchDelegateUis()
-        //       );
-        //     }
-        //     break;
-        //   case 2:
-        //     if ( nameRoute != 'create-ad' ) {
-        //       Navigator.pushNamed(context, 'create-ad');
-        //     }
-        //     break;
-        //   case 3:
-        //     if ( nameRoute != 'profile' ) {
-        //       UtilsNavigator.navigatorProfile(context, Preferences.uid );
-        //       Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false ,arguments: {
-        //         'type': 'user'
-        //       });
-        //     }
-        //   break;
-        //   default:
-        // }
+        switch (index) {
+          case 0:
+            if ( nameRoute != 'main' ) {
+              Navigator.pushNamed(context, 'main');
+            }
+            break;
+          case 1:
+            if ( nameRoute != 'search' ) {
+              showSearch(
+                context: context,
+                delegate: SearchDelegateUis()
+              );
+            }
+            break;
+          case 2:
+            if ( nameRoute != 'profile' ) {
+              Scaffold.of(context).openDrawer();
+              // UtilsNavigator.navigatorProfile(context, Preferences.uid );
+              // Navigator.pushNamedAndRemoveUntil(context, 'profile', (route) => false ,arguments: {
+              //   'type': 'user'
+              // });
+            }
+            break;
+          case 3:
+            if ( nameRoute != 'favorites-ad' ) {
+              Navigator.pushNamed(context, 'favorites-ad');
+            }
+          break;
+          default:
+        }
       },
     );
     // return BottomAppBar(

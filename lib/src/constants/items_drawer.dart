@@ -8,6 +8,30 @@ List<Map<String, dynamic>> listDrawer = [
     'key': 'ads'
   },
   {
+    'icon': CustomUisIcons.bi_bell,
+    'route': '',
+    'label': 'Notificaciones',
+    'key': 'notifications'
+  },
+  {
+    'icon': CustomUisIcons.favorite_outline,
+    'route': 'favorites-ad',
+    'label': 'Mis Favoritos',
+    'key': 'favorites'
+  },
+  {
+    'icon': CustomUisIcons.todo_list,
+    'route': 'interest',
+    'label': 'Mis Intereses',
+    'key': 'interests'
+  },
+  {
+    'icon': CustomUisIcons.history_return,
+    'route': 'history-ad',
+    'label': 'Historial',
+    'key': 'history'
+  },
+  {
     'icon': CustomUisIcons.message,
     'route': '',
     'label': 'Envia tus comentarios',
@@ -18,7 +42,7 @@ List<Map<String, dynamic>> listDrawer = [
     'route': '',
     'label': 'Acerca de la app',
     'key': 'about'
-  }
+  },
 ];
 
 Map<String, dynamic> logoutDrawerInfo = {

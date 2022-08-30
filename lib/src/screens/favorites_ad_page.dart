@@ -76,6 +76,8 @@ class FavoritesAdPage extends StatelessWidget {
           ),
         ),
       ),
+      drawer: const DrawerCustom(),
+      drawerEnableOpenDragGesture: false,
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,

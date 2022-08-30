@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
-import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
@@ -151,7 +149,7 @@ class ItemDrawer extends StatelessWidget {
       currentRoute == route ? AppColors.primary : AppColors.logoSchoolPrimary;
 
   void getNavigationRoute(BuildContext context, String routeName) {
-    if( routeName.isEmpty ) {
+    if( routeName.isEmpty || routeName == '' ) {
       showAboutApp(context);
     } else {
       if( routeName == 'login' ) {
@@ -167,18 +165,57 @@ class ItemDrawer extends StatelessWidget {
       context: context, 
       builder: ( context ) {
         return AlertDialog(
-          insetPadding: EdgeInsets.symmetric(
-            horizontal: size.height * 1
+          // insetPadding: EdgeInsets.symmetric(
+          //   horizontal: size.height * 0.1
+          // ),
+          title: Center(
+            child: Text(
+              '¿Desea Eliminar este anuncio de su lista de anuncios?',
+              textAlign: TextAlign.center ,
+              style: TextStyle(
+                // fontSize: size.height * 0.03,
+                fontWeight: FontWeight.w500,
+                color: AppColors.titles
+              ),
+            ),
           ),
-          content: Column(
-            children: [
-              Row(
-                children: [
-                  LogoApp(height: size.height * 0.01)
-                ],
-              )
-            ],
-          ), 
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          actions: [
+            ElevatedButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true)
+                .pop(false);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.mainThirdContrast,
+                side: BorderSide(
+                  color: AppColors.subtitles
+                ),
+                onPrimary: AppColors.subtitles,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0)
+                ),
+                textStyle: TextStyle(
+                fontWeight: FontWeight.w400)
+              ),
+            ),
+            ElevatedButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true)
+                .pop(true);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.reject,
+                // padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle: TextStyle(
+                // fontSize: 30,
+                fontWeight: FontWeight.bold)
+              ),
+            ),
+          ],
+          content: Icon(CustomUisIcons.bold_problem_alert, color: Color(0xFFF2C94C), size: size.height * 0.08,),
         );
       }
     );

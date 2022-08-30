@@ -80,6 +80,7 @@ class InterestPage extends StatelessWidget {
           ],
         ),
       )),
+      drawer: const DrawerCustom(),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,

@@ -66,6 +66,7 @@ class HistoryAdPage extends StatelessWidget {
                     height: 1,
                   ),
               itemCount: 10)),
+      drawer: const DrawerCustom(),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
