@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
 class InterestPage extends StatelessWidget {
@@ -9,8 +11,11 @@ class InterestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Cargar del servicio los intereses y usarlos en el provider, limpiar los intereses en caso de tener alguno
+    final interestFormProvider = Provider.of<InterestPageProvider>(context);
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -35,49 +40,63 @@ class InterestPage extends StatelessWidget {
       ),
       body: Container(
           child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Widget titulo
-            _TitleBar(),
-            // Widget descripcion
-            _DescriptionBar(),
-            // Widget InputCustom
-            InputCustom(
-              labelText: '',
-              onSaved: (value) {
-                log(value);
-              },
-              hintText: 'Ingrese la palabra clave',
-              iconData: Icons.abc_outlined,
-              keyboardType: TextInputType.emailAddress,
-              paddingPorcentage: 0.05,
-            ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
-            // Widget boton
-            Container(
-              width: double.infinity,
-              child: Row(
+        child: Form(
+          key: interestFormProvider.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Widget titulo
+              _TitleBar(),
+              // Widget descripcion
+              _DescriptionBar(),
+              // Widget InputCustom
+              _InputPalabrasClaves(),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              // Widget boton
+              Container(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Spacer(),
+                    _ButtonBar(
+                      texto: 'Agregar Interes',
+                      onPressed: () {
+                          _validarInteresAgregado(interestFormProvider, context);
+                      },
+                    ),
+                    SizedBox(
+                      width: 15,
+                    )
+                  ],
+                ),
+              ),
+              // Widget de intereses
+              if (interestFormProvider.interests.isEmpty)
+              _InterestWidgetVacio(),
+              if (interestFormProvider.interests.isNotEmpty)
+              _InterestWidgetFull(),
+              if (interestFormProvider.interests.isNotEmpty)
+              Row(
                 children: [
                   Spacer(),
-                  _ButtonBar(
-                    texto: 'Agregar Interes',
-                    onPressed: () {
-                      log('Agregar Interes');
-                    },
-                  ),
+                  _ButtonGuardar(
+                      size: size,
+                      onPressed: () {
+                        // TODO: Guardar los intereses, limpia el provider y regresa a la pantalla anterior
+                        interestFormProvider.cleanInterests();
+                        log('Intereses ${interestFormProvider.interests}');
+                      },
+                      text: 'Guardar'),
                   SizedBox(
-                    width: 15,
+                    width: 10,
                   )
                 ],
               ),
-            ),
-            // Widget de intereses
-            _InterestWidget(),
-            // _InterestBar(),
-          ],
+            ],
+          ),
         ),
       )),
       drawer: const DrawerCustom(),
@@ -93,11 +112,181 @@ class InterestPage extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
+  // Metodo para validar un interes agregado
+  void _validarInteresAgregado(InterestPageProvider interestFormProvider, BuildContext context) {
+    if (interestFormProvider.interests.length < 5) {
+      interestFormProvider.formKey.currentState?.save();
+      FocusScope.of(context).unfocus();
+      log('Agregar Interes ${interestFormProvider.interests}');
+    } else {
+      log('No se puede agregar mas de 5 intereses');
+      FocusScope.of(context).unfocus();
+      ScaffoldMessenger.of(context).showSnackBar(
+        showAlertCustom(
+          'No se puede agregar mas de 5 intereses',
+          true,
+        ),
+      );
+    }
+  }
+}
+
+class _ButtonGuardar extends StatelessWidget {
+  const _ButtonGuardar({
+    Key? key,
+    required this.size,
+    required this.onPressed,
+    required this.text,
+  }) : super(key: key);
+
+  final Size size;
+  final Function onPressed;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonCustom(
+      colorBorder: AppColors.primary,
+      colorButton: AppColors.primary,
+      colorText: Colors.white,
+      height: size.height * 0.05,
+      width: size.width * 0.25,
+      onPressed: onPressed,
+      text: text,
+      borderRadius: 10.0,
+      marginHorizontal: size.width * 0.018,
+      marginVertical: size.height * 0.013,
+    );
+  }
+}
+
+// Widget que contiene los elementos agreagados a la lista de intereses
+class _InterestWidgetFull extends StatelessWidget {
+  const _InterestWidgetFull({
+    Key? key,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final interestFormProvider = Provider.of<InterestPageProvider>(context);
+    final Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Recuadro de intereses
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            width: size.width * 0.9,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AppColors.primary,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Wrap(spacing: 5.0, runSpacing: 5.0, children: [
+              ...interestFormProvider.interests.map((interest) {
+                return _BuildChip(label: interest, color: AppColors.primary);
+              }).toList(),
+            ]),
+          ),
+          // Mensaje de intereses
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            '* Puedes agregar máx 5 intereses.',
+            style: TextStyle(
+              fontSize: 15,
+              color: AppColors.subtitles,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Widget qeu construye el Chip
+class _BuildChip extends StatelessWidget {
+  const _BuildChip({
+    Key? key,
+    required this.label,
+    this.color = Colors.blue,
+  }) : super(key: key);
+
+  final String label;
+  final Color? color;
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      labelPadding: EdgeInsets.all(2.0),
+      avatar: CircleAvatar(
+        backgroundColor: Colors.white70,
+        child: Text(label[0].toUpperCase()),
+      ),
+      label: Text(
+        label,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: color,
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.all(8.0),
+      onDeleted: () {
+        final interestFormProvider =
+            Provider.of<InterestPageProvider>(context, listen: false);
+        interestFormProvider.removeInterest(label);
+      },
+      deleteIcon: Icon(
+        Icons.close,
+        color: AppColors.mainThirdContrast,
+        size: 15,
+      ),
+    );
+  }
+}
+
+/// Widget que contiene el input de palabras claves
+class _InputPalabrasClaves extends StatelessWidget {
+  const _InputPalabrasClaves({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final interestFormProvider = Provider.of<InterestPageProvider>(context);
+    return InputCustom(
+      labelText: '',
+      onSaved: (value) {
+        _validarValorAgregadoInput(value, interestFormProvider, context);
+      },
+      hintText: 'Ingrese la palabra clave',
+      iconData: Icons.abc_outlined,
+      keyboardType: TextInputType.emailAddress,
+      paddingPorcentage: 0.05,
+    );
+  }
+  // Metodo para validar un valor agregado a la lista de palabras claves en el input
+  void _validarValorAgregadoInput(value, InterestPageProvider interestFormProvider, BuildContext context) {
+    if ((value.isNotEmpty && value.length > 2) && !interestFormProvider.interests.contains(value)) {
+        interestFormProvider.addInterest(value);
+        log(value);
+    } else {
+      ScaffoldMessenger.of(context)
+        .showSnackBar(showAlertCustom('Interes Vacio o repetido', true));
+    }
+  }
 }
 
 /// Widget que contendra el elemento de los intereses
-class _InterestWidget extends StatelessWidget {
-  const _InterestWidget({
+class _InterestWidgetVacio extends StatelessWidget {
+  const _InterestWidgetVacio({
     Key? key,
   }) : super(key: key);
 
@@ -106,34 +295,38 @@ class _InterestWidget extends StatelessWidget {
     // Condicionar este container a la hora de mostrar los intereses guardados
     return Container(
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-            const Icon(Icons.warning, color: AppColors.subtitles, size: 50,),
+            const Icon(
+              Icons.warning,
+              color: AppColors.subtitles,
+              size: 50,
+            ),
             const SizedBox(
               height: 10,
             ),
             const Text(
-            'No se ha añadido ningún interés de búsqueda ',
-            style: TextStyle(
-                fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.subtitles),
-            textAlign: TextAlign.center,
-          ),
-          ]
-        )
-      ),
+              'No se ha añadido ningún interés de búsqueda ',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.subtitles),
+              textAlign: TextAlign.center,
+            ),
+          ])),
     );
   }
 }
+
 /// Widget que contiene el boton de agregar intereses
 class _ButtonBar extends StatelessWidget {
   const _ButtonBar({
     Key? key,
-    required  this.texto,
+    required this.texto,
     required this.onPressed,
   }) : super(key: key);
 
@@ -144,11 +337,10 @@ class _ButtonBar extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.only(top: 5),
-      height: 18,
+      height: size.height * 0.04,
       child: ElevatedButton(
         style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all(AppColors.primary),
+            backgroundColor: MaterialStateProperty.all(AppColors.primary),
             elevation: MaterialStateProperty.all(0),
             textStyle: MaterialStateProperty.all(const TextStyle(
                 fontSize: 10, color: AppColors.mainThirdContrast))),

@@ -13,3 +13,4 @@ export 'package:uisads_app/src/providers/search_ads_provider.dart';
 export 'package:uisads_app/src/providers/delete_ad_provider.dart';
 export 'package:uisads_app/src/providers/list_ad_provider.dart';
 export 'package:uisads_app/src/providers/edit_ad_provider.dart';
+export 'package:uisads_app/src/providers/interest_page_provider.dart';

@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
 
 SnackBar showAlertCustom(String text, bool isError) {
   return SnackBar(
-    content: Text(
-      text,
-      style: const TextStyle(fontSize: 11.0),
+    content: Row(
+      children: [
+        Icon(
+          isError ? CustomUisIcons.circle_error : CustomUisIcons.circle_ok,
+          color: AppColors.mainThirdContrast,
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 12.0,
+            fontFamily: GoogleFonts.robotoSlab().fontFamily,
+            fontWeight: FontWeight.w500, 
+          ),
+        ),
+      ],
     ),
     action: SnackBarAction(
-      label: 'Cerrar',
+      label: '\u2716',
       onPressed: () {},
       textColor: AppColors.mainThirdContrast,
     ),
@@ -17,6 +33,6 @@ SnackBar showAlertCustom(String text, bool isError) {
     backgroundColor: isError ? AppColors.reject : AppColors.accept,
     behavior: SnackBarBehavior.floating,
     duration: const Duration( seconds: 3),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
   );
 }

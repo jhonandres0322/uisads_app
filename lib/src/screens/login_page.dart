@@ -41,16 +41,13 @@ class LoginPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Container(
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              // SizedBox(height: size.height * 0.07),
-              LogoApp(height: size.height * 0.45 ),
-              _LoginForm(),
-              const SizedBox(height: 10.0),
-            ],
-          ),
+        child: Column(
+          children: [
+            // SizedBox(height: size.height * 0.07),
+            LogoApp(height: size.height * 0.45 ),
+            _LoginForm(),
+            const SizedBox(height: 10.0),
+          ],
         ),
       ),
     );

@@ -15,6 +15,7 @@ class InputCustom extends StatelessWidget {
   final TextInputType keyboardType;
   final String initialValue;
   final double paddingPorcentage;
+  final TextEditingController? controller;
 
   const InputCustom({
     Key? key,
@@ -26,7 +27,8 @@ class InputCustom extends StatelessWidget {
     required this.hintText,
     this.keyboardType = TextInputType.text,
     this.initialValue = '', 
-    this.paddingPorcentage = 0.1
+    this.paddingPorcentage = 0.1, 
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -59,7 +61,8 @@ class InputCustom extends StatelessWidget {
             height: size.height * 0.01,
           ),
           TextFormField(
-            initialValue: initialValue,
+            // initialValue: initialValue,
+            controller: controller ?? TextEditingController(text: initialValue),
             autofocus: autofocus,
             obscureText: obscureText,
             keyboardType: keyboardType,
