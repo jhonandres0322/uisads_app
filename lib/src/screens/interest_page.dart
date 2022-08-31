@@ -188,7 +188,7 @@ class _InterestWidgetFull extends StatelessWidget {
             ),
             child: Wrap(spacing: 5.0, runSpacing: 5.0, children: [
               ...interestFormProvider.interests.map((interest) {
-                return _BuildChip(label: interest, color: AppColors.primary);
+                return _BuildChip(label: interest, color: AppColors.third);
               }).toList(),
             ]),
           ),
@@ -224,10 +224,6 @@ class _BuildChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       labelPadding: EdgeInsets.all(2.0),
-      avatar: CircleAvatar(
-        backgroundColor: Colors.white70,
-        child: Text(label[0].toUpperCase()),
-      ),
       label: Text(
         label,
         style: TextStyle(
@@ -273,9 +269,9 @@ class _InputPalabrasClaves extends StatelessWidget {
     );
   }
   // Metodo para validar un valor agregado a la lista de palabras claves en el input
-  void _validarValorAgregadoInput(value, InterestPageProvider interestFormProvider, BuildContext context) {
-    if ((value.isNotEmpty && value.length > 2) && !interestFormProvider.interests.contains(value)) {
-        interestFormProvider.addInterest(value);
+  void _validarValorAgregadoInput(String value, InterestPageProvider interestFormProvider, BuildContext context) {
+    if ((value.trim().isNotEmpty && value.trim().length > 2) && !interestFormProvider.interests.contains(value.trim().toLowerCase())) {
+        interestFormProvider.addInterest(value.trim().toLowerCase());
         log(value);
     } else {
       ScaffoldMessenger.of(context)

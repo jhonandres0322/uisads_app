@@ -9,7 +9,7 @@ List<Map<String, dynamic>> listDrawer = [
   },
   {
     'icon': CustomUisIcons.bi_bell,
-    'route': '',
+    'route': 'notifications',
     'label': 'Notificaciones',
     'key': 'notifications'
   },
