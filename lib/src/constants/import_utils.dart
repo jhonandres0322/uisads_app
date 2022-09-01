@@ -7,3 +7,4 @@ export 'package:uisads_app/src/utils/utils_navigator.dart';
 export 'package:uisads_app/src/utils/utils_recovery_page.dart';
 export 'package:uisads_app/src/utils/categoria_model.dart';
 export 'package:uisads_app/src/utils/utils_ad.dart';
+export 'package:uisads_app/src/utils/utils_operations.dart';

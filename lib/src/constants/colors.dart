@@ -20,6 +20,7 @@ class AppColors {
   static const Color technology = Color(0xFF548235);
   static const Color education = Color(0xFF2CB2B2);
   static const Color art = Color(0xFFAD31AD);
+  static const Color services = Color(0xFF804000);
   static const Color foodBg = Color(0xFFFDD2B2);
   static const Color sportsBg = Color(0xFFD6D5D5);
   static const Color logoSchoolOpaque = Color(0xFF171738);
@@ -27,4 +28,5 @@ class AppColors {
   static const Color reject = Color(0xFFDD3A35);
   static const Color selectedFavorite = Color(0xFFEB5757);
   static const Color backgroundBar = Color(0xFFD9D9D9);
+  static Color primaryOpacity = const Color(0xFF3EB96B).withOpacity(0.75);
 }

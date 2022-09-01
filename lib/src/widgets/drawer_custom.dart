@@ -157,25 +157,99 @@ class ItemDrawer extends StatelessWidget {
           context, routeName, (Route<dynamic> route) => false);
     }
   }
-
+  // AlertDialog para el Acerca de la App
   void showAboutApp(BuildContext context) {
     // Uso del AlertDialog
-    var dialog = CustomAlertDialog(
-        title: '¿Desea Eliminar este anuncio de su lista de anuncios?',
-        icon: CustomUisIcons.bold_problem_alert,
-        iconColor: Color(0xffF2C94C),
-        onPostivePressed: () {
-          Navigator.of(context, rootNavigator: true).pop(true);
-        },
-        onNegativePressed: () {
-          Navigator.of(context, rootNavigator: true).pop(false);
-        },
-        circularBorderRadius: 10,
-        positiveBtnText: 'Eliminar',
-        positiveBtnColor: AppColors.reject,
-        negativeBtnText: 'Cancelar',
-        negativeBtnColor: AppColors.mainThirdContrast,
+    var dialog = AlertDialog(
+      alignment: Alignment.center ,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(
+            CustomUisIcons.uis_ads_icon,
+            color: AppColors.primary,
+            size: 30,
+          ),
+          SizedBox(width: 10),
+          Image.asset(
+            'assets/images/logo_school.png',
+            height: 30,
+          ),
+          SizedBox(width: 10),
+          Image.asset(
+            'assets/images/logo_uis.png',
+            height: 30,
+          )
+        ],
+      ),
+      content: Text('UISADS', textAlign: TextAlign.center,),
+      contentTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: AppColors.primary,
+      ),
+      actions: <Widget>[
+        const Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'Aplicativo móvil desarrollado en busca de dar una solución a la comunidad universitaria en su necesidad de poseer una plataforma de intercambio de artículos y servicios que sea fácil y cómoda de usar', 
+            textAlign: TextAlign.justify, 
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: AppColors.titles,
+            )
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'Desarrollada por Jorge Andrés Triana Mojica y Jhon Andrés Parra Rodriguez y Elkin Fernández como proyecto de grado para optar por el titulo de Ingenieria de Sistemas.', 
+            textAlign: TextAlign.justify, 
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: AppColors.titles,
+            )
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: const Text(
+            'Powered by PFT Technologies', 
+            textAlign: TextAlign.center, 
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.subtitles,
+            )
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            child: Text('Cerrar'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(AppColors.primary),
+            ),  
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      ],
     );
+
     showDialog(
         context: context,
         builder: (context) => dialog);

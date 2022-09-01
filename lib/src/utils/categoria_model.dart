@@ -4,8 +4,18 @@ import 'package:flutter/material.dart';
 class Categoria {
   final IconData icono;
   final String nombre;
+  final Color? color;
+  String? id;
 
-  Categoria({required this.icono, required this.nombre});
+  Categoria({
+    required this.icono, 
+    required this.nombre,
+    this.color,
+    this.id = '',
+  });
+
+  // Setters y Getters
+  set setId(String value) => id = value;  
 }
 // TODO: Agregar la lista de categorias y cambiarlas de archivo
 

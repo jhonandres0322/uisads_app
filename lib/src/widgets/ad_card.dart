@@ -8,24 +8,27 @@ import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
-import 'package:uisads_app/src/providers/delete_ad_provider.dart';
 
 class AdCard extends StatelessWidget {
   final Upload mainPage;
   final String title;
   final String id;
   final bool isManage;
+  final String? category;
 
   const AdCard(
       {Key? key,
       required this.mainPage,
       required this.title,
       required this.id,
-      required this.isManage})
+      required this.isManage,
+      this.category = ''
+      })
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final List<Categoria> categorysInfo = categoriasData;
     final Size _size = MediaQuery.of(context).size;
     double widthCard = (_size.width - 30) / 2;
     return Container(
@@ -35,7 +38,11 @@ class AdCard extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           // color: Colors.red,
-          border: Border.all(color: Colors.black54, width: 2)),
+          border: Border.all(
+            color: UtilsOperations.compararCategoryId(categorysInfo, category!), 
+            width: 2
+          )
+      ),
       child: Column(
         children: [
           SizedBox(
@@ -118,12 +125,11 @@ class _BottomCard extends StatelessWidget {
                   'Eliminar',
                   style: TextStyle(fontSize: 8),
                 ),
-                onPressed: () async{
+                onPressed: () async {
                   bool confirmacion = await showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => dialog
-                  );
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => dialog);
                   if (confirmacion) {
                     confirmDeleteAd(context, idAd);
                   }

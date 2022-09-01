@@ -234,7 +234,7 @@ class _SectionCategoryDate extends StatelessWidget {
             height: size.height * 0.03,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: AppColors.foods,
+              color: UtilsOperations.compararCategoryId(categoriasData, category),
             ),
             child: FutureBuilder(
                 future: _categoryService.getCategoryId(category),
@@ -489,20 +489,6 @@ class _SectionImagesState extends State<_SectionImages> {
                 ),
               ],
             )),
-        // Positioned para el FloatingActionButton para contacto
-        // Positioned(
-        //   bottom: 20,
-        //   right: 10,
-        //   child: FloatingActionButton(
-        //     elevation: 6,
-        //     backgroundColor: AppColors.primary,
-        //     onPressed: () async{
-        //       print(_adPageProvider.ad.title);
-        //       UtilsContact.contactarUsuario('3026685578', 'Hola, estoy muy interesado en tu anuncio de');
-        //     },
-        //     child: const Icon(CustomUisIcons.whatsapp),
-        //   ),
-        // ),
       ]),
       SizedBox(
         height: 20,

@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 
 // Lista de categorias 
 final List<Categoria> categoriasData = [
       Categoria(icono: Icons.apps, nombre: 'Todos'),
-      Categoria(icono: CustomUisIcons.geometry_icon, nombre: 'Variados'),
-      Categoria(icono: CustomUisIcons.food, nombre: 'Alimentos'),
-      Categoria(icono: CustomUisIcons.key_hand, nombre: 'Alquiler'),
-      Categoria(icono: CustomUisIcons.art, nombre: 'Arte'),
-      Categoria(icono: CustomUisIcons.sports, nombre: 'Deportes'),
-      Categoria(icono: CustomUisIcons.facilitador, nombre: 'Educacion'),
-      Categoria(icono: CustomUisIcons.briefcase, nombre: 'Empleo'),
-      Categoria(icono: CustomUisIcons.work_tool, nombre: 'Servicios'),
-      Categoria(icono: CustomUisIcons.cloathing, nombre: 'Textil'),
-      Categoria(icono: Icons.laptop, nombre: 'Tecnologia'),
+      Categoria(icono: CustomUisIcons.geometry_icon, nombre: 'Variados', color: AppColors.primary),
+      Categoria(icono: CustomUisIcons.food, nombre: 'Alimentos', color: AppColors.foods),
+      Categoria(icono: CustomUisIcons.key_hand, nombre: 'Alquiler', color: AppColors.rental),
+      Categoria(icono: CustomUisIcons.art, nombre: 'Arte', color: AppColors.art),
+      Categoria(icono: CustomUisIcons.sports, nombre: 'Deportes', color: AppColors.sports),
+      Categoria(icono: CustomUisIcons.facilitador, nombre: 'Educacion', color: AppColors.education),
+      Categoria(icono: CustomUisIcons.briefcase, nombre: 'Empleo', color: AppColors.job),
+      Categoria(icono: CustomUisIcons.work_tool, nombre: 'Servicios', color: AppColors.services),
+      Categoria(icono: CustomUisIcons.cloathing, nombre: 'Textil', color: AppColors.textile),
+      Categoria(icono: Icons.laptop, nombre: 'Tecnologia', color: AppColors.technology),
 ];
 
 IconData getIcon( String name ) {
   int index = categoriasData.indexWhere((element) => element.nombre == name );
   IconData icon = categoriasData[index].icono; 
   return icon;
+}
+// Obtenemos el Id de la categoria y lo asignamos a mis constantes
+void getCategoryIdByName( Category category ) {
+  int index = categoriasData.indexWhere((element) => element.nombre == category.name );
+  categoriasData.elementAt(index).id = category.id;
 }
 
 // DropdownItems para filtro de por relevancia

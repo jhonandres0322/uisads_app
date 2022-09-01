@@ -44,7 +44,7 @@ class _CategoriaButtonState extends State<CategoriaButton> {
               height: size.height * 0.05,
               child: IconButton(
                 icon: Icon(widget.icon, size: size.height * 0.03),
-                color: widget.enabled ? AppColors.titles : AppColors.subtitles,
+                color: widget.enabled ? AppColors.mainThirdContrast : AppColors.primaryOpacity,
                 onPressed: () {
                   setState(() {
                     _categoryProvider.categorySelect = widget.id;
@@ -54,11 +54,11 @@ class _CategoriaButtonState extends State<CategoriaButton> {
                 },
               ),
               decoration: BoxDecoration(
-                // color: Colors.green,
+                color: widget.enabled ? AppColors.titles : AppColors.mainThirdContrast,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color:
-                      widget.enabled ? AppColors.titles : AppColors.subtitles,
+                      widget.enabled ? AppColors.titles : AppColors.primaryOpacity,
                   width: 2,
                 ),
               ),
@@ -69,7 +69,7 @@ class _CategoriaButtonState extends State<CategoriaButton> {
             Text(
               widget.name,
               style: TextStyle(
-                color: widget.enabled ? AppColors.titles : AppColors.subtitles,
+                color: widget.enabled ? AppColors.titles : AppColors.primaryOpacity,
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w500,
                 fontSize: 12,

@@ -38,7 +38,13 @@ class _ListAdState extends State<ListAd> {
       if( _scrollController.position.pixels >= _scrollController.position.maxScrollExtent ) {
         // log('entrando al scroll');
         widget.onNextPage();
+        // _scrollController.animateTo(
+        //   _scrollController.position.maxScrollExtent + 150,
+        //   duration: const Duration(milliseconds: 300),
+        //   curve: Curves.fastOutSlowIn
+        // ); 
       }
+
     });
   }
 
@@ -75,6 +81,7 @@ class _ListAdState extends State<ListAd> {
                 mainPage: widget.ads[index].mainPage,
                 id: widget.ads[index].id,
                 isManage: widget.provider.validateManage(context),
+                category: widget.ads[index].category,
               );
             }
           ),

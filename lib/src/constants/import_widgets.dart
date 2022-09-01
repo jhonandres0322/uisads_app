@@ -19,3 +19,4 @@ export 'package:uisads_app/src/widgets/profile_avatar.dart';
 export 'package:uisads_app/src/widgets/search_widget.dart';
 export 'package:uisads_app/src/widgets/button_custom.dart';
 export 'package:uisads_app/src/widgets/custom_alert_dialog.dart';
+export 'package:uisads_app/src/widgets/void_info_widget.dart';

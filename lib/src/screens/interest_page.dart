@@ -313,6 +313,9 @@ class _InterestWidgetVacio extends StatelessWidget {
                   color: AppColors.subtitles),
               textAlign: TextAlign.center,
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            )
           ])),
     );
   }

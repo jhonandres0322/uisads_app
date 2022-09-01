@@ -14,18 +14,21 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context);
+    final CategoryProvider _categoryProvider =
+        Provider.of<CategoryProvider>(context);
     final mainPageProvider = Provider.of<MainPageProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
-        builder: (BuildContext context) {
-          return IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () { Scaffold.of(context).openDrawer(); },
-            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-          );
-        },
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
         ),
         iconTheme: const IconThemeData(color: AppColors.third),
         automaticallyImplyLeading: false,
@@ -41,12 +44,9 @@ class MainPage extends StatelessWidget {
           ),
           Spacer(),
           IconButton(
-            icon: Icon(CustomUisIcons.search_right), 
+            icon: Icon(CustomUisIcons.search_right),
             onPressed: () {
-              showSearch(
-                context: context, 
-                delegate: SearchDelegateUis()
-              );
+              showSearch(context: context, delegate: SearchDelegateUis());
             },
           ),
           SizedBox(
@@ -56,23 +56,20 @@ class MainPage extends StatelessWidget {
       ),
       drawer: const DrawerCustom(),
       drawerEnableOpenDragGesture: false,
-      body: Builder(
-        builder: (context) {
-          return Column(
-            children: [
-              // Widget Horizontal con la lista de categorias
-              SizedBox(
-                  width: double.infinity,
-                  // color: Colors.yellow,
-                  height: size.height * 0.10,
-                  child: const _ListaCategorias()
-              ),
-              // CardTable para los anuncios mostrados
-              const Expanded( child: _ListAds() )
-            ],
-          );
-        }
-      ),
+      body: Builder(builder: (context) {
+        return Column(
+          children: [
+            // Widget Horizontal con la lista de categorias
+            SizedBox(
+                width: double.infinity,
+                // color: Colors.yellow,
+                height: size.height * 0.10,
+                child: const _ListaCategorias()),
+            // CardTable para los anuncios mostrados
+            Expanded(child: _ListAds())
+          ],
+        );
+      }),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
@@ -85,29 +82,43 @@ class MainPage extends StatelessWidget {
           color: AppColors.mainThirdContrast,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked ,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
-
 
 class _ListAds extends StatelessWidget {
   const _ListAds({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     final mainPageProvider = Provider.of<MainPageProvider>(context);
     final categoryProvider = Provider.of<CategoryProvider>(context);
     String category = categoryProvider.categorySelect;
-    return ListAd(
-      provider: mainPageProvider,
-      ads: mainPageProvider.ads,
-      onNextPage: () =>   categoryProvider.categorySelect != '' ? mainPageProvider.getAdsByCategoryNews(category) :  mainPageProvider.getAdsNews()
-    );
-    // return Container();
+    if (mainPageProvider.isLoading && mainPageProvider.ads.isEmpty) {
+      return Center(
+        child: Image.asset(
+          'assets/images/jar-loading.gif',
+          // 'assets/images/giphy.gif',
+          width: size.width * 0.8,
+          height: size.height * 0.8,
+        ),
+      );
+    } else {
+      if (mainPageProvider.ads.isEmpty) {
+        return const VoidInfoWidget();
+      } else {
+        return ListAd(
+          provider: mainPageProvider,
+          ads: mainPageProvider.ads,
+          onNextPage: () =>   categoryProvider.categorySelect != '' ? mainPageProvider.getAdsByCategoryNews(category) :  mainPageProvider.getAdsNews()
+        );
+      }
+      
+    }
   }
 }
-
 
 /// Widget Horizontal con la lista de categorias
 class _ListaCategorias extends StatelessWidget {
@@ -149,8 +160,8 @@ class CirclePerfilAvatar extends StatelessWidget {
               nombreUser: Preferences.name,
             ),
             // Stack con el circulo de perfil
-            ProfileAvatar( 
-              radius:  0.025,
+            ProfileAvatar(
+              radius: 0.025,
               image: Preferences.image,
             )
             // PerfilCirculoUsuario(radio: height / 2, radioInterno: 2),
