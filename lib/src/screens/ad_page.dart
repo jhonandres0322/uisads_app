@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
@@ -21,17 +22,19 @@ class AdPage extends StatelessWidget {
     Map arguments = ModalRoute.of(context)?.settings.arguments as Map;
 
     final AdService _adService = AdService();
+    final CategoryProvider _categoryProvider =
+        Provider.of<CategoryProvider>(context);
     final AdPageProvider _adPageProvider = Provider.of<AdPageProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.subtitles),
+          icon: const Icon(Icons.arrow_back, color: AppColors.third),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(CustomUisIcons.search_right,
-                color: AppColors.subtitles),
+            icon:
+                const Icon(CustomUisIcons.search_right, color: AppColors.third),
             onPressed: () {},
           ),
         ],
@@ -57,11 +60,13 @@ class AdPage extends StatelessWidget {
                       children: [
                         _SectionImages(
                           images: snapshot.data!.images,
+                          categoria: snapshot.data!.category,
                         ),
                         Positioned(
                           bottom: 75,
                           right: 10,
                           child: FloatingActionButton(
+                            key: const Key('contact'),
                             elevation: 6,
                             backgroundColor: AppColors.primary,
                             onPressed: () async {
@@ -78,10 +83,20 @@ class AdPage extends StatelessWidget {
                     _DescripcionAnuncio(
                       description: snapshot.data!.description,
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _ReportSection(),
+                    Divider(
+                      color: AppColors.third,
+                    ),
                     _SectionCalification(
                         pointsPositive: snapshot.data!.positvePoints,
                         pointsNegative: snapshot.data!.negativePoints,
                         ad: snapshot.data!.id),
+                    SizedBox(
+                      height: 20,
+                    )
                   ],
                 );
               } else {
@@ -92,6 +107,136 @@ class AdPage extends StatelessWidget {
             }),
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
+      drawer: const DrawerCustom(),
+      drawerEnableOpenDragGesture: false,
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'btn_navigation',
+        elevation: 1,
+        foregroundColor: Colors.white,
+        key: const Key('navbar'),
+        backgroundColor: AppColors.primary,
+        onPressed: () {
+          _categoryProvider.categorySelect = '';
+          Navigator.pushNamed(context, 'create-ad');
+        },
+        child: const Icon(
+          CustomUisIcons.megaphone,
+          color: AppColors.mainThirdContrast,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+}
+
+// Widget para la sección de reporte de la aplicacion
+class _ReportSection extends StatelessWidget {
+  const _ReportSection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _ReportButton(),
+        ],
+      ),
+    );
+  }
+}
+
+// Widget para el boton de reporte de la aplicacion
+class _ReportButton extends StatefulWidget {
+  const _ReportButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_ReportButton> createState() => _ReportButtonState();
+}
+
+class _ReportButtonState extends State<_ReportButton> {
+  // Esta propiedad reporte puede ser controlada con un Provider para la realizacion del reporte en el back
+  bool _isReported = false;
+  @override
+  Widget build(BuildContext context) {
+    // Control del reporte
+    var dialog = CustomAlertDialog(
+      title: _isReported
+          ? '¿Desea deshacer el reporte causado al anuncio?'
+          : '¿Desea reportar este anuncio como indebido o inapropiado',
+      icon: Icons.warning_rounded,
+      iconColor: _isReported
+          ? const Color(0xffF2C94C)
+          : AppColors.reject.withOpacity(0.8),
+      onPostivePressed: () {
+        Navigator.of(context, rootNavigator: true).pop(true);
+      },
+      onNegativePressed: () {
+        Navigator.of(context, rootNavigator: true).pop(false);
+      },
+      circularBorderRadius: 10,
+      positiveBtnText: _isReported ? 'Quitar Reporte' : 'Reportar',
+      positiveBtnColor: _isReported ? AppColors.accept : AppColors.reject,
+      negativeBtnText: 'Cancelar',
+      negativeBtnColor: AppColors.mainThirdContrast,
+    );
+    return InkWell(
+      onTap: () async {
+        // Confirmacion de anuncio reportado
+        if (_isReported) {
+          bool confirmacion = await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => dialog);
+          if (confirmacion) {
+            setState(() {
+              _isReported = false;
+              log('Confirmado');
+            });
+          }
+        } else {
+          bool confirmacion = await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => dialog);
+          if (confirmacion) {
+            setState(() {
+              _isReported = true;
+              log('Confirmado');
+            });
+          }
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          children: [
+            Icon(CustomUisIcons.block,
+                color: _isReported
+                    ? AppColors.logoSchoolOpaque
+                    : AppColors.reject),
+            SizedBox(width: 10),
+            Text(
+              _isReported ? 'Anuncio Reportado' : 'Reporta este Anuncio',
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w500,
+                color:
+                    _isReported ? AppColors.logoSchoolOpaque : AppColors.reject,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -111,41 +256,69 @@ class _SectionCalification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calificacion de anuncio el AdProvider se encarga de la calificacion de un anuncio y se carga directamente del service
+    final AdPageProvider _adPageProvider = Provider.of<AdPageProvider>(context);
+    String _elementoCalificado = _adPageProvider.choice;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       height: 100,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           // Widget del like
           GestureDetector(
             onTap: () => manageRating(context, Choices.like),
             child: _IconButtonLike(
-              icon: CustomUisIcons.like,
-              color: AppColors.primary,
+              icon: CustomUisIcons.bold_like,
+              color: _elementoCalificado == Choices.like
+                  ? AppColors.accept
+                  : AppColors.subtitles.withOpacity(0.5),
               valoracion: pointsPositive,
             ),
           ),
-          const SizedBox(
-            width: 70,
+          // const SizedBox(
+          //   width: 10,
+          // ),
+          // TODO: Crear un widget que contenga el icono de Favorito y el nombre del favorito
+          GestureDetector(
+            onTap: () => {
+              // Agregacion a favorito
+              log('Favorito clicked ${_adPageProvider.favoriteSelection}'),
+              _adPageProvider.favoriteSelection == Choices.favorite
+                  ? _adPageProvider.favoriteSelection = ''
+                  : _adPageProvider.favoriteSelection = Choices.favorite
+            },
+            child: _IconButtonLike(
+              icon: _adPageProvider.favoriteSelection == Choices.favorite ? CustomUisIcons.favorite_bold : CustomUisIcons.favorite_outline,
+              color: _adPageProvider.favoriteSelection == Choices.favorite
+                  ? AppColors.selectedFavorite
+                  : AppColors.subtitles.withOpacity(0.5),
+              textIcon: _adPageProvider.favoriteSelection == Choices.favorite ? 'Agregado' :'Agregar Favorito',
+            ),
           ),
+          // const SizedBox(
+          //   width: 10,
+          // ),
           // Widget del dislike
           GestureDetector(
             onTap: () => manageRating(context, Choices.dislike),
             child: _IconButtonLike(
-              icon: CustomUisIcons.dislike,
-              color: AppColors.subtitles.withOpacity(0.5),
+              icon: CustomUisIcons.bold_dislike,
+              color: _elementoCalificado == Choices.dislike
+                  ? AppColors.reject
+                  : AppColors.subtitles.withOpacity(0.5),
               valoracion: pointsNegative,
             ),
           ),
-          const SizedBox(
-            width: 10,
-          ),
+          // const SizedBox(
+          //   width: 10,
+          // ),
         ],
       ),
     );
   }
 
+  // Metodo que maneja la calificacion de un anuncio
   void manageRating(BuildContext context, String choice) async {
     final AdService _adService = AdService();
     Response _response =
@@ -153,6 +326,9 @@ class _SectionCalification extends StatelessWidget {
 
     if (!_response.error) {
       Navigator.pushReplacementNamed(context, 'ad', arguments: {'id': ad});
+      final AdPageProvider _adPageProvider =
+          Provider.of<AdPageProvider>(context, listen: false);
+      _adPageProvider.choice = choice;
     }
     ScaffoldMessenger.of(context)
         .showSnackBar(showAlertCustom(_response.message, _response.error));
@@ -165,12 +341,14 @@ class _IconButtonLike extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.color,
-    required this.valoracion,
+    this.valoracion, 
+    this.textIcon = '',
   }) : super(key: key);
 
   final IconData icon;
   final Color color;
-  final int valoracion;
+  final int? valoracion;
+  final String? textIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -193,10 +371,11 @@ class _IconButtonLike extends StatelessWidget {
             height: 10,
           ),
           Text(
-            '($valoracion)',
+            valoracion != null ? '($valoracion)' : '$textIcon',
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: color,
-              fontSize: 10,
+              fontSize: 11,
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,
             ),
@@ -234,7 +413,8 @@ class _SectionCategoryDate extends StatelessWidget {
             height: size.height * 0.03,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: UtilsOperations.compararCategoryId(categoriasData, category),
+              color:
+                  UtilsOperations.compararCategoryId(categoriasData, category),
             ),
             child: FutureBuilder(
                 future: _categoryService.getCategoryId(category),
@@ -425,9 +605,12 @@ class _SectionInfoProfileCity extends StatelessWidget {
 }
 
 class _SectionImages extends StatefulWidget {
-  const _SectionImages({Key? key, required this.images}) : super(key: key);
+  const _SectionImages(
+      {Key? key, required this.images, required this.categoria})
+      : super(key: key);
 
   final List<Upload> images;
+  final String categoria;
 
   @override
   State<_SectionImages> createState() => _SectionImagesState();
@@ -460,10 +643,11 @@ class _SectionImagesState extends State<_SectionImages> {
                                   (context, AsyncSnapshot<String> snapshot) {
                                 if (snapshot.hasData) {
                                   return ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
                                       child: Image.file(
-                                    File(snapshot.data!),
-                                    fit: BoxFit.cover,
-                                  ));
+                                        File(snapshot.data!),
+                                        fit: BoxFit.cover,
+                                      ));
                                 } else {
                                   return const Center(
                                     child: CircularProgressIndicator(),
@@ -473,7 +657,8 @@ class _SectionImagesState extends State<_SectionImages> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: AppColors.logoSchoolPrimary,
+                              color: UtilsOperations.compararCategoryId(
+                                  categoriasData, widget.categoria),
                               width: 2,
                             ),
                           ),
@@ -519,6 +704,7 @@ class _SectionImagesState extends State<_SectionImages> {
                               horizontal: _size.width * 0.02),
                           child: _CarreteImageElement(
                             image: snapshot.data!,
+                            categoria: widget.categoria,
                           ),
                         );
                       } else {
@@ -564,8 +750,11 @@ class _DescripcionAnuncio extends StatelessWidget {
 
 /// Widget para el elemento cuadrado del carrete de fotografias
 class _CarreteImageElement extends StatelessWidget {
-  const _CarreteImageElement({Key? key, required this.image}) : super(key: key);
+  const _CarreteImageElement(
+      {Key? key, required this.image, required this.categoria})
+      : super(key: key);
   final String image;
+  final String categoria;
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -575,7 +764,7 @@ class _CarreteImageElement extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(9),
         border: Border.all(
-          color: AppColors.logoSchoolPrimary,
+          color: UtilsOperations.compararCategoryId(categoriasData, categoria),
           width: 2,
         ),
       ),

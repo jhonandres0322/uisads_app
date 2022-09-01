@@ -69,6 +69,8 @@ class ProfilePage extends StatelessWidget {
         }
       ),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
+      drawer: const DrawerCustom(),
+      drawerEnableOpenDragGesture: false,
     );
   }
 }

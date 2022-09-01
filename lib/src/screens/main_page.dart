@@ -72,6 +72,7 @@ class MainPage extends StatelessWidget {
       }),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'btn_navigation',
         backgroundColor: AppColors.primary,
         onPressed: () {
           _categoryProvider.categorySelect = '';

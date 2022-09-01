@@ -134,7 +134,8 @@ class _BottomCard extends StatelessWidget {
                     confirmDeleteAd(context, idAd);
                   }
                 }),
-            SizedBox(width: _size.width * 0.05),
+            // SizedBox(width: _size.width * 0.05),
+            const Spacer(),
             ElevatedButton.icon(
               icon: Icon(CustomUisIcons.pencil_simple,
                   size: _size.height * 0.015),
