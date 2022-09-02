@@ -36,24 +36,33 @@ class LoginPage extends StatelessWidget {
           ),
         ],
         leading: IconButton(
-              color: AppColors.primary,
-              icon: const Icon(Icons.arrow_back_ios_outlined),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+          color: AppColors.primary,
+          icon: const Icon(Icons.arrow_back_ios_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         backgroundColor: AppColors.mainThirdContrast,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            // SizedBox(height: size.height * 0.07),
-            LogoApp(height: size.height * 0.45 ),
-            _LoginForm(),
-            const SizedBox(height: 10.0),
-          ],
+      body: LoaderOverlay(
+        useDefaultLoading: false,
+        overlayWidget: const Center(
+          child: SpinKitPouringHourGlassRefined(
+            color: AppColors.primary,
+            size: 50.0,
+          ),
+        ),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              // SizedBox(height: size.height * 0.07),
+              LogoApp(height: size.height * 0.45),
+              _LoginForm(),
+              const SizedBox(height: 10.0),
+            ],
+          ),
         ),
       ),
     );
@@ -109,7 +118,9 @@ class _InputEmailLogin extends StatelessWidget {
     // );
     return InputCustom(
       labelText: 'Correo Electronico',
-      onSaved: ( value ) { loginForm.email = value ?? '';},
+      onSaved: (value) {
+        loginForm.email = value ?? '';
+      },
       hintText: 'example@example.com',
       iconData: Icons.person,
       keyboardType: TextInputType.emailAddress,
@@ -138,7 +149,7 @@ class _InputPasswordLogin extends StatelessWidget {
     // );
     return InputCustom(
       labelText: 'Contraseña',
-      onSaved: ( value ) => loginForm.password = value ?? '',
+      onSaved: (value) => loginForm.password = value ?? '',
       obscureText: true,
       hintText: '********',
       iconData: Icons.key,
@@ -161,30 +172,33 @@ class _ButtonLogin extends StatelessWidget {
     // Declaracion del provider del formulario
     final loginForm = Provider.of<LoginFormProvider>(context);
     return ButtonCustom(
-      height: size.height * 0.065,
-      width: size.width * 0.7,
-      onPressed: () {
-        loginForm.formKey.currentState?.save();
-        _loginUser( context, loginForm.email, loginForm.password );
-      },
-      text: 'Iniciar Sesión',
-      colorText: Colors.white,
-      colorButton: AppColors.primary,
-      colorBorder: AppColors.primary
-    );
+        height: size.height * 0.065,
+        width: size.width * 0.7,
+        onPressed: () {
+          loginForm.formKey.currentState?.save();
+          FocusScope.of(context).unfocus();
+          _loginUser(context, loginForm.email, loginForm.password);
+        },
+        text: 'Iniciar Sesión',
+        colorText: Colors.white,
+        colorButton: AppColors.primary,
+        colorBorder: AppColors.primary);
   }
 
-  void _loginUser(BuildContext context, String email, String password ) async {
+  void _loginUser(BuildContext context, String email, String password) async {
     final _authService = AuthService();
-    LoginRequest loginRequest = LoginRequest.fromMap({
-      "email": email,
-      "password": password
-    });
+    LoginRequest loginRequest =
+        LoginRequest.fromMap({"email": email, "password": password});
+    // Ejecucion del loading de la pantalla
+    context.loaderOverlay.show();
     LoginResponse loginResponse = await _authService.loginUser(loginRequest);
-    ScaffoldMessenger.of(context).showSnackBar( showAlertCustom( loginResponse.message, loginResponse.error ) );
-    if( !loginResponse.error ) {
-      UtilsNavigator.navigatorAuth( context, loginResponse.token, loginResponse.profile, loginResponse.user );
-    } 
+    context.loaderOverlay.hide();
+    ScaffoldMessenger.of(context).showSnackBar(
+        showAlertCustom(loginResponse.message, loginResponse.error));
+    if (!loginResponse.error) {
+      UtilsNavigator.navigatorAuth(context, loginResponse.token,
+          loginResponse.profile, loginResponse.user);
+    }
   }
 }
 

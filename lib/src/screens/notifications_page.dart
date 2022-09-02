@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart' show CupertinoSwitch;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
-import 'package:uisads_app/src/constants/import_providers.dart';
+// import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
-
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -22,9 +20,9 @@ class NotificationsPage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(CustomUisIcons.settings_bold), 
+            icon: Icon(CustomUisIcons.settings_bold),
             color: AppColors.mainThirdContrast,
-            onPressed: () {},  
+            onPressed: () {},
           ),
           SizedBox(
             width: size.width * 0.03,
@@ -36,19 +34,17 @@ class NotificationsPage extends StatelessWidget {
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  Color(0xFF67B93E),
-                  Color(0xFF3EB96B),
-                  Color(0xFFA9B93E)
-                ]
-            )
-          ),
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                Color(0xFF67B93E),
+                Color(0xFF3EB96B),
+                Color(0xFFA9B93E)
+              ])),
         ),
       ),
-      body: Container(
+      body:Container(
         child: ListView(
           children: [
             // Widget de favoritos
@@ -73,7 +69,7 @@ class NotificationsPage extends StatelessWidget {
           color: AppColors.mainThirdContrast,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked ,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
@@ -98,7 +94,7 @@ class _NotificationBarState extends State<_NotificationBar> {
         color: AppColors.titles,
       ),
       title: Text(
-        _isEnabled ? 'Desactivar Notificaciones': 'Activar Notificaciones',
+        _isEnabled ? 'Desactivar Notificaciones' : 'Activar Notificaciones',
         style: TextStyle(
           fontFamily: GoogleFonts.robotoSlab().fontFamily,
           fontSize: 15.0,
