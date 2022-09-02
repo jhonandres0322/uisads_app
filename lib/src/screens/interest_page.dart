@@ -102,8 +102,11 @@ class InterestPage extends StatelessWidget {
       drawer: const DrawerCustom(),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'btn_navigation',
         backgroundColor: AppColors.primary,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, 'create-ad');
+        },
         child: const Icon(
           CustomUisIcons.megaphone,
           color: AppColors.mainThirdContrast,

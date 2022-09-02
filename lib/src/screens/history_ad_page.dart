@@ -69,8 +69,11 @@ class HistoryAdPage extends StatelessWidget {
       drawer: const DrawerCustom(),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'btn_navigation',
         backgroundColor: AppColors.primary,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, 'create-ad');
+        },
         child: const Icon(
           CustomUisIcons.megaphone,
           color: AppColors.mainThirdContrast,
@@ -259,17 +262,19 @@ class _SeccionVistoContactar extends StatelessWidget {
                 elevation: MaterialStateProperty.all(0),
                 textStyle: MaterialStateProperty.all(const TextStyle(
                     fontSize: 8, color: AppColors.mainThirdContrast))),
-            child: Row(children: [
-              Icon(
-                Icons.call,
-                color: AppColors.mainThirdContrast,
-                size: 12,
-              ),
-              SizedBox(
-                width: 5,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              // Icon(
+              //   Icons.call,
+              //   color: AppColors.mainThirdContrast,
+              //   size: 12,
+              // ),
+              // SizedBox(
+              //   width: 5,
+              // ),
               Text(
-                'Contactar',
+                'Ver más',
                 textAlign: TextAlign.center,
                 style:
                     TextStyle(fontSize: 12, color: AppColors.mainThirdContrast),

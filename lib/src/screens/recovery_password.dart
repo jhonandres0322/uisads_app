@@ -18,7 +18,7 @@ class RecoveryPasswordPage extends StatelessWidget {
             children: const [
               BackgroundTopRecovery(), 
               LogoAppRecovery(),
-              ButtonArrowBack( routeName:  ''), 
+              ButtonArrowBack( routeName:  'home'), 
               _ContainerInfo(),
               _ContainerForm()
             ],

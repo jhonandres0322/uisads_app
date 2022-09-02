@@ -35,7 +35,13 @@ class LoginPage extends StatelessWidget {
             width: 20,
           ),
         ],
-        leading: Container(),
+        leading: IconButton(
+              color: AppColors.primary,
+              icon: const Icon(Icons.arrow_back_ios_outlined),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+        ),
         backgroundColor: AppColors.mainThirdContrast,
         elevation: 0,
       ),
@@ -105,8 +111,9 @@ class _InputEmailLogin extends StatelessWidget {
       labelText: 'Correo Electronico',
       onSaved: ( value ) { loginForm.email = value ?? '';},
       hintText: 'example@example.com',
-      iconData: Icons.abc,
+      iconData: Icons.person,
       keyboardType: TextInputType.emailAddress,
+      colorIcon: AppColors.primary,
     );
   }
 }
@@ -134,7 +141,8 @@ class _InputPasswordLogin extends StatelessWidget {
       onSaved: ( value ) => loginForm.password = value ?? '',
       obscureText: true,
       hintText: '********',
-      iconData: Icons.lock,
+      iconData: Icons.key,
+      colorIcon: AppColors.primary,
     );
   }
 }

@@ -46,10 +46,11 @@ class _ButtonRegisterHome extends StatelessWidget {
       height: size.height * 0.065, 
       width: size.width * 0.75, 
       onPressed: () => Navigator.pushNamed(context, 'register'), 
-      text: 'Registrarse', 
+      text: 'Registro', 
       colorText: AppColors.primary, 
       colorButton: AppColors.mainThirdContrast, 
-      colorBorder: AppColors.subtitles
+      colorBorder: AppColors.subtitles,
+      icon: const Icon(Icons.person_add, color: AppColors.primary,),
     );
   }
 }
@@ -68,11 +69,12 @@ class _ButtonLoginHome extends StatelessWidget {
     return ButtonCustom(
       height: size.height * 0.065,
       width: size.width * 0.75,
-      onPressed: () =>  Navigator.pushNamed(context, 'login'),
+      onPressed: () =>  Navigator.pushNamed(context, 'login-ways'),
       text: 'Iniciar Sesión',
       colorText: Colors.white,
       colorButton: AppColors.primary,
-      colorBorder: AppColors.primary
+      colorBorder: AppColors.primary,
+      icon: Icon(Icons.login, color: AppColors.mainThirdContrast,),
     );
   }
 }

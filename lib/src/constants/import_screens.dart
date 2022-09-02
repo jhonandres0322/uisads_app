@@ -16,3 +16,4 @@ export 'package:uisads_app/src/screens/favorites_ad_page.dart';
 export 'package:uisads_app/src/screens/history_ad_page.dart';
 export 'package:uisads_app/src/screens/interest_page.dart';
 export 'package:uisads_app/src/screens/notifications_page.dart';
+export 'package:uisads_app/src/screens/login_other_ways.dart';

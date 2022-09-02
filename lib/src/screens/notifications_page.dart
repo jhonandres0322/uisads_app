@@ -13,7 +13,6 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final CategoryProvider _categoryProvider = Provider.of<CategoryProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -64,9 +63,9 @@ class NotificationsPage extends StatelessWidget {
       drawerEnableOpenDragGesture: false,
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'btn_navigation',
         backgroundColor: AppColors.primary,
         onPressed: () {
-          _categoryProvider.categorySelect = '';
           Navigator.pushNamed(context, 'create-ad');
         },
         child: const Icon(

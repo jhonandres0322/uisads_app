@@ -24,6 +24,7 @@ class RoutesApp {
     'history-ad': (BuildContext context ) =>  const HistoryAdPage(),
     'interest': (BuildContext context ) => const InterestPage(),
     'notifications': (BuildContext context ) => const NotificationsPage(),
+    'login-ways': (BuildContext context ) => const LoginOtherWays(),
   };
 
 }

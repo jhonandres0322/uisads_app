@@ -19,7 +19,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-              color: AppColors.subtitles,
+              color: AppColors.primary,
               icon: const Icon(Icons.arrow_back_ios_outlined),
               onPressed: () {
                 Navigator.pop(context);
@@ -69,10 +69,98 @@ class _RegisterForm extends StatelessWidget {
           const _InputCelularRegister(),
           const _InputCiudadRegister(),
           const _InputPasswordLogin(),
-          SizedBox(height: size.height * 0.08),
-          _ButtonRegister( size:size, formKey: formKey )
+          SizedBox(height: size.height * 0.06),
+          _ButtonRegister( size:size, formKey: formKey ),
+          SizedBox(height: size.height * 0.04),
+          // Registrese con
+          const _RegistreseConBarra(),
+          SizedBox(height: size.height * 0.01),
+          // Botones de Google y Facebook
+          const _BotonesRegistroOtrosMedios(),
+          SizedBox(height: size.height * 0.04),
         ],
       ),
+    );
+  }
+}
+
+// Botones de Registro de Otros Medios
+class _BotonesRegistroOtrosMedios extends StatelessWidget {
+  const _BotonesRegistroOtrosMedios({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children :[
+        // Botones de Google y Facebook
+        IconButton(
+          iconSize: 35,
+          onPressed: () {
+            // Ejecucion de la integracion con Facebook
+            log('Facebook Register');
+          }, 
+          icon: Icon(
+            CustomUisIcons.facebook_1,
+            color: Color(0xff1877F2),
+          )
+        ),
+        const SizedBox(width: 10,),
+        IconButton(
+          iconSize: 35,
+          onPressed: () {
+            // Ejecucion de la integracion con Facebook
+            log('Facebook Register');
+          }, 
+          icon: Image.asset(
+            'assets/images/icon_google_color.png',
+          )
+        ),
+        // const _ButtonGoogle(),
+        // const _ButtonFacebook(),
+      ]
+    );
+  }
+}
+
+// Widget que muestra el registre con barra
+class _RegistreseConBarra extends StatelessWidget {
+  const _RegistreseConBarra({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Divider(
+          color: Color(0XFFD9D9D9),
+          thickness: 1.0,
+        ),
+        // Texto Registrese con
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 5.0,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.mainThirdContrast,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Text(
+            'ó Registrese con',
+            style: TextStyle(
+              color: AppColors.subtitles,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Roboto',
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -93,6 +181,7 @@ class _InputEmailRegister extends StatelessWidget {
       hintText: 'example@example.com', 
       keyboardType: TextInputType.emailAddress,
       autofocus: true,
+      colorIcon: AppColors.primary,
     );
   }
 }
@@ -111,6 +200,7 @@ class _InputUsuarioRegister extends StatelessWidget {
       onSaved: (value) => registerForm.name = value ?? '', 
       iconData: Icons.person, 
       hintText: 'Ingrese un nombre', 
+      colorIcon: AppColors.primary,
     );
   }
 }
@@ -131,6 +221,7 @@ class _InputCelularRegister extends StatelessWidget {
       iconData: Icons.mobile_friendly, 
       hintText: 'Ingrese un numero de celular', 
       keyboardType: TextInputType.phone,
+      colorIcon: AppColors.primary,
     );
   }
 }
@@ -154,7 +245,8 @@ class _InputCiudadRegister extends StatelessWidget {
     final Widget dropdownCity = DropdownButtonFormField<dynamic>(
       decoration: decorationInputCustom(
         Icons.location_city_rounded,
-        'Ingrese la ciudad'
+        'Ingrese la ciudad',
+        AppColors.primary
       ),
       items: cities,
       onChanged: ( dynamic value ) => registerForm.city = value,
@@ -180,6 +272,7 @@ class _InputPasswordLogin extends StatelessWidget {
       iconData: Icons.lock, 
       hintText: 'Ingrese una contraseña', 
       obscureText: true,
+      colorIcon: AppColors.primary,
     );
   }
 }
