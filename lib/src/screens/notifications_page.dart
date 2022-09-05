@@ -4,10 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
 // import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'package:uisads_app/src/widgets/notifications_bar.dart';
 
-class NotificationsPage extends StatelessWidget {
+class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
 
+  @override
+  State<NotificationsPage> createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+  
+  bool _isEnabled = false;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -19,17 +27,23 @@ class NotificationsPage extends StatelessWidget {
         iconTheme: const IconThemeData(color: AppColors.mainThirdContrast),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(CustomUisIcons.settings_bold),
-            color: AppColors.mainThirdContrast,
-            onPressed: () {},
+          CupertinoSwitch(
+            activeColor: AppColors.titles,
+            trackColor: AppColors.subtitles,
+            thumbColor: AppColors.logoSchoolSecondary,
+            value: _isEnabled,
+            onChanged: (value) {
+              setState(() {
+                _isEnabled = value;
+              });
+            },
           ),
           SizedBox(
             width: size.width * 0.03,
           )
         ],
-        title: const Text(
-          'Notificaciones',
+        title: Text(
+          _isEnabled ? 'Desactivar Notificaciones' : 'Activar Notificaciones',
           style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w400),
         ),
         flexibleSpace: Container(
@@ -45,15 +59,17 @@ class NotificationsPage extends StatelessWidget {
         ),
       ),
       body:Container(
-        child: ListView(
-          children: [
-            // Widget de favoritos
-            _NotificationBar(),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
+        child:SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: size.height * 0.10,
+              ),
+              _InterestWidgetVacio(),
+            ],
+          ),
+        )
       ),
       drawer: const DrawerCustom(),
       drawerEnableOpenDragGesture: false,
@@ -74,43 +90,44 @@ class NotificationsPage extends StatelessWidget {
   }
 }
 
-///  Widget que muestra la barra de encender o apagar las notificaciones
-class _NotificationBar extends StatefulWidget {
-  const _NotificationBar({
+/// Widget que contendra el elemento de los intereses
+class _InterestWidgetVacio extends StatelessWidget {
+  const _InterestWidgetVacio({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<_NotificationBar> createState() => _NotificationBarState();
-}
-
-class _NotificationBarState extends State<_NotificationBar> {
-  bool _isEnabled = true;
-  @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(
-        CustomUisIcons.bi_bell,
-        color: AppColors.titles,
-      ),
-      title: Text(
-        _isEnabled ? 'Desactivar Notificaciones' : 'Activar Notificaciones',
-        style: TextStyle(
-          fontFamily: GoogleFonts.robotoSlab().fontFamily,
-          fontSize: 15.0,
-          fontWeight: FontWeight.w600,
-          color: AppColors.logoSchoolPrimary,
-        ),
-      ),
-      trailing: CupertinoSwitch(
-        activeColor: AppColors.third,
-        value: _isEnabled,
-        onChanged: (value) {
-          setState(() {
-            _isEnabled = value;
-          });
-        },
-      ),
+    // Condicionar este container a la hora de mostrar los intereses guardados
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            const Icon(
+              Icons.warning,
+              color: AppColors.subtitles,
+              size: 50,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              'No se han encontrado notificaciones en base a los intereses seleccionados',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.subtitles),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            )
+          ])),
     );
   }
 }

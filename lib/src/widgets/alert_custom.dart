@@ -14,14 +14,19 @@ SnackBar showAlertCustom(String text, bool isError) {
         SizedBox(
           width: 5,
         ),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 12.0,
-            fontFamily: GoogleFonts.robotoSlab().fontFamily,
-            fontWeight: FontWeight.w500, 
+        Flexible(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 12.0,
+              fontFamily: GoogleFonts.robotoSlab().fontFamily,
+              fontWeight: FontWeight.w500, 
+            ),
           ),
         ),
+        // SizedBox(
+        //   width: 5,
+        // ),
       ],
     ),
     action: SnackBarAction(
