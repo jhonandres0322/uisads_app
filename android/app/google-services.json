@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "434928272792",
+    "project_id": "flutter-signin-uisads",
+    "storage_bucket": "flutter-signin-uisads.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434928272792:android:94796be86a04814cc857ed",
+        "android_client_info": {
+          "package_name": "com.pfttechnologies.uisadsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434928272792-her9df810ehq1hpaqn2pc7k1ifkmh8pd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pfttechnologies.uisadsapp",
+            "certificate_hash": "56014502777230dd64542c6927cd4b7c45432b4a"
+          }
+        },
+        {
+          "client_id": "434928272792-ofpdtjknoag57dg89r710378sbfs19uh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmcaJLWknBZ65ndzCczsCVmONFRsD_UaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434928272792-ofpdtjknoag57dg89r710378sbfs19uh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

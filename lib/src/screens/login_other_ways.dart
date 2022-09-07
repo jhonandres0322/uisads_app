@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
 
@@ -19,6 +20,16 @@ class LoginOtherWays extends StatelessWidget {
                 Navigator.pop(context);
               },
         ),
+        actions: [
+          IconButton(
+            color: AppColors.primary,
+            icon: const Icon(CustomUisIcons.log_out),
+            onPressed: () {
+              // TODO: SIGN OUT
+              GoogleSigninService.signOutGoogle();
+            },
+          ),
+        ],
         backgroundColor: AppColors.mainThirdContrast,
         elevation: 0,
       ),
@@ -47,7 +58,10 @@ class LoginOtherWays extends StatelessWidget {
               ),
               // Boton Google
               _BotonIngresoCustom(
-                onPressed: (){},
+                onPressed: () {
+                  // TODO: sign in with google
+                  GoogleSigninService.signInWithGoogle();
+                },
                 text: 'Google',
                 colorBorder: AppColors.subtitles.withOpacity(0.4),
                 colorButton: AppColors.mainThirdContrast,
