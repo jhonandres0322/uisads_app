@@ -1,12 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
-
 class LoginOtherWays extends StatelessWidget {
   const LoginOtherWays({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class LoginOtherWays extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-              color: AppColors.primary,
-              icon: const Icon(Icons.arrow_back_ios_outlined),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+          color: AppColors.primary,
+          icon: const Icon(Icons.arrow_back_ios_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           IconButton(
@@ -27,6 +27,7 @@ class LoginOtherWays extends StatelessWidget {
             onPressed: () {
               // TODO: SIGN OUT
               GoogleSigninService.signOutGoogle();
+              FacebookSigninService.signOutFacebook();
             },
           ),
         ],
@@ -39,7 +40,9 @@ class LoginOtherWays extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             children: [
-              LogoApp(height: size.height * 0.25,),
+              LogoApp(
+                height: size.height * 0.25,
+              ),
               SizedBox(
                 height: size.height * 0.07,
               ),
@@ -58,17 +61,18 @@ class LoginOtherWays extends StatelessWidget {
               ),
               // Boton Google
               _BotonIngresoCustom(
-                onPressed: () {
+                onPressed: () async {
                   // TODO: sign in with google
-                  GoogleSigninService.signInWithGoogle();
+                  // GoogleSigninService.signInWithGoogle();
+                  log('is signed in google: ${ await GoogleSigninService.isSignedInGoogle()}');
                 },
                 text: 'Google',
                 colorBorder: AppColors.subtitles.withOpacity(0.4),
                 colorButton: AppColors.mainThirdContrast,
                 colorText: AppColors.subtitles,
                 icon: Image.asset(
-                      'assets/images/icon_google_color.png',
-                      width: 25,
+                  'assets/images/icon_google_color.png',
+                  width: 25,
                 ),
               ),
               SizedBox(
@@ -76,13 +80,19 @@ class LoginOtherWays extends StatelessWidget {
               ),
               // Boton Facebook
               _BotonIngresoCustom(
-                onPressed: (){},
+                onPressed: () {
+                  // TODO: sign in with facebook
+                  FacebookSigninService.signInWithFacebook();
+                },
                 text: 'Facebook',
                 colorBorder: Color(0xff1877F2),
                 colorButton: Color(0xff1877F2),
                 // colorButton: Color(0xff3B5998),
                 colorText: AppColors.logoSchoolSecondary,
-                icon: Icon(CustomUisIcons.square_facebook, color: AppColors.logoSchoolSecondary,),
+                icon: Icon(
+                  CustomUisIcons.square_facebook,
+                  color: AppColors.logoSchoolSecondary,
+                ),
               ),
               SizedBox(
                 height: size.height * 0.04,
@@ -94,19 +104,25 @@ class LoginOtherWays extends StatelessWidget {
                 colorBorder: AppColors.primary,
                 colorButton: AppColors.primary,
                 colorText: AppColors.logoSchoolSecondary,
-                icon: Icon(CustomUisIcons.email_fluent, color: AppColors.logoSchoolSecondary,),
+                icon: Icon(
+                  CustomUisIcons.email_fluent,
+                  color: AppColors.logoSchoolSecondary,
+                ),
               ),
               SizedBox(
                 height: size.height * 0.04,
               ),
               // Boton Ingreso invitado
               _BotonIngresoCustom(
-                onPressed: (){},
+                onPressed: () {},
                 text: 'Ingresar como invitado',
                 colorBorder: AppColors.subtitles,
                 colorButton: AppColors.mainThirdContrast,
                 colorText: AppColors.primary,
-                icon: Icon(CustomUisIcons.solid_person, color: AppColors.primary,),
+                icon: Icon(
+                  CustomUisIcons.solid_person,
+                  color: AppColors.primary,
+                ),
               ),
               SizedBox(
                 height: size.height * 0.04,
@@ -127,11 +143,10 @@ class _BotonIngresoCustom extends StatelessWidget {
     this.colorButton = AppColors.mainThirdContrast,
     this.colorBorder = AppColors.subtitles,
     this.colorText = AppColors.subtitles,
-    required this.icon, 
-    required this.onPressed, 
+    required this.icon,
+    required this.onPressed,
     required this.text,
   }) : super(key: key);
-  
 
   final Color? colorButton;
   final Color? colorBorder;
@@ -139,7 +154,6 @@ class _BotonIngresoCustom extends StatelessWidget {
   final Widget icon;
   final Function onPressed;
   final String text;
-
 
   @override
   Widget build(BuildContext context) {

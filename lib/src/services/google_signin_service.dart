@@ -46,5 +46,9 @@ class GoogleSigninService {
   static Future<void> signOutGoogle() async {
     await _googleSignIn.signOut();
   }
+  // Metodo para revisar si esta logeado con Google
+  static Future<bool> isSignedInGoogle() async {
+    return await _googleSignIn.isSignedIn();
+  }
   
 }
