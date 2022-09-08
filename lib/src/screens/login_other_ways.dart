@@ -63,7 +63,7 @@ class LoginOtherWays extends StatelessWidget {
               _BotonIngresoCustom(
                 onPressed: () async {
                   // TODO: sign in with google
-                  // GoogleSigninService.signInWithGoogle();
+                  GoogleSigninService.signInWithGoogle();
                   log('is signed in google: ${ await GoogleSigninService.isSignedInGoogle()}');
                 },
                 text: 'Google',
