@@ -148,7 +148,7 @@ class CirclePerfilAvatar extends StatelessWidget {
     // Obtenemos los valores de la pantalla
     return InkWell(
       onTap: () {
-        // Scaffold.of(context).openDrawer();
+        Scaffold.of(context).openDrawer();
       },
       child: SizedBox(
         height: height,
@@ -158,7 +158,7 @@ class CirclePerfilAvatar extends StatelessWidget {
             _BarraPerfilNombre(
               // width: width ,
               height: height,
-              nombreUser: Preferences.name,
+              nombreUser: Preferences.name == '' ? ' Invitado' : Preferences.name,
             ),
             // Stack con el circulo de perfil
             ProfileAvatar(

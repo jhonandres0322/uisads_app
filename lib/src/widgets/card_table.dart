@@ -107,6 +107,7 @@ class AnuncioCard extends StatelessWidget {
                   ),
                   onPressed: () {
                     log('Ver más del anuncio');
+                    Navigator.pushNamed(context, 'ad-guest');
                   },
                 ),
               ),

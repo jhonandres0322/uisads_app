@@ -47,7 +47,29 @@ List<Map<String, dynamic>> listDrawer = [
 
 Map<String, dynamic> logoutDrawerInfo = {
   'icon' : CustomUisIcons.log_out,
-  'route': 'login',
+  'route': 'home',
   'label': 'Cerrar Sesión',
   'key': 'logout'
 };
+
+Map<String, dynamic> logoutDrawerOutNoLogin = {
+  'icon' : CustomUisIcons.log_out,
+  'route': 'home',
+  'label': 'Cerrar Sesión',
+  'key': 'logout'
+};
+
+List<Map<String, dynamic>> listDrawerNoLogin = [
+  {
+    'icon': CustomUisIcons.message,
+    'route': '',
+    'label': 'Envia tus comentarios',
+    'key': 'comments'
+  },
+  {
+    'icon': CustomUisIcons.info,
+    'route': '',
+    'label': 'Acerca de la app',
+    'key': 'about'
+  },
+];

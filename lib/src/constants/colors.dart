@@ -29,4 +29,5 @@ class AppColors {
   static const Color selectedFavorite = Color(0xFFEB5757);
   static const Color backgroundBar = Color(0xFFD9D9D9);
   static Color primaryOpacity = const Color(0xFF3EB96B).withOpacity(0.75);
+  static Color unSelected = const Color(0xFF8798AD).withOpacity(0.50);
 }

@@ -17,3 +17,5 @@ export 'package:uisads_app/src/screens/history_ad_page.dart';
 export 'package:uisads_app/src/screens/interest_page.dart';
 export 'package:uisads_app/src/screens/notifications_page.dart';
 export 'package:uisads_app/src/screens/login_other_ways.dart';
+export 'package:uisads_app/src/screens/main_guest_page.dart';
+export 'package:uisads_app/src/screens/ad_page_guest.dart';

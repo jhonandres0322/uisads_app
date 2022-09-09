@@ -114,7 +114,10 @@ class LoginOtherWays extends StatelessWidget {
               ),
               // Boton Ingreso invitado
               _BotonIngresoCustom(
-                onPressed: () {},
+                onPressed: () {
+                  // TODO: sign in as guest
+                  Navigator.pushNamed(context, 'main-guest');
+                },
                 text: 'Ingresar como invitado',
                 colorBorder: AppColors.subtitles,
                 colorButton: AppColors.mainThirdContrast,

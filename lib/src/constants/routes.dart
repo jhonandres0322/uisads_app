@@ -25,6 +25,8 @@ class RoutesApp {
     'interest': (BuildContext context ) => const InterestPage(),
     'notifications': (BuildContext context ) => const NotificationsPage(),
     'login-ways': (BuildContext context ) => const LoginOtherWays(),
+    'main-guest': (BuildContext context ) => const MainGuestPage(),
+    'ad-guest': (BuildContext context ) => const AdPageGuest(),
   };
 
 }

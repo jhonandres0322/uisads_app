@@ -12,6 +12,7 @@ class DrawerCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final items = listDrawer;
     final Size size = MediaQuery.of(context).size;
     return Drawer(
@@ -21,14 +22,26 @@ class DrawerCustom extends StatelessWidget {
             children: [
               const CardInfoProfile(),
               SizedBox(height: size.height * 0.05),
-              Expanded(
-                child: ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      return ItemDrawer(data: items[index]);
-                    }),
-              ),
-              ItemDrawer(data: logoutDrawerInfo),
+              if (Preferences.name != '')
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        return ItemDrawer(data: items[index]);
+                      }),
+                ),
+              if (Preferences.name == '')
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: listDrawerNoLogin.length,
+                      itemBuilder: (context, index) {
+                        return ItemDrawer(data: listDrawerNoLogin[index]);
+                      }),
+                ),
+              if (Preferences.name != '')
+                ItemDrawer(data: logoutDrawerInfo),
+              if (Preferences.name == '')
+                ItemDrawer(data: logoutDrawerOutNoLogin),
               SizedBox(
                 height: size.height * 0.05,
               )
@@ -46,8 +59,10 @@ class CardInfoProfile extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        UtilsNavigator.navigatorProfile(context, Preferences.uid);
-        Navigator.pushNamed(context, 'profile', arguments: {'type': 'user'});
+        if (Preferences.token != '') {
+          UtilsNavigator.navigatorProfile(context, Preferences.uid);
+          Navigator.pushNamed(context, 'profile', arguments: {'type': 'user'});
+        }
       },
       child: Container(
         child: Row(
@@ -64,7 +79,7 @@ class CardInfoProfile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    Preferences.name,
+                    Preferences.name == '' ? 'Invitado' : Preferences.name,
                     style: const TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.bold,
@@ -73,7 +88,7 @@ class CardInfoProfile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    Preferences.email,
+                    Preferences.email == '' ? 'invitado@invitado.com ' : Preferences.email,
                     style: const TextStyle(
                       fontSize: 10.0,
                       color: AppColors.mainThirdContrast,
@@ -150,7 +165,7 @@ class ItemDrawer extends StatelessWidget {
     if (routeName.isEmpty || routeName == '') {
       showAboutApp(context);
     } else {
-      if (routeName == 'login') {
+      if (routeName == 'home') {
         Preferences.clearInfoLogout();
       }
       Navigator.pushNamedAndRemoveUntil(

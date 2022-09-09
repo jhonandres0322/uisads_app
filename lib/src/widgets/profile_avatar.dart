@@ -54,7 +54,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
     if( path.isNotEmpty ) {
       return FileImage( File( path ) );
     } else {
-      return const AssetImage('assets/images/avatar.png');
+      return const AssetImage('assets/images/invitado.png');
     }
   }
 }
