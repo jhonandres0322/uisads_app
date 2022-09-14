@@ -40,4 +40,12 @@ class AuthService with HttpHandler {
     final resp = await getPost('/auth/change-password', request.toMap());
     return Response.fromMap( resp );
   }
+  // Metodo para Login con Google
+  Future<LoginResponse> loginUserGoogle( String idTokenUser) async {
+    final resp = await getPost('/auth/google', {
+      "token": idTokenUser
+    });
+    LoginResponse loginResponse = LoginResponse.fromMap( resp );
+    return loginResponse;
+  }
 }
