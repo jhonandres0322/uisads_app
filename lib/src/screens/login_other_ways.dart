@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
@@ -26,9 +27,12 @@ class LoginOtherWays extends StatelessWidget {
           IconButton(
             color: AppColors.primary,
             icon: const Icon(CustomUisIcons.log_out),
-            onPressed: () {
+            onPressed: () async{
               // TODO: SIGN OUT
-              GoogleSigninService.signOutGoogle();
+              // GoogleSigninService.signOutGoogle();
+              // Cerrar sesion Facebook
+              bool isSignedInFacebook = await FacebookSigninService.isSignedInFacebook();
+              log(isSignedInFacebook.toString());
               FacebookSigninService.signOutFacebook();
             },
           ),
@@ -72,14 +76,16 @@ class LoginOtherWays extends StatelessWidget {
                 // Boton Google
                 _BotonIngresoCustom(
                   onPressed: () async {
-                    // Logica de ingreso con Google                  
-                    final googleUser = await GoogleSigninService.signInWithGoogle();
+                    // Logica de ingreso con Google
+                    final googleUser =
+                        await GoogleSigninService.signInWithGoogle();
                     if (googleUser != null) {
                       _loginUser(context, googleUser.idToken!);
-                    } else{
-                      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom('Error Autenticacion Google, contacte al administrador', true));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(
+                          'Error Autenticacion Google, contacte al administrador',
+                          true));
                     }
-                    
                   },
                   text: 'Google',
                   colorBorder: AppColors.subtitles.withOpacity(0.4),
@@ -95,9 +101,16 @@ class LoginOtherWays extends StatelessWidget {
                 ),
                 // Boton Facebook
                 _BotonIngresoCustom(
-                  onPressed: () {
-                    // TODO: sign in with facebook
-                    FacebookSigninService.signInWithFacebook();
+                  onPressed: () async{
+                    // Logica de ingreso con Facebook
+                    final facebookUser = await FacebookSigninService.signInWithFacebook();
+                    if (facebookUser.status == LoginStatus.success) {
+                      _loginUserFacebook(context, facebookUser.accessToken!.token, facebookUser.accessToken!.userId);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(showAlertCustom(
+                          'Error Autenticacion Facebook, contacte al administrador',
+                          true));
+                    }
                   },
                   text: 'Facebook',
                   colorBorder: Color(0xff1877F2),
@@ -130,7 +143,6 @@ class LoginOtherWays extends StatelessWidget {
                 // Boton Ingreso invitado
                 _BotonIngresoCustom(
                   onPressed: () {
-                    // TODO: sign in as guest
                     Navigator.pushNamed(context, 'main-guest');
                   },
                   text: 'Ingresar como invitado',
@@ -153,8 +165,9 @@ class LoginOtherWays extends StatelessWidget {
       ),
     );
   }
+
   // Metodo para iniciar sesion con google por ahora
-  void _loginUser(BuildContext context, String tokenId) async {
+  void _loginUser(BuildContext context, String tokenId, ) async {
     final _authService = AuthService();
     // Ejecucion del loading de la pantalla
     context.loaderOverlay.show();
@@ -167,6 +180,21 @@ class LoginOtherWays extends StatelessWidget {
           loginResponse.profile, loginResponse.user);
     }
     GoogleSigninService.signOutGoogle();
+  }
+  // Metodo para iniciar sesion con facebook por ahora
+  void _loginUserFacebook(BuildContext context, String tokenId, String userId) async {
+    final _authService = AuthService();
+    // Ejecucion del loading de la pantalla
+    context.loaderOverlay.show();
+    LoginResponse loginResponse = await _authService.loginUserFacebook(tokenId, userId);
+    context.loaderOverlay.hide();
+    ScaffoldMessenger.of(context).showSnackBar(
+        showAlertCustom(loginResponse.message, loginResponse.error));
+    if (!loginResponse.error) {
+      UtilsNavigator.navigatorAuth(context, loginResponse.token,
+          loginResponse.profile, loginResponse.user);
+    }
+    FacebookSigninService.signOutFacebook();
   }
 }
 

@@ -11,12 +11,13 @@ class FacebookSigninService {
       if (result.status == LoginStatus.success) {
         final userData = await FacebookAuth.instance.getUserData();
         log('Facebook Sign In: ${userData}');
-        // final AccessToken accessToken = result.accessToken!;
+        final AccessToken accessToken = result.accessToken!;
         // final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(accessToken.token);
         // final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
         // final User user = userCredential.user!;
         // log('Facebook Sign In: ${user.displayName}');
-        log('Facebook Sign In: ${result.accessToken!.token}');
+        log('Facebook Sign token: ${result.accessToken!.token}');
+        log('Facebook Sign In UserId: ${result.accessToken!.userId}');
         return result;
       } else {
         throw Exception('No se pudo obtener la autenticacion de Facebook');

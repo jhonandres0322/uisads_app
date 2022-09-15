@@ -48,4 +48,13 @@ class AuthService with HttpHandler {
     LoginResponse loginResponse = LoginResponse.fromMap( resp );
     return loginResponse;
   }
+  // Metodo para Login con Facebook
+  Future<LoginResponse> loginUserFacebook( String idTokenUser, String userId) async {
+    final resp = await getPost('/auth/facebook/token', {
+      "token": idTokenUser,
+      "userId": userId
+    });
+    LoginResponse loginResponse = LoginResponse.fromMap( resp );
+    return loginResponse;
+  }
 }
