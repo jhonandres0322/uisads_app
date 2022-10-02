@@ -41,9 +41,9 @@ class AdPage extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child: FutureBuilder(
+        child: FutureBuilder<Ad>(
             future: _adService.getAdById(arguments['id']),
-            builder: (context, AsyncSnapshot<dynamic> snapshot) {
+            builder: (context, AsyncSnapshot<Ad> snapshot) {
               if (snapshot.hasData) {
                 return Column(
                   children: [
@@ -86,7 +86,9 @@ class AdPage extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    _ReportSection(),
+                    _ReportSection(
+                      idAd: snapshot.data!.id
+                    ),
                     Divider(
                       color: AppColors.third,
                     ),
@@ -133,7 +135,10 @@ class AdPage extends StatelessWidget {
 class _ReportSection extends StatelessWidget {
   const _ReportSection({
     Key? key,
+    required String this.idAd
   }) : super(key: key);
+
+  final String idAd;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +147,7 @@ class _ReportSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _ReportButton(),
+          _ReportButton( idAd: idAd ),
         ],
       ),
     );
@@ -151,9 +156,12 @@ class _ReportSection extends StatelessWidget {
 
 // Widget para el boton de reporte de la aplicacion
 class _ReportButton extends StatefulWidget {
-  const _ReportButton({
+  _ReportButton({
     Key? key,
+    required String this.idAd
   }) : super(key: key);
+
+  final String idAd;
 
   @override
   State<_ReportButton> createState() => _ReportButtonState();
@@ -164,6 +172,7 @@ class _ReportButtonState extends State<_ReportButton> {
   bool _isReported = false;
   @override
   Widget build(BuildContext context) {
+    ReportProvider _reportProvider = Provider.of<ReportProvider>(context);
     // Control del reporte
     var dialog = CustomAlertDialog(
       title: _isReported
@@ -180,22 +189,22 @@ class _ReportButtonState extends State<_ReportButton> {
         Navigator.of(context, rootNavigator: true).pop(false);
       },
       circularBorderRadius: 10,
-      positiveBtnText: _isReported ? 'Quitar Reporte' : 'Reportar',
-      positiveBtnColor: _isReported ? AppColors.accept : AppColors.reject,
+      positiveBtnText: _reportProvider.isReported ? 'Quitar Reporte' : 'Reportar',
+      positiveBtnColor: _reportProvider.isReported ? AppColors.accept : AppColors.reject,
       negativeBtnText: 'Cancelar',
       negativeBtnColor: AppColors.mainThirdContrast,
     );
     return InkWell(
       onTap: () async {
         // Confirmacion de anuncio reportado
-        if (_isReported) {
+        if (_reportProvider.isReported) {
           bool confirmacion = await showDialog(
               context: context,
               barrierDismissible: false,
               builder: (context) => dialog);
           if (confirmacion) {
             setState(() {
-              _isReported = false;
+              _reportProvider.manageReport(widget.idAd);
               log('Confirmado');
             });
           }
@@ -206,7 +215,7 @@ class _ReportButtonState extends State<_ReportButton> {
               builder: (context) => dialog);
           if (confirmacion) {
             setState(() {
-              _isReported = true;
+              _reportProvider.manageReport(widget.idAd);
               log('Confirmado');
             });
           }
