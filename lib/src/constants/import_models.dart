@@ -19,4 +19,5 @@ export 'package:uisads_app/src/models/upload.dart';
 export 'package:uisads_app/src/models/user_login.dart';
 export 'package:uisads_app/src/models/user_register.dart';
 export 'package:uisads_app/src/models/user.dart';
-
+export 'package:uisads_app/src/models/response_interest.dart';
+export 'package:uisads_app/src/models/request_interest.dart';

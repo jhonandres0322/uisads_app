@@ -4,16 +4,51 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'package:uisads_app/src/models/response_interest.dart';
 
-class InterestPage extends StatelessWidget {
+class InterestPage extends StatefulWidget {
   const InterestPage({Key? key}) : super(key: key);
 
   @override
+  State<InterestPage> createState() => _InterestPageState();
+}
+
+class _InterestPageState extends State<InterestPage> {
+  @override
+  void initState() {
+    super.initState();
+    _cargarIntereses();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: Cargar del servicio los intereses y usarlos en el provider, limpiar los intereses en caso de tener alguno
     final interestFormProvider = Provider.of<InterestPageProvider>(context);
     final Size size = MediaQuery.of(context).size;
+    var dialog = CustomAlertDialog(
+      title: '¿Desea guardar los intereses suministrados?',
+      icon: Icons.check_circle,
+      iconColor: AppColors.accept,
+      onPostivePressed: () {
+        Navigator.of(context, rootNavigator: true).pop(true);
+      },
+      onNegativePressed: () {
+        Navigator.of(context, rootNavigator: true).pop(false);
+      },
+      circularBorderRadius: 10,
+      positiveBtnText: 'Aceptar',
+      positiveBtnColor: AppColors.primary,
+      negativeBtnText: 'Cancelar',
+      negativeBtnColor: AppColors.mainThirdContrast,
+    );
+    // final List<String> interests = interestFormProvider.interests;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -64,7 +99,7 @@ class InterestPage extends StatelessWidget {
                     _ButtonBar(
                       texto: 'Agregar Interes',
                       onPressed: () {
-                          _validarInteresAgregado(interestFormProvider, context);
+                        _validarInteresAgregado(interestFormProvider, context);
                       },
                     ),
                     SizedBox(
@@ -75,26 +110,30 @@ class InterestPage extends StatelessWidget {
               ),
               // Widget de intereses
               if (interestFormProvider.interests.isEmpty)
-              _InterestWidgetVacio(),
+                _InterestWidgetVacio(),
               if (interestFormProvider.interests.isNotEmpty)
-              _InterestWidgetFull(),
+                _InterestWidgetFull(),
               if (interestFormProvider.interests.isNotEmpty)
-              Row(
-                children: [
-                  Spacer(),
-                  _ButtonGuardar(
-                      size: size,
-                      onPressed: () {
-                        // TODO: Guardar los intereses, limpia el provider y regresa a la pantalla anterior
-                        interestFormProvider.cleanInterests();
-                        log('Intereses ${interestFormProvider.interests}');
-                      },
-                      text: 'Guardar'),
-                  SizedBox(
-                    width: 10,
-                  )
-                ],
-              ),
+                Row(
+                  children: [
+                    Spacer(),
+                    _ButtonGuardar(
+                        size: size,
+                        onPressed: () async {
+                          bool confirmacion = await showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => dialog);
+                          if (confirmacion) {
+                            _guardarIntereses(context);
+                          }
+                        },
+                        text: 'Guardar'),
+                    SizedBox(
+                      width: 10,
+                    )
+                  ],
+                ),
             ],
           ),
         ),
@@ -116,8 +155,40 @@ class InterestPage extends StatelessWidget {
     );
   }
 
-  // Metodo para validar un interes agregado
-  void _validarInteresAgregado(InterestPageProvider interestFormProvider, BuildContext context) {
+  // Guardar Intereses
+  void _guardarIntereses(BuildContext context) async {
+    final interestFormProvider =
+        Provider.of<InterestPageProvider>(context, listen: false);
+    final interestService = InterestService();
+    final response = await interestService.saveInterests(interestFormProvider.handlerData());
+    if (response.error) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showAlertCustom(response.message, response.error));
+      } else {
+        // Limpiar el formulario
+        interestFormProvider.formKey.currentState!.reset();
+        // Actualizar la lista de anuncios
+        interestFormProvider.cleanInterests();
+        Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showAlertCustom(response.message, response.error));
+      }
+    
+  }
+
+  // Cargar intereses en la pagina al ingresar
+  void _cargarIntereses() async {
+    final interestFormProvider =
+        Provider.of<InterestPageProvider>(context, listen: false);
+    final interestService = InterestService();
+    final resp = await interestService.getInterests();
+    final responseInterest = ResponseInterest.fromJson(resp);
+    interestFormProvider.interests = responseInterest.interests;
+  }
+
+  // Validar que el interes no este vacio y todo este correcto
+  void _validarInteresAgregado(
+      InterestPageProvider interestFormProvider, BuildContext context) {
     if (interestFormProvider.interests.length < 5) {
       interestFormProvider.formKey.currentState?.save();
       FocusScope.of(context).unfocus();
@@ -241,6 +312,7 @@ class _BuildChip extends StatelessWidget {
         final interestFormProvider =
             Provider.of<InterestPageProvider>(context, listen: false);
         interestFormProvider.removeInterest(label);
+        log('Intereses ${interestFormProvider.interests}');
       },
       deleteIcon: Icon(
         Icons.close,
@@ -271,14 +343,17 @@ class _InputPalabrasClaves extends StatelessWidget {
       paddingPorcentage: 0.05,
     );
   }
+
   // Metodo para validar un valor agregado a la lista de palabras claves en el input
-  void _validarValorAgregadoInput(String value, InterestPageProvider interestFormProvider, BuildContext context) {
-    if ((value.trim().isNotEmpty && value.trim().length > 2) && !interestFormProvider.interests.contains(value.trim().toLowerCase())) {
-        interestFormProvider.addInterest(value.trim().toLowerCase());
-        log(value);
+  void _validarValorAgregadoInput(String value,
+      InterestPageProvider interestFormProvider, BuildContext context) {
+    if ((value.trim().isNotEmpty && value.trim().length > 2) &&
+        !interestFormProvider.interests.contains(value.trim().toLowerCase())) {
+      interestFormProvider.addInterest(value.trim().toLowerCase());
+      log(value);
     } else {
       ScaffoldMessenger.of(context)
-        .showSnackBar(showAlertCustom('Interes Vacio o repetido', true));
+          .showSnackBar(showAlertCustom('Interes Vacio o repetido', true));
     }
   }
 }
