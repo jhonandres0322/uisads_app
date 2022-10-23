@@ -10,10 +10,25 @@ import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 // import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'package:uisads_app/src/services/local_notification_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
-class NotificationsPage extends StatelessWidget {
+class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
+
+  @override
+  State<NotificationsPage> createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+  late final LocalNotificationService serviceNotifications;
+  @override
+  void initState() {
+    serviceNotifications = LocalNotificationService();
+    serviceNotifications.intialize();
+    _listenNotification();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +97,39 @@ class NotificationsPage extends StatelessWidget {
               height: size.height * 0.10,
             ),
             _InterestWidgetVacio(),
+            SizedBox(
+              height: 20.0,
+            ),
+            // Boton para activar Notificacion
+            ElevatedButton(
+                onPressed: () async {
+                  log('Boton para activar notificaciones');
+                  await serviceNotifications.showNotification(
+                      id: 0, title: 'UIS ADS', body: 'Notificacion de prueba');
+                },
+                child: Text('Notificacion simple')),
+            SizedBox(
+              height: 20.0,
+            ),
+            // Boton para activar Notificacion
+            ElevatedButton(
+                onPressed: () async {
+                  log('Boton para activar notificaciones');
+                  await serviceNotifications.showScheduledNotification(
+                      id: 0,
+                      title: 'UIS ADS',
+                      body: 'Notificacion programada',
+                      seconds: 15);
+                },
+                child: Text('Notificacion con tiempo retrasado')),
+            SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+                onPressed: () async{
+                   await serviceNotifications.showNotificationWithPayload(
+                      id: 0, title: 'UIS ADS', body: 'Notificacion de prueba', payload: 'Hola mundo');
+                }, child: Text('Notificacion con Payload'))
           ],
         ),
       )),
@@ -117,6 +165,18 @@ class NotificationsPage extends StatelessWidget {
           .activarDesactivarNotificaciones('inactive');
     }
     UtilsOperations.mostrarResultadoError(response, context);
+  }
+
+  // Escuchar la informacion de la notificacion recibida
+  void _listenNotification() =>
+      serviceNotifications.onNotificationClick.listen(onNotificationListener);
+  // Metodo para mostrar la informacion escuchada en el stream
+  void onNotificationListener(String? payload) {
+    log('Notificacion recibida: $payload');
+    if (payload != null && payload.isNotEmpty) {
+      // Enviamos a la pagina de detalle en este caso de mi notificacion mi Notifications page favorites-ad notifications
+      Navigator.pushNamedAndRemoveUntil(context, 'favorites-ad', (Route<dynamic> route) => false);  
+    }
   }
 }
 
