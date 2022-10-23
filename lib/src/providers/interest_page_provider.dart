@@ -62,8 +62,7 @@ class InterestPageProvider with ChangeNotifier {
     // Cargar la informacion de los intereses
     final interestService = InterestService();
     final resp = await interestService.getInterests();
-    final ResponseInterest interesesTemp = ResponseInterest.fromJson(resp);
-    print(interesesTemp);
+    // final ResponseInterest interesesTemp = ResponseInterest.fromJson(resp);
     return resp;
   }
 

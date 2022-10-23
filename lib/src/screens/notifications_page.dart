@@ -1,24 +1,31 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart' show CupertinoSwitch;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 // import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
-import 'package:uisads_app/src/widgets/notifications_bar.dart';
+import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
-class NotificationsPage extends StatefulWidget {
+class NotificationsPage extends StatelessWidget {
   const NotificationsPage({Key? key}) : super(key: key);
 
   @override
-  State<NotificationsPage> createState() => _NotificationsPageState();
-}
-
-class _NotificationsPageState extends State<NotificationsPage> {
-  
-  bool _isEnabled = false;
-  @override
   Widget build(BuildContext context) {
+    final notificationProvider = Provider.of<NotificationPageProvider>(context);
+    notificationProvider.estadoNotificaciones = Preferences.isNotify;
     final Size size = MediaQuery.of(context).size;
+    String notificacionTitle = notificationProvider.estadoNotificaciones
+        ? 'Desactivar Notificaciones'
+        : 'Activar Notificaciones';
+
+    var dialog = UtilsOperations.mostrarDialogo(
+        context, '¿Desea $notificacionTitle de sus intereses definidos?');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -31,11 +38,19 @@ class _NotificationsPageState extends State<NotificationsPage> {
             activeColor: AppColors.titles,
             trackColor: AppColors.subtitles,
             thumbColor: AppColors.logoSchoolSecondary,
-            value: _isEnabled,
-            onChanged: (value) {
-              setState(() {
-                _isEnabled = value;
-              });
+            value: notificationProvider.estadoNotificaciones,
+            onChanged: (value) async {
+              bool confirmacion = await showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => dialog);
+              if (confirmacion) {
+                final notificationProvider =
+                    Provider.of<NotificationPageProvider>(context,
+                        listen: false);
+                _sendNotificationChoice(value, context);
+                notificationProvider.estadoNotificaciones = value;
+              }
             },
           ),
           SizedBox(
@@ -43,7 +58,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           )
         ],
         title: Text(
-          _isEnabled ? 'Desactivar Notificaciones' : 'Activar Notificaciones',
+          notificacionTitle,
           style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w400),
         ),
         flexibleSpace: Container(
@@ -58,19 +73,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ])),
         ),
       ),
-      body:Container(
-        child:SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: size.height * 0.10,
-              ),
-              _InterestWidgetVacio(),
-            ],
-          ),
-        )
-      ),
+      body: Container(
+          child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: size.height * 0.10,
+            ),
+            _InterestWidgetVacio(),
+          ],
+        ),
+      )),
       drawer: const DrawerCustom(),
       drawerEnableOpenDragGesture: false,
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
@@ -87,6 +101,22 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  // Enviar valor notificacion BD
+  void _sendNotificationChoice(bool value, BuildContext context) async {
+    final notificacionesService = NotificationService();
+    Response response;
+    if (value) {
+      // Activar notificaciones
+      response =
+          await notificacionesService.activarDesactivarNotificaciones('active');
+    } else {
+      // Desactivar notificaciones
+      response = await notificacionesService
+          .activarDesactivarNotificaciones('inactive');
+    }
+    UtilsOperations.mostrarResultadoError(response, context);
   }
 }
 

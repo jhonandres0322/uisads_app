@@ -58,6 +58,19 @@ class HttpHandler {
     jsonDecode.addAll({"error": false});
     return jsonDecode;
   }
+  Future<Map<String, dynamic>> getPostEncode( String endpoint, Map<String, dynamic> request) async {
+    Map<String, String> getHeaders = _getHeaders();
+    String url = _getEndpoint(endpoint);
+    final resp = await http.post(Uri.parse(url), headers: getHeaders, body: request, encoding: Encoding.getByName('utf-8'));
+    Map<String, dynamic> jsonDecode = json.decode(resp.body);
+    int statusCode = resp.statusCode;
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
+    }
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
+  }
 
   // ignore: unused_element
   Future<Map<String, dynamic>> getPut( String endpoint, Map<String, dynamic> request) async {

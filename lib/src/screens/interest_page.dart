@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 import 'package:uisads_app/src/models/response_interest.dart';
 
@@ -31,24 +32,7 @@ class _InterestPageState extends State<InterestPage> {
   Widget build(BuildContext context) {
     final interestFormProvider = Provider.of<InterestPageProvider>(context);
     final Size size = MediaQuery.of(context).size;
-    var dialog = CustomAlertDialog(
-      title: '¿Desea guardar los intereses suministrados?',
-      icon: Icons.check_circle,
-      iconColor: AppColors.accept,
-      onPostivePressed: () {
-        Navigator.of(context, rootNavigator: true).pop(true);
-      },
-      onNegativePressed: () {
-        Navigator.of(context, rootNavigator: true).pop(false);
-      },
-      circularBorderRadius: 10,
-      positiveBtnText: 'Aceptar',
-      positiveBtnColor: AppColors.primary,
-      negativeBtnText: 'Cancelar',
-      negativeBtnColor: AppColors.mainThirdContrast,
-    );
-    // final List<String> interests = interestFormProvider.interests;
-
+    var dialog = UtilsOperations.mostrarDialogo(context, '¿Desea guardar los intereses suministrados?');
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

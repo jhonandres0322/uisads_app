@@ -10,6 +10,7 @@ class Preferences {
   static String email = '';
   static String name  = '';
   static Upload image = Upload();
+  static bool isNotify = false;
   
 
   Future init() async {
@@ -22,6 +23,7 @@ class Preferences {
     email = '';
     name  = '';
     image = Upload();
+    isNotify = false;
   }
 
   static void saveInfoLogin( Map<String,dynamic> infoProfile ) {
@@ -30,6 +32,7 @@ class Preferences {
     email = infoProfile["email"];
     name  = infoProfile["name"];
     image = infoProfile["image"];
+    isNotify = infoProfile["isNotify"];
   }
 
   static void updateInfo( Profile profile ) {

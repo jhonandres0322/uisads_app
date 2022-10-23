@@ -8,6 +8,7 @@ import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/routes.dart';
 import 'package:uisads_app/src/constants/themes.dart';
 
+
 import 'package:uisads_app/src/utils/screen_size.dart';
 
 void main() => runApp(const AppState());
@@ -34,7 +35,8 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DeleteAdProvider()),
         ChangeNotifierProvider(create: (_) => EditAdProvider()),
         ChangeNotifierProvider(create: (_) => InterestPageProvider()),
-        ChangeNotifierProvider(create: (_) => ReportProvider())
+        ChangeNotifierProvider(create: (_) => ReportProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationPageProvider())
       ],
       child: const App(),
     );

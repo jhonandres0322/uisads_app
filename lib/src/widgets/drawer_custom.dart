@@ -123,7 +123,7 @@ class ItemDrawer extends StatelessWidget {
     // return Text('${data['label']}');
     final currentRoute = ModalRoute.of(context)?.settings.name;
     return InkWell(
-      onTap: () => getNavigationRoute(context, data['route']),
+      onTap: () => getNavigationRoute(context, data['route'], currentRoute),
       child: Container(
         padding: EdgeInsets.symmetric(
             horizontal: size.width * 0.05, vertical: size.height * 0.015),
@@ -161,15 +161,17 @@ class ItemDrawer extends StatelessWidget {
   Color getColorItem(final currentRoute, String route) =>
       currentRoute == route ? AppColors.primary : AppColors.logoSchoolPrimary;
 
-  void getNavigationRoute(BuildContext context, String routeName) {
+  void getNavigationRoute(BuildContext context, String routeName, String? rutaActual) {
     if (routeName.isEmpty || routeName == '') {
       showAboutApp(context);
     } else {
       if (routeName == 'home') {
         Preferences.clearInfoLogout();
       }
-      Navigator.pushNamedAndRemoveUntil(
+      if(routeName != rutaActual){
+        Navigator.pushNamedAndRemoveUntil(
           context, routeName, (Route<dynamic> route) => false);
+      }
     }
   }
   // AlertDialog para el Acerca de la App

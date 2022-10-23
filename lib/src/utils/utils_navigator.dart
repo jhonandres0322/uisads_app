@@ -18,7 +18,8 @@ class UtilsNavigator {
         "name"  : profile.name,
         "email" : user.email,
         "uid"   : profile.uid,
-        "image" : profile.image
+        "image" : profile.image,
+        "isNotify" : profile.isNotify,
       };
       Preferences.saveInfoLogin( infoLogin );
       Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);

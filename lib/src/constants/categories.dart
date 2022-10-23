@@ -29,6 +29,12 @@ void getCategoryIdByName( Category category ) {
   int index = categoriasData.indexWhere((element) => element.nombre == category.name );
   categoriasData.elementAt(index).id = category.id;
 }
+// obtener el nombre de la categoria
+String getCategoryNameById( String id ) {
+  int index = categoriasData.indexWhere((element) => element.id == id );
+  String name = categoriasData.elementAt(index).nombre; 
+  return name;
+}
 
 // DropdownItems para filtro de por relevancia
 List<DropdownMenuItem<String>> get optionsRelevance {
