@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 
 
 /// Pantalla que contiene la lista de anuncios favoritos
 class FavoritesAdPage extends StatelessWidget {
   const FavoritesAdPage({Key? key}) : super(key: key);
-
-
   @override
   Widget build(BuildContext context) {
     // Constantes de la pantalla
@@ -60,17 +60,7 @@ class FavoritesAdPage extends StatelessWidget {
               ),
               // Widget de anuncios
               Expanded(
-                child: CardTable(
-                  images: [
-                    {'prueba':'Hola'},
-                    {'prueba':'Hola'},
-                    {'prueba':'Hola'},
-                    {'prueba':'Hola'},
-                    {'prueba':'Hola'},
-                    {'prueba':'Hola'},
-                    {'prueba':'Hola'},
-                  ],
-                ),
+                child: _ListFavoriteAds()
               ),
             ],
           ),
@@ -118,6 +108,70 @@ class _FavoriteBar extends StatelessWidget {
         ],
       
       ),
+    );
+  }
+}
+
+/// Widget que contiene la lista de anuncios
+class _ListFavoriteAds extends StatelessWidget {
+  const _ListFavoriteAds({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteAdsProvider>(context);
+    print('favoriteProvider.favoriteAds.length: ${favoriteProvider.ads.length}');
+    if (favoriteProvider.ads.length == 0) {
+      return const Center(
+        child: _InterestWidgetVacio(),
+      );
+    } else {
+      return ListAd(
+        ads: favoriteProvider.ads, 
+        onNextPage: () => favoriteProvider.getAdsNews(), 
+        provider: favoriteProvider 
+      );     
+    } 
+    
+  }
+}
+
+// Widget Vacio cuando no se han agregado favoritos
+class _InterestWidgetVacio extends StatelessWidget {
+  const _InterestWidgetVacio({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Condicionar este container a la hora de mostrar los intereses guardados
+    return Container(
+      child: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            const Icon(
+              Icons.warning,
+              color: AppColors.subtitles,
+              size: 50,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              'No se ha añadido anuncios Favoritos ',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.subtitles),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            )
+          ])),
     );
   }
 }

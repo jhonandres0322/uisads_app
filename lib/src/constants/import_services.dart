@@ -7,3 +7,4 @@ export 'package:uisads_app/src/services/facebook_signin_service.dart';
 export 'package:uisads_app/src/services/report_service.dart';
 export 'package:uisads_app/src/services/interest_service.dart';
 export 'package:uisads_app/src/services/notification_service.dart';
+export 'package:uisads_app/src/services/favorites_service.dart';

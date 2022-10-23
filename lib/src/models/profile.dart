@@ -45,7 +45,7 @@ class Profile {
     String uid;
 
     factory Profile.fromMap(Map<String, dynamic> json) => Profile(
-        // interests: (List<String>.from(json["interests"].map((x) => x))) ?? [],
+        interests: (List<String>.from(json["interests"].map((x) => x))),
         // notifications: List<dynamic>.from(json["notifications"].map((x) => x)) ?? [],
         // favorites: List<dynamic>.from(json["favorites"].map((x) => x)) ?? [],
         isNotify: json["isNotify"] ?? false,
