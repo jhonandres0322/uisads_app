@@ -4,12 +4,14 @@
 
 import 'dart:convert';
 
+import 'package:uisads_app/src/models/ad.dart';
 
 
-import 'package:uisads_app/src/constants/import_models.dart';
 
 
-ResponseFavoriteAds responseAdsFromMap(String str) => ResponseFavoriteAds.fromMap(json.decode(str));
+
+
+ResponseFavoriteAds responseFavoritesAdsFromMap(String str) => ResponseFavoriteAds.fromMap(json.decode(str));
 
 // String responseAdsToMap(ResponseAds data) => json.encode(data.toMap());
 
