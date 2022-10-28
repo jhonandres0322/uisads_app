@@ -7,6 +7,7 @@ import 'package:uisads_app/src/constants/import_models.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'package:uisads_app/src/services/local_notification_service.dart';
 
 class LoginOtherWays extends StatelessWidget {
   const LoginOtherWays({Key? key}) : super(key: key);
@@ -14,41 +15,41 @@ class LoginOtherWays extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitPouringHourGlassRefined(
           color: AppColors.primary,
-          icon: const Icon(Icons.arrow_back_ios_outlined),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          size: 50.0,
         ),
-        actions: [
-          IconButton(
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
             color: AppColors.primary,
-            icon: const Icon(CustomUisIcons.log_out),
-            onPressed: () async{
-              // TODO: SIGN OUT
-              // GoogleSigninService.signOutGoogle();
-              // Cerrar sesion Facebook
-              bool isSignedInFacebook = await FacebookSigninService.isSignedInFacebook();
-              log(isSignedInFacebook.toString());
-              FacebookSigninService.signOutFacebook();
+            icon: const Icon(Icons.arrow_back_ios_outlined),
+            onPressed: () {
+              Navigator.pop(context);
             },
           ),
-        ],
-        backgroundColor: AppColors.mainThirdContrast,
-        elevation: 0,
-      ),
-      body: LoaderOverlay(
-        useDefaultLoading: false,
-        overlayWidget: const Center(
-          child: SpinKitPouringHourGlassRefined(
-            color: AppColors.primary,
-            size: 50.0,
-          ),
+          actions: [
+            IconButton(
+              color: AppColors.primary,
+              icon: const Icon(CustomUisIcons.log_out),
+              onPressed: () async{
+                // TODO: SIGN OUT
+                // GoogleSigninService.signOutGoogle();
+                // Cerrar sesion Facebook
+                bool isSignedInFacebook = await FacebookSigninService.isSignedInFacebook();
+                log(isSignedInFacebook.toString());
+                FacebookSigninService.signOutFacebook();
+              },
+            ),
+          ],
+          backgroundColor: AppColors.mainThirdContrast,
+          elevation: 0,
         ),
-        child: SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(top: size.height * 0.07),
             alignment: Alignment.center,
@@ -168,16 +169,33 @@ class LoginOtherWays extends StatelessWidget {
 
   // Metodo para iniciar sesion con google por ahora
   void _loginUser(BuildContext context, String tokenId, ) async {
+    late final LocalNotificationService serviceNotifications;
+    serviceNotifications = LocalNotificationService();
+    serviceNotifications.intialize();
     final _authService = AuthService();
     // Ejecucion del loading de la pantalla
     context.loaderOverlay.show();
     LoginResponse loginResponse = await _authService.loginUserGoogle(tokenId);
     context.loaderOverlay.hide();
-    ScaffoldMessenger.of(context).showSnackBar(
-        showAlertCustom(loginResponse.message, loginResponse.error));
     if (!loginResponse.error) {
+      final _notificationService = NotificationService();
+      log(loginResponse.token!);
+      Response responseNotificaciones =
+          await _notificationService.checkNewNotifications(loginResponse.token!);
+          await serviceNotifications.showScheduledNotification(
+          id: 0,
+          title: 'Nuevos Anuncios con base en tus Intereses',
+          body: responseNotificaciones.message,
+          payload: 'Nuevos Anuncios',
+          seconds: 7);
+      ScaffoldMessenger.of(context).showSnackBar(
+          showAlertCustom(loginResponse.message, loginResponse.error));
+
       UtilsNavigator.navigatorAuth(context, loginResponse.token!,
           loginResponse.profile!, loginResponse.user!);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          showAlertCustom(loginResponse.message, loginResponse.error));
     }
     GoogleSigninService.signOutGoogle();
   }

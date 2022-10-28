@@ -220,21 +220,21 @@ class _ListFavoriteAds extends StatelessWidget {
   final List<Ad> anuncios;
   @override
   Widget build(BuildContext context) {
-    final favoriteProvider = Provider.of<FavoriteAdsProvider>(context);
+    final notificationProvider = Provider.of<NotificationPageProvider>(context);
     print(
-        'favoriteProvider.favoriteAds.length: ${favoriteProvider.ads.length}');
-    if (favoriteProvider.isLoading && favoriteProvider.ads.isEmpty) {
+        'Notifications.ads.length: ${notificationProvider.ads.length}');
+    if (notificationProvider.isLoading && notificationProvider.ads.isEmpty) {
       return const Center(
         child: _InterestWidgetVacio(),
       );
     } else {
-      if (favoriteProvider.ads.isEmpty) {
+      if (notificationProvider.ads.isEmpty) {
         return const VoidInfoWidget();
       } else {
         return ListAd(
             ads: this.anuncios,
-            onNextPage: () => favoriteProvider.getFavoriteAdsNews(),
-            provider: favoriteProvider);
+            onNextPage: () => notificationProvider.getNotificationAdsNews(),
+            provider: notificationProvider);
       }
     }
   }

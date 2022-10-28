@@ -17,3 +17,4 @@ export 'package:uisads_app/src/providers/interest_page_provider.dart';
 export 'package:uisads_app/src/providers/report_provider.dart';
 export 'package:uisads_app/src/providers/notification_provider.dart';
 export 'package:uisads_app/src/providers/favorite_ads_provider.dart';
+export 'package:uisads_app/src/providers/historial_ads_provider.dart';

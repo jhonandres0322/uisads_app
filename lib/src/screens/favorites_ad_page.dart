@@ -141,7 +141,7 @@ class _ListFavoriteAds extends StatelessWidget {
         child: _InterestWidgetVacio(),
       );
     } else {
-      if (favoriteProvider.ads.isEmpty) {
+      if (favoriteProvider.ads.isEmpty && anuncios.isNotEmpty) {
         return const VoidInfoWidget();
       } else {
         return ListAd(

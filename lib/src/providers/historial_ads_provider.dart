@@ -33,8 +33,7 @@ class HistoryAdsProvider extends ListAdProvider {
     isLoading = true;
     log('getHistoryAd + $_currentPage');
     final historialAdService = HistorialService();
-    final resp = await historialAdService.getHistorialAds(_currentPage);
-    final ResponseHistorialAds responseAds = ResponseHistorialAds.fromMap(resp);
+    final responseAds = await historialAdService.getHistorialAds(_currentPage);
     log('HistoryAds: ${ads.length}');
     ads = [...ads, ...responseAds.historial];
     // Terminamos de cargar
@@ -54,8 +53,7 @@ class HistoryAdsProvider extends ListAdProvider {
     // Cargamos nuevos anuncios
     isLoading = true;
     final historialAdService = HistorialService();
-    final resp = await historialAdService.getHistorialAds(_currentPage);
-    final ResponseHistorialAds responseAds = ResponseHistorialAds.fromMap(resp);
+    final responseAds = await historialAdService.getHistorialAds(_currentPage);
     ads = [...ads, ...responseAds.historial];
     // Terminamos de cargar
     isLoading = false;

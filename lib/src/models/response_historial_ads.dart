@@ -9,7 +9,7 @@ import 'package:uisads_app/src/models/ad.dart';
 
 ResponseHistorialAds responseHistorialAdsFromMap(String str) => ResponseHistorialAds.fromMap(json.decode(str));
 
-String responseHistorialAdsToMap(ResponseHistorialAds data) => json.encode(data.toMap());
+// String responseHistorialAdsToMap(ResponseHistorialAds data) => json.encode(data.toMap());
 
 class ResponseHistorialAds {
     ResponseHistorialAds({
@@ -21,12 +21,12 @@ class ResponseHistorialAds {
     int totalRows;
 
     factory ResponseHistorialAds.fromMap(Map<String, dynamic> json) => ResponseHistorialAds(
-        historial: List<Ad>.from(json["historial"].map((x) => x)),
+        historial: List<Ad>.from(json["historial"].map( (x) => Ad.fromMap(x))),
         totalRows: json["totalRows"] ?? 0,
     );
 
-    Map<String, dynamic> toMap() => {
-        "historial": List<Ad>.from(historial.map((x) => x)),
-        "totalRows": totalRows,
-    };
+    // Map<String, dynamic> toMap() => {
+    //     "historial": List<Ad>.from(historial.map((x) => x)),
+    //     "totalRows": totalRows,
+    // };
 }
