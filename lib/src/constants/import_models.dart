@@ -24,3 +24,4 @@ export 'package:uisads_app/src/models/request_interest.dart';
 export 'package:uisads_app/src/models/response_favorites_ads.dart';
 export 'package:uisads_app/src/models/response_historial_ads.dart';
 export 'package:uisads_app/src/models/response_ad.dart';
+export 'package:uisads_app/src/models/response_notifications.dart';

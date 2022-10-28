@@ -136,7 +136,7 @@ class _ListFavoriteAds extends StatelessWidget {
     final favoriteProvider = Provider.of<FavoriteAdsProvider>(context);
     print(
         'favoriteProvider.favoriteAds.length: ${favoriteProvider.ads.length}');
-    if (favoriteProvider.isLoading && favoriteProvider.ads.isEmpty) {
+    if (anuncios.isEmpty) {
       return const Center(
         child: _InterestWidgetVacio(),
       );

@@ -58,6 +58,27 @@ class HttpHandler {
     jsonDecode.addAll({"error": false});
     return jsonDecode;
   }
+  // Metodo POST para notificaciones
+  Future<Map<String, dynamic>> getPostNotifications( String endpoint, Map<String, dynamic> request, String token) async {
+    final Map<String, String> _headers = {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'charset': 'utf-8'
+    };
+    Map<String, String> accessToken = {'access-token': token};
+    _headers.addAll(accessToken);
+    // Map<String, String> getHeaders = _getHeaders();
+    String url = _getEndpoint(endpoint);
+    final resp = await http.post(Uri.parse(url), headers: _headers, body: request);
+    Map<String, dynamic> jsonDecode = json.decode(resp.body);
+    int statusCode = resp.statusCode;
+    Map<String, dynamic> msgError = errorHandler(jsonDecode, statusCode);
+    if (msgError.isNotEmpty) {
+      return msgError;
+    }
+    jsonDecode.addAll({"error": false});
+    return jsonDecode;
+  }
   Future<Map<String, dynamic>> getPostEncode( String endpoint, Map<String, dynamic> request) async {
     Map<String, String> getHeaders = _getHeaders();
     String url = _getEndpoint(endpoint);

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,13 +18,13 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return LoaderOverlay(
-        useDefaultLoading: false,
-        overlayWidget: const Center(
-          child: SpinKitPouringHourGlassRefined(
-            color: AppColors.primary,
-            size: 50.0,
-          ),
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitPouringHourGlassRefined(
+          color: AppColors.primary,
+          size: 50.0,
         ),
+      ),
       child: Scaffold(
         appBar: AppBar(
           actions: [
@@ -55,17 +57,16 @@ class LoginPage extends StatelessWidget {
           elevation: 0,
         ),
         body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                // SizedBox(height: size.height * 0.07),
-                LogoApp(height: size.height * 0.45),
-                _LoginForm(),
-                const SizedBox(height: 10.0),
-              ],
-            ),
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              // SizedBox(height: size.height * 0.07),
+              LogoApp(height: size.height * 0.45),
+              _LoginForm(),
+              const SizedBox(height: 10.0),
+            ],
           ),
-        
+        ),
       ),
     );
   }
@@ -189,7 +190,8 @@ class _ButtonLogin extends StatelessWidget {
 
   void _loginUser(BuildContext context, String email, String password) async {
     late final LocalNotificationService serviceNotifications;
-serviceNotifications = LocalNotificationService();
+    serviceNotifications = LocalNotificationService();
+    serviceNotifications.intialize();
     final _authService = AuthService();
     LoginRequest loginRequest =
         LoginRequest.fromMap({"email": email, "password": password});
@@ -197,11 +199,25 @@ serviceNotifications = LocalNotificationService();
     context.loaderOverlay.show();
     LoginResponse loginResponse = await _authService.loginUser(loginRequest);
     context.loaderOverlay.hide();
-    ScaffoldMessenger.of(context).showSnackBar(
-        showAlertCustom(loginResponse.message, loginResponse.error));
     if (!loginResponse.error) {
-      UtilsNavigator.navigatorAuth(context, loginResponse.token,
-          loginResponse.profile, loginResponse.user);
+      final _notificationService = NotificationService();
+      log(loginResponse.token!);
+      Response responseNotificaciones =
+          await _notificationService.checkNewNotifications(loginResponse.token!);
+          await serviceNotifications.showScheduledNotification(
+          id: 0,
+          title: 'Nuevos Anuncios con base en tus Intereses',
+          body: responseNotificaciones.message,
+          payload: 'Nuevos Anuncios',
+          seconds: 7);
+      ScaffoldMessenger.of(context).showSnackBar(
+          showAlertCustom(loginResponse.message, loginResponse.error));
+
+      UtilsNavigator.navigatorAuth(context, loginResponse.token!,
+          loginResponse.profile!, loginResponse.user!);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          showAlertCustom(loginResponse.message, loginResponse.error));
     }
   }
 }

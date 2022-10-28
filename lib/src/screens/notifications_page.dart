@@ -10,7 +10,6 @@ import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 // import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
-import 'package:uisads_app/src/services/local_notification_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 
 class NotificationsPage extends StatefulWidget {
@@ -21,17 +20,11 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  late final LocalNotificationService serviceNotifications;
-  @override
-  void initState() {
-    serviceNotifications = LocalNotificationService();
-    serviceNotifications.intialize();
-    _listenNotification();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    final NotificationService _notificationService = NotificationService();
     final notificationProvider = Provider.of<NotificationPageProvider>(context);
     notificationProvider.estadoNotificaciones = Preferences.isNotify;
     final Size size = MediaQuery.of(context).size;
@@ -88,51 +81,30 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ])),
         ),
       ),
-      body: Container(
-          child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: size.height * 0.10,
-            ),
-            _InterestWidgetVacio(),
-            SizedBox(
-              height: 20.0,
-            ),
-            // Boton para activar Notificacion
-            ElevatedButton(
-                onPressed: () async {
-                  log('Boton para activar notificaciones');
-                  await serviceNotifications.showNotification(
-                      id: 0, title: 'UIS ADS', body: 'Notificacion de prueba');
-                },
-                child: Text('Notificacion simple')),
-            SizedBox(
-              height: 20.0,
-            ),
-            // Boton para activar Notificacion
-            ElevatedButton(
-                onPressed: () async {
-                  log('Boton para activar notificaciones');
-                  await serviceNotifications.showScheduledNotification(
-                      id: 0,
-                      title: 'Nuevos Anuncios con base en tus Intereses',
-                      body: 'Tienes nuevos anuncios asociados a sus intereses, ¿Deseas Revisarlos?',
-                      seconds: 10);
-                },
-                child: Text('Notificacion con tiempo retrasado')),
-            SizedBox(
-              height: 20.0,
-            ),
-            ElevatedButton(
-                onPressed: () async{
-                   await serviceNotifications.showNotificationWithPayload(
-                      id: 0, title: 'UIS ADS', body: 'Notificacion de prueba', payload: 'Hola mundo');
-                }, child: Text('Notificacion con Payload'))
-          ],
-        ),
-      )),
+      body: SafeArea(
+        child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _FavoriteBar(),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Expanded(
+                      child: FutureBuilder<ResponseNotificationAds>(
+                          future: _notificationService
+                              .getFavoritesAds(notificationProvider.currentPage),
+                          builder: (context,
+                              AsyncSnapshot<ResponseNotificationAds> snapshot) {
+                            return snapshot.hasData
+                                ? _ListFavoriteAds(
+                                  anuncios: snapshot.data!.notifications,
+                                )
+                                : const Center(child: CircularProgressIndicator());
+                          })),
+              ],
+            )),
+      ),
       drawer: const DrawerCustom(),
       drawerEnableOpenDragGesture: false,
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
@@ -167,17 +139,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
     UtilsOperations.mostrarResultadoError(response, context);
   }
 
-  // Escuchar la informacion de la notificacion recibida
-  void _listenNotification() =>
-      serviceNotifications.onNotificationClick.listen(onNotificationListener);
-  // Metodo para mostrar la informacion escuchada en el stream
-  void onNotificationListener(String? payload) {
-    log('Notificacion recibida: $payload');
-    if (payload != null && payload.isNotEmpty) {
-      // Enviamos a la pagina de detalle en este caso de mi notificacion mi Notifications page favorites-ad notifications
-      Navigator.pushNamedAndRemoveUntil(context, 'favorites-ad', (Route<dynamic> route) => false);  
-    }
-  }
 }
 
 /// Widget que contendra el elemento de los intereses
@@ -219,5 +180,62 @@ class _InterestWidgetVacio extends StatelessWidget {
             )
           ])),
     );
+  }
+}
+/// Widget Barra que contiene el titulo de mis anuncios favoritos
+class _FavoriteBar extends StatelessWidget {
+  const _FavoriteBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: 40,
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      color: AppColors.backgroundBar,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          // const Icon(CustomUisIcons.heart, color: AppColors.mainThirdContrast),
+          Icon(Icons.notifications_active,color: AppColors.logoSchoolPrimary),
+          SizedBox(width: 10.0),
+          Text('Mis Notificaciones recientes',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.logoSchoolPrimary)),
+        ],
+      ),
+    );
+  }
+}
+/// Widget que contiene la lista de anuncios
+class _ListFavoriteAds extends StatelessWidget {
+  const _ListFavoriteAds({
+    Key? key, 
+    required this.anuncios}) : super(key: key);
+
+  final List<Ad> anuncios;
+  @override
+  Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteAdsProvider>(context);
+    print(
+        'favoriteProvider.favoriteAds.length: ${favoriteProvider.ads.length}');
+    if (favoriteProvider.isLoading && favoriteProvider.ads.isEmpty) {
+      return const Center(
+        child: _InterestWidgetVacio(),
+      );
+    } else {
+      if (favoriteProvider.ads.isEmpty) {
+        return const VoidInfoWidget();
+      } else {
+        return ListAd(
+            ads: this.anuncios,
+            onNextPage: () => favoriteProvider.getFavoriteAdsNews(),
+            provider: favoriteProvider);
+      }
+    }
   }
 }

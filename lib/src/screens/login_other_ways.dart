@@ -176,8 +176,8 @@ class LoginOtherWays extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
         showAlertCustom(loginResponse.message, loginResponse.error));
     if (!loginResponse.error) {
-      UtilsNavigator.navigatorAuth(context, loginResponse.token,
-          loginResponse.profile, loginResponse.user);
+      UtilsNavigator.navigatorAuth(context, loginResponse.token!,
+          loginResponse.profile!, loginResponse.user!);
     }
     GoogleSigninService.signOutGoogle();
   }
@@ -191,8 +191,8 @@ class LoginOtherWays extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
         showAlertCustom(loginResponse.message, loginResponse.error));
     if (!loginResponse.error) {
-      UtilsNavigator.navigatorAuth(context, loginResponse.token,
-          loginResponse.profile, loginResponse.user);
+      UtilsNavigator.navigatorAuth(context, loginResponse.token!,
+          loginResponse.profile!, loginResponse.user!);
     }
     FacebookSigninService.signOutFacebook();
   }

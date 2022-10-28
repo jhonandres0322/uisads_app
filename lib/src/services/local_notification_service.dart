@@ -68,7 +68,8 @@ class LocalNotificationService {
       {required int id,
       required String title,
       required String body,
-      required int seconds}) async {
+      required int seconds,
+      required String payload}) async {
     final details = await _notificationDetails();
     await _localNotificationService.zonedSchedule(
       id,
@@ -82,6 +83,7 @@ class LocalNotificationService {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      payload: payload,
     );
   }
   // Metodo para mostrar una notificacion con un payload o informacion recibida de este
