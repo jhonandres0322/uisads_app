@@ -23,17 +23,20 @@ class AdService with HttpHandler {
     final resp = await getGet('/ad/ads/$page');
     return resp;
   }
-
-  Future<Ad> getAdById( String id ) async {
+  // Metodo para obtener un anuncio especifico
+  Future<ResponseAdUnique> getAdById( String id ) async {
     List<Upload> images = [];
     final resp = await getGet('/ad/$id');
+    
+
     for (var image in resp['ad']['images']) {
       Upload uploadPivot = Upload.fromMap( image );
       images.add( uploadPivot ); 
     }
     resp['ad']['images'] = images;
-    Ad ad = Ad.fromMap( resp['ad'] );
-    return ad;
+    ResponseAdUnique _responseAdUnique = ResponseAdUnique.fromMap(resp);
+    // Ad ad = Ad.fromMap( resp['ad'] );
+    return _responseAdUnique;
   }
 
   Future<Response> manageRating( Map<String,dynamic> request ) async {

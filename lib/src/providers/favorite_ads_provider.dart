@@ -26,6 +26,9 @@ class FavoriteAdsProvider extends ListAdProvider {
     notifyListeners();
   }
 
+  FavoriteAdsProvider() {
+    getFavoriteAds();
+  }
 
   ///Metodo para obtener los anuncios inicialmente
   getFavoriteAds() async {
@@ -37,15 +40,14 @@ class FavoriteAdsProvider extends ListAdProvider {
     log('getFavoritesAd + $_currentPage');
     final favoriteAdService = FavoritesService();
     final resp = await favoriteAdService.getFavoritesAds(_currentPage);
-    final ResponseFavoriteAds responseAds = ResponseFavoriteAds.fromMap(resp);
     log('Favoritesads: ${ads.length}');
-    ads = [...ads, ...responseAds.favorites];
+    ads = [...ads, ...resp.favorites];
     // Terminamos de cargar
     isLoading = false;
     notifyListeners();
   }
   // Crear el metodo inicial de los anuncios y luego traer los anuncios por cada pagina
-  void getAdsNews() async {
+  void getFavoriteAdsNews() async {
     if (isLoading) {return;}
     if (isRefresh) {
       currentPage = 1;
@@ -58,13 +60,12 @@ class FavoriteAdsProvider extends ListAdProvider {
     isLoading = true;
     final favoriteAdService = FavoritesService();
     final resp = await favoriteAdService.getFavoritesAds(_currentPage);
-    final ResponseFavoriteAds responseAds = ResponseFavoriteAds.fromMap(resp);
-    if (responseAds.favorites.isEmpty) {
+    if (resp.favorites.isEmpty) {
       _currentPage--;
     }
     log('getFavoritesAds News of page $currentPage');
     log('Favoritesads: ${ads.length}');
-    ads = [...ads, ...responseAds.favorites];
+    ads = [...ads, ...resp.favorites];
     isLoading = false;
     notifyListeners();
   }

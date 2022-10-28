@@ -117,9 +117,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   log('Boton para activar notificaciones');
                   await serviceNotifications.showScheduledNotification(
                       id: 0,
-                      title: 'UIS ADS',
-                      body: 'Notificacion programada',
-                      seconds: 15);
+                      title: 'Nuevos Anuncios con base en tus Intereses',
+                      body: 'Tienes nuevos anuncios asociados a sus intereses, ¿Deseas Revisarlos?',
+                      seconds: 10);
                 },
                 child: Text('Notificacion con tiempo retrasado')),
             SizedBox(

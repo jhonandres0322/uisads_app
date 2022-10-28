@@ -7,6 +7,7 @@ import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'package:uisads_app/src/services/local_notification_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,38 +15,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          const Spacer(),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, 'register');
-            },
-            child: const Text(
-              'Registrarse',
-              style: TextStyle(
-                  color: AppColors.third,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Roboto',
-                  fontSize: 16.0),
-            ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-        ],
-        leading: IconButton(
-          color: AppColors.primary,
-          icon: const Icon(Icons.arrow_back_ios_outlined),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: AppColors.mainThirdContrast,
-        elevation: 0,
-      ),
-      body: LoaderOverlay(
+    return LoaderOverlay(
         useDefaultLoading: false,
         overlayWidget: const Center(
           child: SpinKitPouringHourGlassRefined(
@@ -53,17 +23,49 @@ class LoginPage extends StatelessWidget {
             size: 50.0,
           ),
         ),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              // SizedBox(height: size.height * 0.07),
-              LogoApp(height: size.height * 0.45),
-              _LoginForm(),
-              const SizedBox(height: 10.0),
-            ],
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            const Spacer(),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'register');
+              },
+              child: const Text(
+                'Registrarse',
+                style: TextStyle(
+                    color: AppColors.third,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Roboto',
+                    fontSize: 16.0),
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+          ],
+          leading: IconButton(
+            color: AppColors.primary,
+            icon: const Icon(Icons.arrow_back_ios_outlined),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
+          backgroundColor: AppColors.mainThirdContrast,
+          elevation: 0,
         ),
+        body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                // SizedBox(height: size.height * 0.07),
+                LogoApp(height: size.height * 0.45),
+                _LoginForm(),
+                const SizedBox(height: 10.0),
+              ],
+            ),
+          ),
+        
       ),
     );
   }
@@ -186,6 +188,8 @@ class _ButtonLogin extends StatelessWidget {
   }
 
   void _loginUser(BuildContext context, String email, String password) async {
+    late final LocalNotificationService serviceNotifications;
+serviceNotifications = LocalNotificationService();
     final _authService = AuthService();
     LoginRequest loginRequest =
         LoginRequest.fromMap({"email": email, "password": password});
