@@ -13,22 +13,22 @@ String loginResponseToMap(LoginResponse data) => json.encode(data.toMap());
 class LoginResponse {
     LoginResponse({
         required this.message,
-        required this.user,
-        required this.profile,
-        required this.token,
+         this.user,
+         this.profile,
+         this.token,
         required this.error
     });
 
     String message;
-    User user;
-    Profile profile;
-    String token;
+    User? user;
+    Profile? profile;
+    String? token;
     bool error;
 
     factory LoginResponse.fromMap(Map<String, dynamic> json) => LoginResponse(
         message: json["msg"] ?? '',
-        user: User.fromMap(json["user"] ?? {}),
-        profile: Profile.fromMap( json["profile"] ?? {}),
+        user: json["user"] != null ? User.fromMap(json["user"] ?? {}): null,
+        profile: json["profile"] != null ? Profile.fromMap( json["profile"] ?? {}) : null,
         token: json["token"] ?? '',
         error: json["error"] ?? ''
     );

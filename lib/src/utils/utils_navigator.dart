@@ -24,6 +24,18 @@ class UtilsNavigator {
       Preferences.saveInfoLogin( infoLogin );
       Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
   }
+  // Metodo para guardar las preferencias de la notificacion
+  static void preguardadoPreferencias(String token, Profile profile, User user) {
+    Map<String, dynamic > infoLogin = {
+      "token" : token,
+      "name"  : profile.name,
+      "email" : user.email,
+      "uid"   : profile.uid,
+      "image" : profile.image,
+      "isNotify" : profile.isNotify,
+    };
+    Preferences.saveInfoLogin( infoLogin );
+  }
 
   static void navigatorProfile( BuildContext context, String idProfile ) {
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);

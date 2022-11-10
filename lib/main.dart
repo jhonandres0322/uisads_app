@@ -36,7 +36,9 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => EditAdProvider()),
         ChangeNotifierProvider(create: (_) => InterestPageProvider()),
         ChangeNotifierProvider(create: (_) => ReportProvider()),
-        ChangeNotifierProvider(create: (_) => NotificationPageProvider())
+        ChangeNotifierProvider(create: (_) => NotificationPageProvider()),
+        ChangeNotifierProvider(create:  (_) => FavoriteAdsProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryAdsProvider()),
       ],
       child: const App(),
     );

@@ -35,7 +35,8 @@ class AdPageProvider with ChangeNotifier {
 
   getAd( String idAd ) async {
     final adService = AdService();
-    ad = await adService.getAdById( idAd );
+    ResponseAdUnique responseAd =  await adService.getAdById(idAd) ;
+    ad = responseAd.ad;
     notifyListeners();
   }
 

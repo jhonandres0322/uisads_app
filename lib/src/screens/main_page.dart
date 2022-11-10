@@ -1,22 +1,41 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:uisads_app/src/constants/import_constants.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/services/local_notification_service.dart';
 import 'package:uisads_app/src/shared_preferences/preferences.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
 import 'package:uisads_app/src/constants/import_utils.dart';
 
-class MainPage extends StatelessWidget {
+
+
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  late final LocalNotificationService serviceNotifications;
+  @override
+  void initState() {
+    serviceNotifications = LocalNotificationService();
+    serviceNotifications.intialize();
+    _listenNotification();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
+    
     final Size size = MediaQuery.of(context).size;
     final CategoryProvider _categoryProvider =
         Provider.of<CategoryProvider>(context);
-    final mainPageProvider = Provider.of<MainPageProvider>(context);
+    // final mainPageProvider = Provider.of<MainPageProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
@@ -85,6 +104,19 @@ class MainPage extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  // Escuchar la informacion de la notificacion recibida
+  void _listenNotification() =>
+      serviceNotifications.onNotificationClick.listen(onNotificationListener);
+
+  // Metodo para mostrar la informacion escuchada en el stream
+  void onNotificationListener(String? payload) {
+    log('Notificacion recibida: $payload');
+    if (payload != null && payload.isNotEmpty) {
+      // Enviamos a la pagina de detalle en este caso de mi notificacion mi Notifications page favorites-ad notifications
+      Navigator.pushNamedAndRemoveUntil(context, 'notifications', (Route<dynamic> route) => false);  
+    }
   }
 }
 

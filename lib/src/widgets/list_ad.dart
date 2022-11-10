@@ -70,6 +70,7 @@ class _ListAdState extends State<ListAd> {
       child: Stack(
         children: [
           GridView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             physics: const BouncingScrollPhysics(),
             controller: _scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

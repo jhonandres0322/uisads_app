@@ -17,6 +17,7 @@ class UtilsOperations {
     }
     return colorEncontrado;
   }
+
   // Metodo para mostrar un resultado luego de una peticion HTTP
   static void mostrarResultadoError(Response response, BuildContext context) {
     if (response.error) {
@@ -29,7 +30,9 @@ class UtilsOperations {
     }
   }
 
-  static CustomAlertDialog mostrarDialogo(BuildContext context, String mensajeDialogo) {
+  // Metodo para mostrar un modal de confirmacion con un texto definido
+  static CustomAlertDialog mostrarDialogo(
+      BuildContext context, String mensajeDialogo) {
     return CustomAlertDialog(
       title: mensajeDialogo,
       icon: Icons.check_circle,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +9,7 @@ import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_providers.dart';
 import 'package:uisads_app/src/constants/import_services.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'package:uisads_app/src/services/local_notification_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,46 +17,46 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          const Spacer(),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, 'register');
-            },
-            child: const Text(
-              'Registrarse',
-              style: TextStyle(
-                  color: AppColors.third,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Roboto',
-                  fontSize: 16.0),
-            ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-        ],
-        leading: IconButton(
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitPouringHourGlassRefined(
           color: AppColors.primary,
-          icon: const Icon(Icons.arrow_back_ios_outlined),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          size: 50.0,
         ),
-        backgroundColor: AppColors.mainThirdContrast,
-        elevation: 0,
       ),
-      body: LoaderOverlay(
-        useDefaultLoading: false,
-        overlayWidget: const Center(
-          child: SpinKitPouringHourGlassRefined(
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            const Spacer(),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'register');
+              },
+              child: const Text(
+                'Registrarse',
+                style: TextStyle(
+                    color: AppColors.third,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Roboto',
+                    fontSize: 16.0),
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+          ],
+          leading: IconButton(
             color: AppColors.primary,
-            size: 50.0,
+            icon: const Icon(Icons.arrow_back_ios_outlined),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
+          backgroundColor: AppColors.mainThirdContrast,
+          elevation: 0,
         ),
-        child: SingleChildScrollView(
+        body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
@@ -186,6 +189,9 @@ class _ButtonLogin extends StatelessWidget {
   }
 
   void _loginUser(BuildContext context, String email, String password) async {
+    late final LocalNotificationService serviceNotifications;
+    serviceNotifications = LocalNotificationService();
+    serviceNotifications.intialize();
     final _authService = AuthService();
     LoginRequest loginRequest =
         LoginRequest.fromMap({"email": email, "password": password});
@@ -193,11 +199,25 @@ class _ButtonLogin extends StatelessWidget {
     context.loaderOverlay.show();
     LoginResponse loginResponse = await _authService.loginUser(loginRequest);
     context.loaderOverlay.hide();
-    ScaffoldMessenger.of(context).showSnackBar(
-        showAlertCustom(loginResponse.message, loginResponse.error));
     if (!loginResponse.error) {
-      UtilsNavigator.navigatorAuth(context, loginResponse.token,
-          loginResponse.profile, loginResponse.user);
+      final _notificationService = NotificationService();
+      log(loginResponse.token!);
+      Response responseNotificaciones =
+          await _notificationService.checkNewNotifications(loginResponse.token!);
+          await serviceNotifications.showScheduledNotification(
+          id: 0,
+          title: 'Nuevos Anuncios con base en tus Intereses',
+          body: responseNotificaciones.message,
+          payload: 'Nuevos Anuncios',
+          seconds: 7);
+      ScaffoldMessenger.of(context).showSnackBar(
+          showAlertCustom(loginResponse.message, loginResponse.error));
+
+      UtilsNavigator.navigatorAuth(context, loginResponse.token!,
+          loginResponse.profile!, loginResponse.user!);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          showAlertCustom(loginResponse.message, loginResponse.error));
     }
   }
 }

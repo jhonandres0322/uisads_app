@@ -1,14 +1,23 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:uisads_app/src/constants/import_constants.dart';
+import 'package:uisads_app/src/constants/import_models.dart';
+import 'package:uisads_app/src/constants/import_providers.dart';
+import 'package:uisads_app/src/constants/import_services.dart';
+import 'package:uisads_app/src/constants/import_utils.dart';
 import 'package:uisads_app/src/constants/import_widgets.dart';
+import 'dart:io';
 
 class HistoryAdPage extends StatelessWidget {
   const HistoryAdPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final historialAdProvider = Provider.of<HistoryAdsProvider>(context);
+    final historialService = HistorialService();
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -44,28 +53,52 @@ class HistoryAdPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-          child: ListView.separated(
-              itemBuilder: (context, index) {
-                if (index % 4 == 0) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Enviar el texto en base a lo que se reciba de la base de datos
-                      _HistoryBar(
-                        text: 'Hoy',
-                      ),
-                      _AnuncioCardHistory()
-                    ],
+          child: FutureBuilder<ResponseHistorialAds>(
+        future:
+            historialService.getHistorialAds(historialAdProvider.currentPage),
+        builder: (context, AsyncSnapshot<ResponseHistorialAds> snapshot) {
+          if (snapshot.hasData) {
+            log("Datos de historial");
+            log(snapshot.data!.historial.length.toString());
+            return ListView.separated(
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Enviar el texto en base a lo que se reciba de la base de datos
+                        _HistoryBar(
+                          text: 'Vistos Hoy',
+                        ),
+                        _AnuncioCardHistory(
+                          title: snapshot.data!.historial[index].title,
+                          mainPage: snapshot.data!.historial[index].mainPage,
+                          category: snapshot.data!.historial[index].category,
+                          date: snapshot.data!.historial[index].createdAt,
+                          idAnuncio: snapshot.data!.historial[index].id,
+                        )
+                      ],
+                    );
+                  }
+                  return _AnuncioCardHistory(
+                    title: snapshot.data!.historial[index].title,
+                    mainPage: snapshot.data!.historial[index].mainPage,
+                    category: snapshot.data!.historial[index].category,
+                    date: snapshot.data!.historial[index].createdAt,
+                    idAnuncio: snapshot.data!.historial[index].id,
                   );
-                }
-                return _AnuncioCardHistory();
-              },
-              separatorBuilder: (context, index) => const Divider(
-                    color: AppColors.mainThirdContrast,
-                    thickness: 1,
-                    height: 1,
-                  ),
-              itemCount: 10)),
+                },
+                separatorBuilder: (context, index) => const Divider(
+                      color: AppColors.mainThirdContrast,
+                      thickness: 1,
+                      height: 1,
+                    ),
+                itemCount: snapshot.data!.historial.length);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      )),
       drawer: const DrawerCustom(),
       bottomNavigationBar: const BottomNavigatonBarUisAds(),
       floatingActionButton: FloatingActionButton(
@@ -116,8 +149,20 @@ class _HistoryBar extends StatelessWidget {
 
 /// Widget Anuncio Creado para los cards de los anuncios de historial
 class _AnuncioCardHistory extends StatelessWidget {
-  const _AnuncioCardHistory({Key? key}) : super(key: key);
+  const _AnuncioCardHistory(
+      {Key? key,
+      required this.title,
+      required this.mainPage,
+      this.category = '',
+      required this.date, 
+      required this.idAnuncio})
+      : super(key: key);
 
+  final String title;
+  final Upload mainPage;
+  final String? category;
+  final String date;
+  final String idAnuncio;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -136,10 +181,22 @@ class _AnuncioCardHistory extends StatelessWidget {
             width: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              image: DecorationImage(
-                image: AssetImage('assets/images/anuncio.jpg'),
-                fit: BoxFit.cover,
-              ),
+            ),
+            child: FutureBuilder(
+              future: HandlerImage.getImageBase64(mainPage),
+              builder: (context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.hasData) {
+                  return Image.file(
+                    File(snapshot.data!),
+                    fit: BoxFit.cover,
+                  );
+                } else {
+                  return Image.asset(
+                    'assets/images/anuncio.jpg',
+                    fit: BoxFit.cover,
+                  );
+                }
+              },
             ),
           ),
           SizedBox(
@@ -153,10 +210,15 @@ class _AnuncioCardHistory extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   child: Row(
-                    children: [Spacer(), _CategoryAdHistory()],
+                    children: [
+                      Spacer(),
+                      _CategoryAdHistory(
+                        category: category,
+                      )
+                    ],
                   ),
                 ),
-                Text('Titulo del anuncio',
+                Text(title,
                     style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
@@ -165,7 +227,10 @@ class _AnuncioCardHistory extends StatelessWidget {
                 _FavoriteIconButtonSpacer(),
                 // Widget para los likes del anuncio
                 _LikeDislike(),
-                _SeccionVistoContactar(),
+                _SeccionVistoContactar(
+                  date: date,
+                  idAnuncio: idAnuncio,
+                ),
               ],
             ),
           ),
@@ -238,19 +303,23 @@ class _LikeDislike extends StatelessWidget {
 
 /// Widgets que contiene el visto y contactar del anuncio
 class _SeccionVistoContactar extends StatelessWidget {
-  const _SeccionVistoContactar({
-    Key? key,
-  }) : super(key: key);
-
+  const _SeccionVistoContactar({Key? key, required this.date, required this.idAnuncio})
+      : super(key: key);
+  final String date;
+  final String idAnuncio;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('Visto hace 5d',
-            style: TextStyle(
-                fontSize: 13.0,
-                fontWeight: FontWeight.w400,
-                color: AppColors.subtitles)),
+        Text(
+          'Publicado: ' + convertDate(date, context),
+          style: const TextStyle(
+            color: AppColors.subtitles,
+            fontSize: 10,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         Spacer(),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -262,9 +331,7 @@ class _SeccionVistoContactar extends StatelessWidget {
                 elevation: MaterialStateProperty.all(0),
                 textStyle: MaterialStateProperty.all(const TextStyle(
                     fontSize: 8, color: AppColors.mainThirdContrast))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               // Icon(
               //   Icons.call,
               //   color: AppColors.mainThirdContrast,
@@ -282,11 +349,21 @@ class _SeccionVistoContactar extends StatelessWidget {
             ]),
             onPressed: () {
               log('Contactar Anunciante');
+              Navigator.pushNamed(context, 'ad', arguments: {'id': idAnuncio});
             },
           ),
         ),
       ],
     );
+  }
+
+  // Metodo que convierte la fecha a un formato legible
+  String convertDate(String date, BuildContext context) {
+    String locale = Localizations.localeOf(context).languageCode;
+    DateTime dateTime = DateTime.parse(date);
+    String dayMonth = DateFormat.MMMMd(locale).format(dateTime);
+    String year = DateFormat.y(locale).format(dateTime);
+    return '$dayMonth, $year';
   }
 }
 
@@ -294,10 +371,13 @@ class _SeccionVistoContactar extends StatelessWidget {
 class _CategoryAdHistory extends StatelessWidget {
   const _CategoryAdHistory({
     Key? key,
+    this.category = '',
   }) : super(key: key);
-
+  final String? category;
   @override
   Widget build(BuildContext context) {
+    final CategoryService _categoryService = CategoryService();
+    final List<Categoria> categorysInfo = categoriasData;
     final Size size = MediaQuery.of(context).size;
     return Container(
         alignment: Alignment.center,
@@ -305,16 +385,26 @@ class _CategoryAdHistory extends StatelessWidget {
         height: size.height * 0.03,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: AppColors.foods,
+          color: UtilsOperations.compararCategoryId(categorysInfo, category!),
         ),
-        child: Text(
-          'Alimentos',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 10,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w400,
-          ),
-        ));
+        child: FutureBuilder(
+            future: _categoryService.getCategoryId(category!),
+            builder: (context, AsyncSnapshot<Category> snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                  snapshot.data!.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400,
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }));
   }
 }

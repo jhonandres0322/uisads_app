@@ -41,26 +41,26 @@ class AdPage extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child: FutureBuilder<Ad>(
+        child: FutureBuilder<ResponseAdUnique>(
             future: _adService.getAdById(arguments['id']),
-            builder: (context, AsyncSnapshot<Ad> snapshot) {
+            builder: (context, AsyncSnapshot<ResponseAdUnique> snapshot) {
               if (snapshot.hasData) {
                 return Column(
                   children: [
                     _SectionCategoryDate(
-                      category: snapshot.data!.category,
-                      date: snapshot.data!.createdAt,
+                      category: snapshot.data!.ad.category,
+                      date: snapshot.data!.ad.createdAt,
                     ),
-                    _TitleAdPage(title: snapshot.data!.title),
+                    _TitleAdPage(title: snapshot.data!.ad.title),
                     _SectionInfoProfileCity(
-                      publisher: snapshot.data!.publisher,
+                      publisher: snapshot.data!.ad.publisher,
                     ),
                     // Montaje Widget para contacto al usuario
                     Stack(
                       children: [
                         _SectionImages(
-                          images: snapshot.data!.images,
-                          categoria: snapshot.data!.category,
+                          images: snapshot.data!.ad.images,
+                          categoria: snapshot.data!.ad.category,
                         ),
                         Positioned(
                           bottom: 75,
@@ -73,7 +73,7 @@ class AdPage extends StatelessWidget {
                               // print(_adPageProvider.phone);
                               UtilsContact.contactarUsuario(
                                   _adPageProvider.phone,
-                                  'Hola, estoy muy interesado en tu anuncio de ${snapshot.data!.title}');
+                                  'Hola, estoy muy interesado en tu anuncio de ${snapshot.data!.ad.title}');
                             },
                             child: const Icon(CustomUisIcons.whatsapp),
                           ),
@@ -81,21 +81,20 @@ class AdPage extends StatelessWidget {
                       ],
                     ),
                     _DescripcionAnuncio(
-                      description: snapshot.data!.description,
+                      description: snapshot.data!.ad.description,
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    _ReportSection(
-                      idAd: snapshot.data!.id
-                    ),
+                    _ReportSection(idAd: snapshot.data!.ad.id),
                     Divider(
                       color: AppColors.third,
                     ),
                     _SectionCalification(
-                        pointsPositive: snapshot.data!.positvePoints,
-                        pointsNegative: snapshot.data!.negativePoints,
-                        ad: snapshot.data!.id),
+                        pointsPositive: snapshot.data!.ad.positvePoints,
+                        pointsNegative: snapshot.data!.ad.negativePoints,
+                        ad: snapshot.data!.ad.id,
+                        isFavorite: snapshot.data!.showFavorite),
                     SizedBox(
                       height: 20,
                     )
@@ -133,10 +132,7 @@ class AdPage extends StatelessWidget {
 
 // Widget para la sección de reporte de la aplicacion
 class _ReportSection extends StatelessWidget {
-  const _ReportSection({
-    Key? key,
-    required String this.idAd
-  }) : super(key: key);
+  const _ReportSection({Key? key, required String this.idAd}) : super(key: key);
 
   final String idAd;
 
@@ -147,7 +143,7 @@ class _ReportSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _ReportButton( idAd: idAd ),
+          _ReportButton(idAd: idAd),
         ],
       ),
     );
@@ -156,10 +152,7 @@ class _ReportSection extends StatelessWidget {
 
 // Widget para el boton de reporte de la aplicacion
 class _ReportButton extends StatefulWidget {
-  _ReportButton({
-    Key? key,
-    required String this.idAd
-  }) : super(key: key);
+  _ReportButton({Key? key, required String this.idAd}) : super(key: key);
 
   final String idAd;
 
@@ -189,8 +182,10 @@ class _ReportButtonState extends State<_ReportButton> {
         Navigator.of(context, rootNavigator: true).pop(false);
       },
       circularBorderRadius: 10,
-      positiveBtnText: _reportProvider.isReported ? 'Quitar Reporte' : 'Reportar',
-      positiveBtnColor: _reportProvider.isReported ? AppColors.accept : AppColors.reject,
+      positiveBtnText:
+          _reportProvider.isReported ? 'Quitar Reporte' : 'Reportar',
+      positiveBtnColor:
+          _reportProvider.isReported ? AppColors.accept : AppColors.reject,
       negativeBtnText: 'Cancelar',
       negativeBtnColor: AppColors.mainThirdContrast,
     );
@@ -256,12 +251,14 @@ class _SectionCalification extends StatelessWidget {
       {Key? key,
       required this.pointsPositive,
       required this.pointsNegative,
-      required this.ad})
+      required this.ad,
+      required this.isFavorite})
       : super(key: key);
 
   final int pointsPositive;
   final int pointsNegative;
   final String ad;
+  final bool isFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -290,19 +287,15 @@ class _SectionCalification extends StatelessWidget {
           // ),
           // TODO: Crear un widget que contenga el icono de Favorito y el nombre del favorito
           GestureDetector(
-            onTap: () => {
-              // Agregacion a favorito
-              log('Favorito clicked ${_adPageProvider.favoriteSelection}'),
-              _adPageProvider.favoriteSelection == Choices.favorite
-                  ? _adPageProvider.favoriteSelection = ''
-                  : _adPageProvider.favoriteSelection = Choices.favorite
-            },
+            onTap: () => manageFavorite(context, ad, isFavorite),
             child: _IconButtonLike(
-              icon: _adPageProvider.favoriteSelection == Choices.favorite ? CustomUisIcons.favorite_bold : CustomUisIcons.favorite_outline,
-              color: _adPageProvider.favoriteSelection == Choices.favorite
+              icon: isFavorite
+                  ? CustomUisIcons.favorite_bold
+                  : CustomUisIcons.favorite_outline,
+              color: isFavorite
                   ? AppColors.selectedFavorite
                   : AppColors.subtitles.withOpacity(0.5),
-              textIcon: _adPageProvider.favoriteSelection == Choices.favorite ? 'Agregado' :'Agregar Favorito',
+              textIcon: isFavorite ? 'Agregado' : 'Agregar Favorito',
             ),
           ),
           // const SizedBox(
@@ -342,6 +335,27 @@ class _SectionCalification extends StatelessWidget {
     ScaffoldMessenger.of(context)
         .showSnackBar(showAlertCustom(_response.message, _response.error));
   }
+
+  // Mostrar dialogo para favorito anuncio
+  void manageFavorite(
+      BuildContext context, String adId, bool isFavorite) async {
+    Response responseAnuncio;
+    final FavoritesService _favoriteService = FavoritesService();
+    if (isFavorite) {
+      responseAnuncio= await _favoriteService.deleteFavoriteAd(adId);
+    } else {
+      responseAnuncio = await _favoriteService.saveFavoriteAd(adId);
+    }
+
+    if (!responseAnuncio.error) {
+      Navigator.pushReplacementNamed(context, 'ad', arguments: {'id': ad});
+      final AdPageProvider _adPageProvider =
+          Provider.of<AdPageProvider>(context, listen: false);
+      _adPageProvider.favoriteSelection = adId;
+    }
+    ScaffoldMessenger.of(context)
+        .showSnackBar(showAlertCustom(responseAnuncio.message, responseAnuncio.error));
+  }
 }
 
 /// Widget que contiene la seccion del boton de like
@@ -350,7 +364,7 @@ class _IconButtonLike extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.color,
-    this.valoracion, 
+    this.valoracion,
     this.textIcon = '',
   }) : super(key: key);
 
@@ -463,6 +477,7 @@ class _SectionCategoryDate extends StatelessWidget {
     );
   }
 
+  // Metodo que convierte la fecha a un formato legible
   String convertDate(String date, BuildContext context) {
     String locale = Localizations.localeOf(context).languageCode;
     DateTime dateTime = DateTime.parse(date);
