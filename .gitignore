@@ -50,3 +50,6 @@ windows/flutter/generated_plugins.cmake
 pubspec.lock
 generated_plugins.cmake
 generated_plugin_registrant.cc
+
+# File environment
+/lib/src/constants/env.dart
